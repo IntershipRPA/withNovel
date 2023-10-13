@@ -128,32 +128,32 @@ export const defaultExtensions = [
     /**
   * addInputRules에 의한 규칙 생성
   */
-  ConditionRule.extend({
-    addInputRules() {
-      return [
-        new InputRule({
-          find: /^(?:~~|~,)$/,
-          handler: ({ state, range }) => {
-            // 입력 규칙이 일치할 때 실행될 동작 정의
-            const { tr } = state;
-            const start = range.from;
-            let end = range.to;
-            console.log("here");
-            tr.delete(
-              tr.mapping.map(start),
-              tr.mapping.map(end)
-            );
-            // 패턴과 일치하는 텍스트를 삭제
-            tr.replaceWith(start, end, []);
-            // modalToggle.value = true;
-            return null; // 규칙 처리 완료
-          },
-        }),
-      ];
-    },
-  }).configure({
-    HTMLAttributes: {
-      class: "mt-4 mb-6 border-t border-stone-300",
-    },
-  }),
+  // ConditionRule.extend({
+  //   addInputRules() {
+  //     return [
+  //       new InputRule({
+  //         find: /^(?:~~|~,)$/,
+  //         handler: ({ state, range }) => {
+  //           // 입력 규칙이 일치할 때 실행될 동작 정의
+  //           const { tr } = state;
+  //           const start = range.from;
+  //           let end = range.to;
+  //           tr.delete(
+  //             tr.mapping.map(start),
+  //             tr.mapping.map(end)
+  //           );
+  //           // 패턴과 일치하는 텍스트를 삭제
+  //           tr.replaceWith(start, end, []);
+  //           // modalToggle.value = true;
+  //           return null; // 규칙 처리 완료
+  //         },
+  //       }),
+  //     ];
+  //   },
+  // }).configure({
+  //   HTMLAttributes: {
+  //     class: "mt-4 mb-6 border-t border-stone-300",
+  //   },
+  // }),
+  ConditionRule,
 ];

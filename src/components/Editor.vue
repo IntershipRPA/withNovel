@@ -10,7 +10,7 @@
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
-    <SimpleModal v-if="showModal" :message="modalMessage" @close="closeModal" />
+    <SimpleModal v-if="showModal" :message="modalMessage" :editor='editor' @close="closeModal" />
   </div>
 </template>
 

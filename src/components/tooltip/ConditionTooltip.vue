@@ -64,7 +64,6 @@ const navigationKeys = ["Space", "Enter"];
 function onKeyDown(e: KeyboardEvent) {
   const editor = props.editor;
   const range = props.range;
-
   if (navigationKeys.includes(e.key)) {
     e.preventDefault();
     if (e.key === "Enter") {
@@ -76,15 +75,15 @@ function onKeyDown(e: KeyboardEvent) {
       modalToggle.value = true;
       return true;
     }
-    if (e.key === "Space") {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .run();
-      modalToggle.value = true;
-      return true;
-    }
+    // if (e.key === "Space") {
+    //   editor
+    //     .chain()
+    //     .focus()
+    //     .deleteRange(range)
+    //     .run();
+    //   modalToggle.value = true;
+    //   return true;
+    // }
     return false;
   }
 }

@@ -22,32 +22,60 @@
           <p>{{ tagMsg }}</p>
           <!-- <p>선택 태그</p> -->
         </div>
-        <ThirdModalChild class='third p-2.5 content-center'/>
-        <MiniEditor class='p-2.5 content-center '/>
+        <ThirdModalChild class='third p-2.5 content-center' />
+        <MiniEditor class='p-2.5 content-center ' />
       </div>
-      <button @click.stop="closeModal" type="button"
-        class="confirm-btn text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">완료</button>
+      <ConfirmBtn @click.stop="handleConfirm" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from "vue";
+import { PropType, defineEmits } from "vue";
 import MiniEditor from './minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
+import ConfirmBtn from './ConfirmBtn.vue';
+import { Editor } from '@tiptap/core';
 
 const whelkMsg = localStorage.getItem('whelk')
 const tagMsg = localStorage.getItem('tag')
 
 const props = defineProps({
   whelkMsg: { type: String, default: "test whelkMsg" },
-  tagMsg: { type: String, default: "test tagMsg" }
+  tagMsg: { type: String, default: "test tagMsg" },
+  editor: {
+    type: Object as PropType<Editor>,
+    required: true,
+  },
+  // range: {
+  //   type: Object as PropType<Range>,
+  //   required: true,
+  // },
 })
 
 const emit = defineEmits(['close']);
 
+const handleConfirm = () => {
+  closeModal();
+  toggleNode(); //conditionRule 노드변경 함수
+};
+
 const closeModal = () => {
   emit('close');
+};
+
+const toggleNode = () => {
+  const editor = props.editor;
+  // const range = props.range;
+  editor
+    .chain()
+    .focus()
+    // .deleteRange({ from: 0, to: 12 }) // 수정해야함
+    .toggleNode("conditionRule", "conditionRule")
+    .setHighlight({ color: '#aac5e4' })
+    .insertContent("←조건_설정_완료")
+    .unsetHighlight()
+    .run();
 };
 
 const stopPropagation = (event) => {
@@ -102,20 +130,16 @@ const stopPropagation = (event) => {
 
 .modal-family {
   display: flex;
-  /* 또는 inline-flex */
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  /* 수평 방향으로 아이템을 정렬 */
-  /* left: 50%;  */
-  /* transform: translateX(-50%); */
-  /* top: 14%; */
   margin: auto;
   margin-top: 60px;
   width: 742px;
   height: 150px;
   /* background-color: aquamarine; */
 }
+
 .first {
   background-color: #ffc5e4;
 }
@@ -126,4 +150,5 @@ const stopPropagation = (event) => {
 
 .third {
   /* background-color: rgb(145, 150, 255); */
-}</style>
+}
+</style>

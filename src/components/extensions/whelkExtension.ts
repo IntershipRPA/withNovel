@@ -63,7 +63,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .chain()
           .focus()
           .deleteRange(range)
-          .toggleNode("conditionRule", "paragraph")
+          .toggleNode("paragraph", "paragraph")
           .setHighlight({ color: '#ffc5e4' })
           .insertContent("Comp Motor")
           .unsetHighlight()
