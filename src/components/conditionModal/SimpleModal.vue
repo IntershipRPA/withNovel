@@ -67,13 +67,14 @@ const closeModal = () => {
 const toggleNode = () => {
   const editor = props.editor;
   // const range = props.range;
+  const modalContent = localStorage.getItem('modal__content');
   editor
     .chain()
     .focus()
     // .deleteRange({ from: 0, to: 12 }) // 수정해야함
     .toggleNode("conditionRule", "conditionRule")
     .setHighlight({ color: '#aac5e4' })
-    .insertContent("←조건_설정_완료")
+    .insertContent(`${modalContent} ←조건_설정_완료`)
     .unsetHighlight()
     .run();
 };

@@ -10,7 +10,7 @@
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
-    <SimpleModal v-if="showModal" :message="modalMessage" :editor="editor" @close="closeModal" />
+    <SimpleModal v-if="showModal" :editor="editor" @close="closeModal" />
   </div>
 </template>
 
@@ -32,7 +32,6 @@ import { modalToggle } from "../components/extensions/conditionExtension"
 
 // 모달 설정
 const showModal = modalToggle;
-const modalMessage = ref("test message");
 const closeModal = () => {
   showModal.value = false;
 };
