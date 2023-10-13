@@ -95,10 +95,11 @@ const renderItems = () => {
 
         return true;
       }
-      
-      component?.ref?.onKeyDown(props.event);
+
+      const onKeyDownResult = component?.ref?.onKeyDown(props.event);
       modalToggle.value = component?.ref?.modalToggle;
-      return false;
+
+      return onKeyDownResult;
     },
     onExit: () => {
       popup?.[0].destroy();

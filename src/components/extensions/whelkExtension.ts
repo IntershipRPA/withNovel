@@ -52,62 +52,69 @@ export interface SuggestionItem {
 }
 
 const getSuggestionItems = async ({ query }: { query: string }) => {
-  // console.log('query:', query); // 검색어 출력
-  try {
-    // API 인증 키 (API Key) 설정
-    const apiKey = '2VUsy8DXgU7UltYDHQ+drH9T6gf4M5cWgEzh67DXRJwjfzWrQFnEGl6To3ODDZzLbXf+Pm/Z7awxIaIlRALQAQ==';
-    const apiEndpoint = 'http://api.odcloud.kr/api/15072603/v1/uddi:c470f155-2d53-4feb-87cd-ff010c6a315d';
-
-    // axios
-    const response = await axios.get(apiEndpoint, {
-      params: {
-        serviceKey: apiKey,
-        page: 1,
-        perPage: 85
+  return [
+    {
+      title: "Comp Motor",
+      description: "콤프레샤",
+      searchTerms: ["콤프","모터", "컴프레서", "압축기", "콤프레샤"],
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setHighlight({ color: '#ffc5e4' })
+          .insertContent("Comp Motor")
+          .unsetHighlight()
+          .run();
       },
-    });
-
-    // 데이터를 가져왔으면 배열에 추가합니다.
-    const dynamicData = response.data.data.map((item: any) => {
-      // console.log(typeof item.기인물명상세코드.toString());
-      return {
-        title: item.기인물명상세,
-        description: item.기인물명,
-        searchTerms: [item.기인물명상세코드.toString()],
-        icon: Cog,
-        command: ({ editor, range }: CommandProps) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .toggleNode("paragraph", "paragraph")
-            .setHighlight({ color: '#ffc5e4' })
-            .insertContent(`${item.기인물명상세}`)
-            .unsetHighlight()
-            .run();
-        },
-      };
-    });
-
-    // query에 따른 필터링 작업을 수행합니다.
-    const filteredData = dynamicData.filter((item) => {
-      if (typeof query === "string" && query.length > 0) {
-        const search = query.toLowerCase();
-        return (
-          item.title.toLowerCase().includes(search) ||
-          item.description.toLowerCase().includes(search) ||
-          (item.searchTerms &&
-            item.searchTerms.some((term: string) => term.includes(search)))
-        );
-      }
-      return true;
-    });
-
-    return filteredData;
-  } catch (error) {
-    console.error('데이터를 불러오는 중 오류가 발생했습니다:', error);
-    return [];
-  }
+    },
+    {
+      title: "Receiver Tank",
+      searchTerms: ["리시버", "탱크", "압축공기"],
+      description: "리시버 탱크",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setHighlight({ color: '#ffc5e4' })
+          .insertContent("Receiver Tank")
+          .unsetHighlight()
+          .run();
+      },
+    },
+    {
+      title: "After Cooler",
+      searchTerms: ["애프터","쿨러","냉각"],
+      description: "후방냉각기",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setHighlight({ color: '#ffc5e4' })
+          .insertContent("After Cooler")
+          .unsetHighlight()
+          .run();
+      },
+    },
+  ].filter((item) => {
+    if (typeof query === "string" && query.length > 0) {
+      const search = query.toLowerCase();
+      return (
+        item.title.toLowerCase().includes(search) ||
+        (item.searchTerms &&
+          item.searchTerms.some((term: string) => term.includes(search)))
+      );
+    }
+    return true;
+  });
 };
 
 const renderItems = () => {

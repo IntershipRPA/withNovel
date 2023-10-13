@@ -2,7 +2,7 @@
   <div class="condition-tooltip">
     <div ref="commandListContainer"
       class="z-50 h-auto max-h-[330px] w-42 overflow-y-auto rounded-md border border-stone-200 bg-white px-4 py-2 shadow-md transition-all text-xs text-stone-500">
-      <p>Enter</p>
+      <p>Enter ↲</p>
     </div>
   </div>
 </template>
@@ -64,7 +64,6 @@ const navigationKeys = ["Space", "Enter"];
 function onKeyDown(e: KeyboardEvent) {
   const editor = props.editor;
   const range = props.range;
-
   if (navigationKeys.includes(e.key)) {
     e.preventDefault();
     if (e.key === "Enter") {
@@ -76,15 +75,15 @@ function onKeyDown(e: KeyboardEvent) {
       modalToggle.value = true;
       return true;
     }
-    if (e.key === "Space") {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .run();
-      modalToggle.value = true;
-      return true;
-    }
+    // if (e.key === "Space") {
+    //   editor
+    //     .chain()
+    //     .focus()
+    //     .deleteRange(range)
+    //     .run();
+    //   modalToggle.value = true;
+    //   return true;
+    // }
     return false;
   }
 }

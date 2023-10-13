@@ -1,4 +1,4 @@
-import { Node, chainCommands, exitCode } from '@tiptap/core';
+import { Node, chainCommands, exitCode, mergeAttributes } from '@tiptap/core';
 
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
@@ -15,19 +15,24 @@ declare module '@tiptap/core' {
 export const ConditionRule = Node.create<ConditionRuleOptions>({
   name: 'conditionRule',
   group: 'block',
-  // content: 'text*',
+  content: 'text*',
   marks: '',
   defining: true,
   draggable: false,
   parseHTML() {
     return [
-      {
-        tag: 'hr',
-      },
-    ];
+      { tag: 'p' },
+    ]
   },
   renderHTML({ HTMLAttributes }) {
-    return ['hr', HTMLAttributes];
+    return ['p', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+  },
+  addCommands() {
+    return {
+      setCondition: () => ({ commands }: { commands: any; }) => {
+        return commands.toggleNode(this.name)
+      },
+    }
   },
   // addCommands() {
   //   return {
