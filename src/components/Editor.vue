@@ -174,7 +174,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       useStorage('change', lineText.split(' '));
       let titleData = localStorage.getItem("change");
       let titleData2;
-      // 타입스크립트에서는 null 체크해야됨
+      // 타입스크립트에서는 null 체크
       if(titleData !== null){
         titleData2 = JSON.parse(titleData);
       }
@@ -188,7 +188,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       useStorage('whelk', JSON.stringify(titleData2[0]));
       useStorage('tag', JSON.stringify(titleData2[1]));
     }
-    
+  
 
 
 
