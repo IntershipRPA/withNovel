@@ -16,11 +16,11 @@
       <!-- 본문 -->
       <div class="modal-family text-lg">
         <div class="first modal-child">
-          <p>선택 설비</p>
+          <p>{{ whelkMsg }}</p>
         </div>
         <div class="second modal-child">
-          <!-- <p>{{ message }}</p> -->
-          <p>선택 태그</p>
+          <p>{{ tagMsg }}</p>
+          <!-- <p>선택 태그</p> -->
         </div>
         <ThirdModalChild class='third modal-child'/>
       </div>
@@ -31,11 +31,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
+import { defineEmits } from "vue";
 import ThirdModalChild from './ThirdModalChild.vue';
 
+const whelkMsg = localStorage.getItem('whelk')
+const tagMsg = localStorage.getItem('tag')
+
 const props = defineProps({
-  message: { type: String, default: "test message" }
+  whelkMsg: { type: String, default: "test whelkMsg" },
+  tagMsg: { type: String, default: "test tagMsg" }
 })
 
 const emit = defineEmits(['close']);
@@ -90,7 +94,7 @@ const stopPropagation = (event) => {
 
 .confirm-btn {
   position: absolute;
-  right: 30px;
+  right: 50px;
   bottom: 20px;
 }
 
