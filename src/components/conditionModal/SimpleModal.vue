@@ -15,14 +15,15 @@
       </button>
       <!-- 본문 -->
       <div class="modal-family text-lg">
-        <div class="first modal-child">
+        <div class="first p-2.5 content-center">
           <p>{{ whelkMsg }}</p>
         </div>
-        <div class="second modal-child">
+        <div class="second p-2.5 content-center">
           <p>{{ tagMsg }}</p>
           <!-- <p>선택 태그</p> -->
         </div>
-        <ThirdModalChild class='third modal-child'/>
+        <ThirdModalChild class='third p-2.5 content-center'/>
+        <MiniEditor class='p-2.5 content-center '/>
       </div>
       <button @click.stop="closeModal" type="button"
         class="confirm-btn text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">완료</button>
@@ -32,6 +33,7 @@
 
 <script setup lang="ts">
 import { defineEmits } from "vue";
+import MiniEditor from './minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 
 const whelkMsg = localStorage.getItem('whelk')
@@ -109,22 +111,17 @@ const stopPropagation = (event) => {
   /* transform: translateX(-50%); */
   /* top: 14%; */
   margin: auto;
-  margin-top: 40px;
+  margin-top: 60px;
   width: 742px;
-  height: 160px;
+  height: 150px;
   /* background-color: aquamarine; */
 }
-.modal-child{
-  
-	align-content: center;
-  padding: 10px;
-}
 .first {
-  /* background-color: rgb(101, 111, 255); */
+  background-color: #ffc5e4;
 }
 
 .second {
-  /* background-color: rgb(0, 162, 255); */
+  background-color: #bedcff;
 }
 
 .third {
