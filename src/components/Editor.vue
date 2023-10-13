@@ -10,7 +10,7 @@
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
-    <SimpleModal v-if="showModal" :message="modalMessage" :editor='editor' @close="closeModal" />
+    <SimpleModal v-if="showModal" :message="modalMessage" :editor="editor" @close="closeModal" />
   </div>
 </template>
 
@@ -126,7 +126,6 @@ const content = useStorage(props.storageKey, props.defaultValue);
 const debouncedUpdate = useDebounceFn(({ editor }) => {
   const json = editor.getJSON();
   content.value = json;
-  // console.log(`확인~~~~~120줄 : ${JSON.stringify(content.value)}`);
   // onDebouncedUpdate : 편집기가 업데이트될 때마다 호출되지만 정의된 디바운스 기간 이후에만 호출되는 콜백 함수입니다.
   props.onDebouncedUpdate(editor);
 }, props.debounceDuration); // debounceDuration : onDebouncedUpdate 콜백을 디바운스하는 기간
@@ -148,9 +147,51 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
     // console.log(`테스트2 : ${JSON.stringify(selection)}`);
     // getPrevText 함수는 주어진 범위 내의 텍스트를 반환
     const lastTwo = getPrevText(e.editor, {
-      chars: 2, // 범위 설정
+      chars: 4, // 범위 설정
     });
+
+    // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
+    if (lastTwo === " /조건" && !isLoading.value){
+      // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
+      // 기존 값 삭제
+      localStorage.removeItem('change');
+      // 커서가 있는 줄을 찾기
+      const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
+      const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
+
+      // 해당 범위에 있는 텍스트를 가져옴
+      let lineText = '';
+      e.editor.state.doc.nodesBetween(lineStart, lineEnd, node => {
+        if (node.isText) {
+          lineText += node.text
+        }
+        return true;
+      })
+      console.log(lineText);
+      let changText = lineText.split(' ');
+      console.log(`changText : ${changText}`);
+
+      useStorage('change', lineText.split(' '));
+      let titleData = localStorage.getItem("change");
+      let titleData2;
+      // 타입스크립트에서는 null 체크해야됨
+      if(titleData !== null){
+        titleData2 = JSON.parse(titleData);
+      }
+      console.log(`titleData : ${titleData2}`);
+      console.log(`확인1 : ${JSON.stringify(titleData2[0])}`);
+      console.log(`확인2 : ${JSON.stringify(titleData2[1])}`);
+      // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
+      localStorage.removeItem('whelk');
+      localStorage.removeItem('tag');
+      // 데이터 각각 whelk, tagd에 저장
+      useStorage('whelk', JSON.stringify(titleData2[0]));
+      useStorage('tag', JSON.stringify(titleData2[1]));
+    }
     
+
+
+
     // 사용자가 문서 끝에 "++"를 입력하면 완성 API를 실행
     if (lastTwo === "++" && !isLoading.value) {
       e.editor.commands.deleteRange({
