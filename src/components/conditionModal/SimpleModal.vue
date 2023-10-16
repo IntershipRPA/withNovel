@@ -84,21 +84,16 @@ const closeModal = () => {
 
 const changeToConditionNode = () => {
   const editor = props.editor;
-  const selection = editor.state.selection;
   // const range = props.range;
   const modalContent = localStorage.getItem('modal__content');
   editor
     .chain()
     .focus()
-    // .deleteRange({ from: 0, to: 12 }) // 수정해야함
     .toggleNode("conditionRule", "conditionRule")
-    .setHighlight({ color: '#aac5e4' })
-    .deleteRange({ from: selection.$from.before(1), to: selection.$from.after(1) })
-    .insertContent(`${whelkMsg}의 ${tagMsg}를 ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
+    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`${whelkMsg}의 ${tagMsg}를 ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
     .unsetHighlight()
     .run();
 
-    console.log(`${whelkMsg} ${tagMsg} ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`);
 };
 
 const stopPropagation = (event) => {
