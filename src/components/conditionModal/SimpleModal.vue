@@ -15,33 +15,86 @@
       </button>
       <!-- 본문 -->
       <div class="modal-family text-lg">
-        <div class="first modal-child">
-          <p>선택 설비</p>
+        <div class="first p-2.5 content-center">
+          <p>{{ whelkMsg }}</p>
         </div>
-        <div class="second modal-child">
-          <!-- <p>{{ message }}</p> -->
-          <p>선택 태그</p>
+        <div class="second p-2.5 content-center">
+          <p>{{ tagMsg }}</p>
+          <!-- <p>선택 태그</p> -->
         </div>
-        <ThirdModalChild class='third modal-child'/>
+        <ThirdModalChild class='third p-2.5 content-center'
+        @tempSelected="updateTempValue" 
+        @unitSelected='updateUnitValue'
+        @rangeSelected='updateRangeValue'/>
+        <MiniEditor class='p-2.5 content-center ' />
       </div>
-      <button @click.stop="closeModal" type="button"
-        class="confirm-btn text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">완료</button>
+      <ConfirmBtn @click.stop="handleConfirm" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
+import { PropType, defineEmits, ref } from "vue";
+import MiniEditor from './minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
+import ConfirmBtn from './ConfirmBtn.vue';
+import { Editor } from '@tiptap/core';
+
+// 설비와 태그 불러오기
+const whelkMsg = localStorage.getItem('whelk')
+const tagMsg = localStorage.getItem('tag')
+
+// 인풋에 입력한 값 불러오기
+const temp = ref<number | null>(null); // 온도
+const unit = ref<string>("℃"); // 단위
+const range = ref<string>("이상"); // 범위
+const updateTempValue = (value : number) => {
+  temp.value = value;
+};
+const updateUnitValue= (value : string) => {
+  unit.value = value;
+};
+const updateRangeValue= (value : string) => {
+  range.value = value;
+};
 
 const props = defineProps({
-  message: { type: String, default: "test message" }
+  whelkMsg: { type: String, default: "test whelkMsg" },
+  tagMsg: { type: String, default: "test tagMsg" },
+  editor: {
+    type: Object as PropType<Editor>,
+    required: true,
+  },
+  // range: {
+  //   type: Object as PropType<Range>,
+  //   required: true,
+  // },
 })
 
 const emit = defineEmits(['close']);
 
+const handleConfirm = () => {
+  closeModal();
+  changeToConditionNode(); //conditionRule 노드변경 함수
+};
+
 const closeModal = () => {
   emit('close');
+};
+
+const changeToConditionNode = () => {
+  const editor = props.editor;
+  // const range = props.range;
+  const modalContent = localStorage.getItem('modal__content');
+  editor
+    .chain()
+    .focus()
+    // .deleteRange({ from: 0, to: 12 }) // 수정해야함
+    .toggleNode("conditionRule", "conditionRule")
+    .setHighlight({ color: '#aac5e4' })
+    .insertContent(`${temp.value}${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
+    .unsetHighlight()
+    .run();
 };
 
 const stopPropagation = (event) => {
@@ -90,39 +143,31 @@ const stopPropagation = (event) => {
 
 .confirm-btn {
   position: absolute;
-  right: 30px;
+  right: 50px;
   bottom: 20px;
 }
 
 .modal-family {
   display: flex;
-  /* 또는 inline-flex */
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  /* 수평 방향으로 아이템을 정렬 */
-  /* left: 50%;  */
-  /* transform: translateX(-50%); */
-  /* top: 14%; */
   margin: auto;
-  margin-top: 40px;
+  margin-top: 60px;
   width: 742px;
-  height: 160px;
+  height: 150px;
   /* background-color: aquamarine; */
 }
-.modal-child{
-  
-	align-content: center;
-  padding: 10px;
-}
+
 .first {
-  /* background-color: rgb(101, 111, 255); */
+  background-color: #ffc5e4;
 }
 
 .second {
-  /* background-color: rgb(0, 162, 255); */
+  background-color: #bedcff;
 }
 
 .third {
   /* background-color: rgb(145, 150, 255); */
-}</style>
+}
+</style>

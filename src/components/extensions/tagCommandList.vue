@@ -111,6 +111,7 @@ defineExpose({
 
 function selectItem(index: number) {
   const item = props.items[index];
+  localStorage.removeItem('tag');
   console.log(`테그 : ${item.title}`);
   // 로컬스토리지에 테그 선택한거 저장
   useStorage('tag', item.title);
