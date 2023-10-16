@@ -16,10 +16,10 @@
       <!-- 본문 -->
       <div class="modal-family text-lg">
         <div class="first p-2.5 content-center">
-          <p>{{ whelkMsg }}의</p>
+          <p>"{{ whelkMsg }}"의</p>
         </div>
         <div class="second p-2.5 content-center">
-          <p>{{ tagMsg }}를</p>
+          <p>"{{ tagMsg }}"를</p>
           <!-- <p>선택 태그</p> -->
         </div>
         <ThirdModalChild class='third p-2.5 content-center'
@@ -90,7 +90,7 @@ const changeToConditionNode = () => {
     .chain()
     .focus()
     .toggleNode("conditionRule", "conditionRule")
-    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`${whelkMsg}의 ${tagMsg}를 ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
+    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
     .unsetHighlight()
     .run();
 
