@@ -170,6 +170,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
 //      console.log(lineText.split('/'));
       let changText = lineText.split(' '); // 공백 단위 쪼개기
       let str = changText.pop(); // '/조건' 제거
+
       let changText2 = changText[0]+ " " +changText[1];
       let changText3 = '';
       if(changText.length == 4){
@@ -177,7 +178,8 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       }else{
         changText3 = changText[2];
       }
-      let change = [changText2, changText3];
+      // 한글 제거
+      let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "")];
 //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
 //      console.log(`changText2 : ${changText2}`);
 //      console.log(`changText3 : ${changText3}`);
@@ -192,14 +194,14 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
         titleData2 = JSON.parse(titleData);
       }
       console.log(`titleData : ${titleData2}`);
-      console.log(`whelk 확인 : ${JSON.stringify(titleData2[0])}`);
-      console.log(`tag 확인 : ${JSON.stringify(titleData2[1])}`);
+      console.log(`whelk 확인 : ${titleData2[0]}`);
+      console.log(`tag 확인 : ${titleData2[1]}`);
       // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
       localStorage.removeItem('whelk');
       localStorage.removeItem('tag');
       // 데이터 각각 whelk, tagd에 저장
-      useStorage('whelk', JSON.stringify(titleData2[0]));
-      useStorage('tag', JSON.stringify(titleData2[1]));
+      useStorage('whelk', titleData2[0]);
+      useStorage('tag', titleData2[1]);
     }
     
 

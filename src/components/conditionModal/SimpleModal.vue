@@ -41,8 +41,8 @@ import ConfirmBtn from './ConfirmBtn.vue';
 import { Editor } from '@tiptap/core';
 
 // 설비와 태그 불러오기
-const whelkMsg = localStorage.getItem('whelk')
-const tagMsg = localStorage.getItem('tag')
+const whelkMsg = localStorage.getItem('whelk');
+const tagMsg = localStorage.getItem('tag');
 
 // 인풋에 입력한 값 불러오기
 const temp = ref<number | null>(null); // 온도
@@ -97,6 +97,8 @@ const changeToConditionNode = () => {
     .insertContent(`${whelkMsg}의 ${tagMsg}를 ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
     .unsetHighlight()
     .run();
+
+    console.log(`${whelkMsg} ${tagMsg} ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`);
 };
 
 const stopPropagation = (event) => {
