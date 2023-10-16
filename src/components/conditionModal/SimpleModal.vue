@@ -22,7 +22,10 @@
           <p>{{ tagMsg }}</p>
           <!-- <p>선택 태그</p> -->
         </div>
-        <ThirdModalChild class='third p-2.5 content-center' />
+        <ThirdModalChild class='third p-2.5 content-center'
+        @tempSelected="updateTempValue" 
+        @unitSelected='updateUnitValue'
+        @rangeSelected='updateRangeValue'/>
         <MiniEditor class='p-2.5 content-center ' />
       </div>
       <ConfirmBtn @click.stop="handleConfirm" />
@@ -31,14 +34,29 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, defineEmits } from "vue";
+import { PropType, defineEmits, ref } from "vue";
 import MiniEditor from './minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from './ConfirmBtn.vue';
 import { Editor } from '@tiptap/core';
 
+// 설비와 태그 불러오기
 const whelkMsg = localStorage.getItem('whelk')
 const tagMsg = localStorage.getItem('tag')
+
+// 인풋에 입력한 값 불러오기
+const temp = ref<number | null>(null); // 온도
+const unit = ref<string>("℃"); // 단위
+const range = ref<string>("이상"); // 범위
+const updateTempValue = (value : number) => {
+  temp.value = value;
+};
+const updateUnitValue= (value : string) => {
+  unit.value = value;
+};
+const updateRangeValue= (value : string) => {
+  range.value = value;
+};
 
 const props = defineProps({
   whelkMsg: { type: String, default: "test whelkMsg" },
@@ -57,23 +75,24 @@ const emit = defineEmits(['close']);
 
 const handleConfirm = () => {
   closeModal();
-  toggleNode(); //conditionRule 노드변경 함수
+  changeToConditionNode(); //conditionRule 노드변경 함수
 };
 
 const closeModal = () => {
   emit('close');
 };
 
-const toggleNode = () => {
+const changeToConditionNode = () => {
   const editor = props.editor;
   // const range = props.range;
+  const modalContent = localStorage.getItem('modal__content');
   editor
     .chain()
     .focus()
     // .deleteRange({ from: 0, to: 12 }) // 수정해야함
     .toggleNode("conditionRule", "conditionRule")
     .setHighlight({ color: '#aac5e4' })
-    .insertContent("←조건_설정_완료")
+    .insertContent(`${temp.value}${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
     .unsetHighlight()
     .run();
 };
