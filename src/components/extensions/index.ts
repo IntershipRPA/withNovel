@@ -14,6 +14,7 @@ import SlashCommand from "./slashExtension";
 import WhelkCommand from "./whelkExtension";
 import TagCommand from "./tagExtension";
 import ConditionCommand from "./conditionExtension";
+import { ConditionRule } from './conditionRule';
 
 export const defaultExtensions = [
   StarterKit.configure({
@@ -95,7 +96,7 @@ export const defaultExtensions = [
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }
-      return "설비기기는 '@'를 누르고, 태그 입력은 '$'을 눌러 작성하세요. 조건은 '~~'을 눌러 작성하세요.";
+      return "설비기기는 '@'를 누르고, 태그 입력은 '$'을 눌러 작성하세요. 조건은 '/조건'입력 후 엔터를 눌러 작성하세요.";
     },
     includeChildren: true,
   }),
@@ -124,4 +125,35 @@ export const defaultExtensions = [
   WhelkCommand,
   TagCommand,
   ConditionCommand,
+    /**
+  * addInputRules에 의한 규칙 생성
+  */
+  // ConditionRule.extend({
+  //   addInputRules() {
+  //     return [
+  //       new InputRule({
+  //         find: /^(?:~~|~,)$/,
+  //         handler: ({ state, range }) => {
+  //           // 입력 규칙이 일치할 때 실행될 동작 정의
+  //           const { tr } = state;
+  //           const start = range.from;
+  //           let end = range.to;
+  //           tr.delete(
+  //             tr.mapping.map(start),
+  //             tr.mapping.map(end)
+  //           );
+  //           // 패턴과 일치하는 텍스트를 삭제
+  //           tr.replaceWith(start, end, []);
+  //           // modalToggle.value = true;
+  //           return null; // 규칙 처리 완료
+  //         },
+  //       }),
+  //     ];
+  //   },
+  // }).configure({
+  //   HTMLAttributes: {
+  //     class: "mt-4 mb-6 border-t border-stone-300",
+  //   },
+  // }),
+  ConditionRule,
 ];

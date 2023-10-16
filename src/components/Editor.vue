@@ -10,7 +10,7 @@
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
-    <SimpleModal v-if="showModal" :editor="editor" @close="closeModal" />
+    <SimpleModal v-if="showModal" :message="modalMessage" :editor='editor' @close="closeModal" />
   </div>
 </template>
 
@@ -200,8 +200,6 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       // 데이터 각각 whelk, tagd에 저장
       useStorage('whelk', JSON.stringify(titleData2[0]));
       useStorage('tag', JSON.stringify(titleData2[1]));
-
-      console.log(titleData2[0] + titleData2[1]);
     }
     
 

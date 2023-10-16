@@ -1,0 +1,2 @@
+# Set specific line ending for a file
+src/components/Editor.vue eol=lf
