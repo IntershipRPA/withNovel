@@ -178,9 +178,9 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
         changText3 = changText[2];
       }
       let change = [changText2, changText3];
-     console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-     console.log(`changText2 : ${changText2}`);
-     console.log(`changText3 : ${changText3}`);
+    //  console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
+    //  console.log(`changText2 : ${changText2}`);
+    //  console.log(`changText3 : ${changText3}`);
       // 로컬에 저장
       useStorage('change', change);
       let titleData = localStorage.getItem("change");
