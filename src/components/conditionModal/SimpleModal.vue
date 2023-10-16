@@ -39,7 +39,7 @@ import MiniEditor from './minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from './ConfirmBtn.vue';
 import { Editor } from '@tiptap/core';
-
+import { useStorage } from "@vueuse/core";
 // 설비와 태그 불러오기
 const whelkMsg = localStorage.getItem('whelk');
 const tagMsg = localStorage.getItem('tag');
@@ -94,6 +94,10 @@ const changeToConditionNode = () => {
     .unsetHighlight()
     .run();
 
+  let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  console.log(konwhow);
+  localStorage.removeItem('konwhow');
+  useStorage('konwhow', konwhow);
 };
 
 const stopPropagation = (event) => {
