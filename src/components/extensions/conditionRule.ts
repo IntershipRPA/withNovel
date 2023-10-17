@@ -1,5 +1,8 @@
-import { Node, chainCommands, exitCode, mergeAttributes } from '@tiptap/core';
-
+import {
+  Node,
+  mergeAttributes
+} from '@tiptap/core';
+import { selectParentNode } from '@tiptap/pm/commands';
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
 }
@@ -8,6 +11,9 @@ declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
       setConditionRule: () => ReturnType;
+      toggleCondition: () => ReturnType;
+      unsetCondition: () => ReturnType;
+      setCondition: () => ReturnType;
     };
   }
 }
@@ -16,72 +22,72 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   name: 'conditionRule',
   group: 'block',
   content: 'text*',
+  // content: 'block+',
   marks: '',
   defining: true,
   draggable: false,
+  // draggable: true,
+
+  // addAttributes() {
+  //   return {
+  //     styleCustom: {
+  //       default: null,
+  //       renderHTML: attributes => {
+  //         return {
+  //           class: `inline-block rounded-lg shadow-md bg-gray-100 hover:bg-gray-200 p-2 px-8 mb-2 mt-2`,
+  //         }
+  //       },
+  //     },
+  //   }
+  // },
+
   parseHTML() {
     return [
-      { tag: 'p' },
+      { tag: 'condition' },
     ]
   },
+
   renderHTML({ HTMLAttributes }) {
-    return ['p', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+    // return ['condition', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+    return [
+      'condition',
+      { class: 'block flex items-center	' },
+      ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 h-10 px-8 mb-2 mt-2 flex items-center`}, 0],
+      ['span', 
+        {class: `cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-5 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
+         tag: `condition-tail`}, 
+        '조건',
+      ],
+    ]
   },
+
+  // 사용 예시
+  // renderHTML({ HTMLAttributes }) {
+  //   return [
+  //     'pre', 
+  //     ['code', HTMLAttributes, 'This is some content inside the code.'], 
+  //     'This is some content after the code.', 
+  //     ['p', 'This is a paragraph after the code.', 'More content between the paragraphs.'], 
+  //     ['div', 'This is a div after the paragraphs.']
+  //   ]
+  // },
+
   addCommands() {
     return {
-      setCondition: () => ({ commands }: { commands: any; }) => {
+      setConditionRule: () => ({ commands }: { commands: any; }) => {
         return commands.toggleNode(this.name)
+      },
+      toggleCondition: () => ({ commands }) => {
+        return commands.toggleWrap(this.name)
+      },
+      unsetCondition: () => ({ commands }) => {
+        return commands.lift(this.name)
+      },
+
+      setCondition: () => ({ commands }: { commands: any; }) => {
+        // commands.toggleNode(this.name)
+        return commands.wrapIn(this.name)
       },
     }
   },
-  // addCommands() {
-  //   return {
-  //     setHorizontalRule:
-  //       () => ({ chain, state }) => {
-  //         const { $to: $originTo } = state.selection
-
-  //         const currentChain = chain()
-
-  //         if ($originTo.parentOffset === 0) {
-  //           currentChain.insertContentAt(Math.max($originTo.pos - 2, 0), { type: this.name })
-  //         } else {
-  //           currentChain.insertContent({ type: this.name })
-  //         }
-
-  //         return (
-  //           currentChain
-  //             // set cursor after horizontal rule
-  //             .command(({ tr, dispatch }) => {
-  //               if (dispatch) {
-  //                 const { $to } = tr.selection
-  //                 const posAfter = $to.end()
-
-  //                 if ($to.nodeAfter) {
-  //                   if ($to.nodeAfter.isTextblock) {
-  //                     tr.setSelection(TextSelection.create(tr.doc, $to.pos + 1))
-  //                   } else if ($to.nodeAfter.isBlock) {
-  //                     tr.setSelection(NodeSelection.create(tr.doc, $to.pos))
-  //                   } else {
-  //                     tr.setSelection(TextSelection.create(tr.doc, $to.pos))
-  //                   }
-  //                 } else {
-  //                   // add node after horizontal rule if it’s the end of the document
-  //                   const node = $to.parent.type.contentMatch.defaultType?.create()
-
-  //                   if (node) {
-  //                     tr.insert(posAfter, node)
-  //                     tr.setSelection(TextSelection.create(tr.doc, posAfter + 1))
-  //                   }
-  //                 }
-
-  //                 tr.scrollIntoView()
-  //               }
-
-  //               return true
-  //             })
-  //             .run()
-  //         )
-  //       },
-  //   }
-  // },
 });

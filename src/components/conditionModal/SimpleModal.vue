@@ -90,10 +90,8 @@ const changeToConditionNode = () => {
     .chain()
     .focus()
     // .deleteRange({ from: 0, to: 12 }) // 수정해야함
-    .toggleNode("conditionRule", "conditionRule")
-    .setHighlight({ color: '#aac5e4' })
-    .insertContent(`${temp.value}${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
-    .unsetHighlight()
+    .insertContent(`${temp.value}${unit.value} ${range.value} ${modalContent} `)
+    .setConditionRule()
     .run();
 };
 
