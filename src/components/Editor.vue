@@ -356,20 +356,41 @@ watchEffect(() => {
 
 // nextTick을 사용하여 초기 렌더링 이후에 실행
 nextTick(() => {
+  console.log("nextTick called");
   // HTML 요소에 클릭 이벤트 핸들러 함수 연결
   const elements = document.querySelectorAll('.condition-tail');
   if (elements) {
+    console.log("elements detected");
     // dynamicElement.value = elements;
     elements.forEach(element => {
       element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+      console.log("element에 클릭 이벤트 연결:", element)
     });
   }
-  // console.log(dynamicElement.value);
+  // console.log(dynamicElement.value);//
 });
+
+// watch(
+//   () => completion.value,
+//   (completion) => {
+//     // HTML 요소에 클릭 이벤트 핸들러 함수 연결
+//     const elements = document.querySelectorAll('.condition-tail');
+//     if (elements) {
+//       console.log("elements detected");
+//       // dynamicElement.value = elements;
+//       elements.forEach(element => {
+//         element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+//         console.log("element에 클릭 이벤트 연결:", element)
+//       });
+//     }
+//     // console.log(dynamicElement.value);
+//   }
+// );
 
 
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
 function handleClick(event) {
+  console.log("handleClick 호출")
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   const clickedElement = event.target;
 
@@ -399,7 +420,7 @@ function handleClick(event) {
   // 모달 열기
   showModal.value = true;
 
-  
+
   // const selection = editor.state.selection;
   // console.log(editor.value?.state);
   // console.log(editor.value?.storage);

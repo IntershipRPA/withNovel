@@ -106,7 +106,6 @@ const changeToConditionNode = () => {
     // })
     
     .deleteRange({from:lineStart, to:lineEnd})
-
     // .insertContent(
     //   {
     //     type: "conditionRule",
@@ -125,6 +124,7 @@ const changeToConditionNode = () => {
     //   },
     // )
     .setConditionRule()
+    
     .insertContent(`${whelkMsg} ${tagMsg} ${temp.value}${unit.value} ${range.value} ${modalContent} `)
     .run();
 };
