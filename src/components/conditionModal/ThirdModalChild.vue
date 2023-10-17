@@ -38,14 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from "vue";
-
-const props = defineProps({
-  message3: { type: String, default: "test3 message" },
-  // tempValue: { type: String, default: "tempValue"},
-  // unitValue: { type: String, default:"℃"},
-  // range: { type: String, default:"이상"},
-})
+import {/* defineProps, */defineEmits, ref } from "vue";
 
 const tempValue = ref<number | null>(null);
 const unitValue = ref<string>("℃");

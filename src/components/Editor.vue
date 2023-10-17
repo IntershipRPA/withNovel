@@ -185,23 +185,23 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
 //      console.log(`changText3 : ${changText3}`);
       // 로컬에 저장
       useStorage('change', change);
-      let titleData = localStorage.getItem("change");
-      let titleData2;
+      // let titleData = localStorage.getItem("change");
+      // let titleData2;
 
-      console.log(`change : ${titleData}`);
-      // 타입스크립트에서는 null 체크해야됨
-      if(titleData !== null){
-        titleData2 = JSON.parse(titleData);
-      }
-      console.log(`titleData : ${titleData2}`);
-      console.log(`whelk 확인 : ${titleData2[0]}`);
-      console.log(`tag 확인 : ${titleData2[1]}`);
-      // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
-      localStorage.removeItem('whelk');
-      localStorage.removeItem('tag');
-      // 데이터 각각 whelk, tagd에 저장
-      useStorage('whelk', titleData2[0]);
-      useStorage('tag', titleData2[1]);
+      // console.log(`change : ${titleData}`);
+      // // 타입스크립트에서는 null 체크해야됨
+      // if(titleData !== null){
+      //   titleData2 = JSON.parse(titleData);
+      // }
+      // console.log(`titleData : ${titleData2}`);
+      // console.log(`whelk 확인 : ${titleData2[0]}`);
+      // console.log(`tag 확인 : ${titleData2[1]}`);
+      // // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
+      // localStorage.removeItem('whelk');
+      // localStorage.removeItem('tag');
+      // // 데이터 각각 whelk, tagd에 저장
+      // useStorage('whelk', titleData2[0]);
+      // useStorage('tag', titleData2[1]);
     }
     
 

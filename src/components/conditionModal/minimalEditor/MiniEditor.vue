@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
+import { EditorContent, useEditor } from '@tiptap/vue-3'
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from "@tiptap/starter-kit";
 import { useStorage } from '@vueuse/core';

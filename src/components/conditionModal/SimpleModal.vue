@@ -41,8 +41,8 @@ import ConfirmBtn from './ConfirmBtn.vue';
 import { Editor } from '@tiptap/core';
 import { useStorage } from "@vueuse/core";
 // 설비와 태그 불러오기
-const whelkMsg = localStorage.getItem('whelk');
-const tagMsg = localStorage.getItem('tag');
+const whelkMsg = localStorage.getItem('whelk')
+const tagMsg = localStorage.getItem('tag')
 
 // 인풋에 입력한 값 불러오기
 const temp = ref<number | null>(null); // 온도
@@ -76,28 +76,37 @@ const emit = defineEmits(['close']);
 const handleConfirm = () => {
   closeModal();
   changeToConditionNode(); //conditionRule 노드변경 함수
+
+
 };
 
 const closeModal = () => {
   emit('close');
 };
 
+const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열 / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
 const changeToConditionNode = () => {
   const editor = props.editor;
-  // const range = props.range;
+console.log("언제 실행");
   const modalContent = localStorage.getItem('modal__content');
   editor
-    .chain()
+  .chain()
     .focus()
-    .toggleNode("conditionRule", "conditionRule")
-    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent} ←조건_설정_완료`)
-    .unsetHighlight()
+    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`)
+    .setConditionRule()
     .run();
 
   let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   console.log(konwhow);
+ 
+  konwhowArr.value.push(konwhow);
+  localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
+  console.log(konwhowArr.value);
+ 
+  
+//  console.log(localStorage.getItem("konwhowArr").replace(/\\/g, '').replace(/"/g, ''));
   localStorage.removeItem('konwhow');
-  useStorage('konwhow', konwhow);
+  useStorage('konwhow', konwhow);//레시피
 };
 
 const stopPropagation = (event) => {

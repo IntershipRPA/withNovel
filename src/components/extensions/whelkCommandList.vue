@@ -106,13 +106,25 @@ watch(
 defineExpose({
   onKeyDown,
 });
-
+// const whelk = useStorage<string[]>('whelk', []);  // 선택한 설비 리스트 / 초기화 막음
 function selectItem(index: number) {
   const item = props.items[index];
   localStorage.removeItem('whelk');  
   console.log(`설비 : ${props.items[index].title}`);
-  // 로컬스토리지에 설비 선택한거 저장
-  useStorage('whelk', item.title);
+
+  // 선택한 설비 리스트
+//  whelk.value.push(item.title); // 배열로 저장 할 때
+//  localStorage.setItem('whelk', JSON.stringify(whelk.value)); // 배열로 저장 할 때
+  useStorage('whelk', item.title); //하나만 저장
+//  console.log(`설비 리스트 : ${JSON.stringify(whelk.value)}`); // 배열로 저장 할 때
+//  console.log(localStorage.getItem('whelk'));
+  
+   
+
+   
+
+  
+
 
   if (item) {
     if (item.title === "Continue writing") {
@@ -153,39 +165,4 @@ function scrollToSelected() {
   }
 }
 
-// const responseData = ref(null); // API 응답 데이터를 저장할 변수
-
-// // API 인증 키 (API Key) 설정
-// const apiKey = '2VUsy8DXgU7UltYDHQ+drH9T6gf4M5cWgEzh67DXRJwjfzWrQFnEGl6To3ODDZzLbXf+Pm/Z7awxIaIlRALQAQ=='; // 실제 API 키로 대체해야 합니다.
-// const apiEndpoint = 'http://api.odcloud.kr/api/15072603/v1/uddi:c470f155-2d53-4feb-87cd-ff010c6a315d'; // 사용하려는 API의 엔드포인트 URL
-
-// const fetchData = async () => {
-//   try {
-//     const response = await axios.get(apiEndpoint, {
-//       params: {
-//         serviceKey: apiKey, // API 키를 요청 매개변수로 추가
-//         // 다른 요청 매개변수도 필요한 경우 여기에 추가
-//         page: 1,
-//         perPage: 5
-//       },
-//     });
-
-//     // API 응답 데이터 처리
-//     console.log(response.data.data);
-//     // console.log(Array.isArray(response.data));
-//     response.data.data.map((item: any) => { 
-//       console.log(item.기인물명상세); 
-//       console.log(item.기인물명상세코드); 
-//       console.log(item.기인물명); 
-//     });
-//     responseData.value = response.data; // API 응답 데이터 저장
-//   } catch (error) {
-//     console.error('API 호출 중 오류 발생:', error);
-//   }
-// };
-
-// // 컴포넌트가 마운트된 후 API 데이터 가져오기
-// onMounted(() => {
-//   fetchData();
-// });
 </script>
