@@ -7,6 +7,7 @@
     <BubbleMenu v-if="editor" :editor="editor" />
     <!-- 조건부 렌더링
         editor 객체가 존재하는 경우에만 해당 컴포넌트 렌더링 -->
+    <!-- <EditorContent @click='handleEditorContentClick' :editor="editor" /> -->
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
@@ -15,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch } from "vue";
+import { watchEffect, type PropType, ref, watch, onUpdated, onMounted, nextTick } from "vue";
 import { useEditor, EditorContent, JSONContent, Extension } from "@tiptap/vue-3";
 import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass } from "@tiptap/core";
@@ -36,7 +37,6 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-
 const props = defineProps({
 
   // 완성(자동완성) API의 엔드포인트 URL
@@ -55,15 +55,15 @@ const props = defineProps({
   // 에디터기본 값으로, JSON 형식으로 저장
   defaultValue: {
     type: Object as PropType<JSONContent>,
-      default: {
-        type: "doc",
-        content: [
-          {
-            type: "heading",
-            attrs: { level: 2 },
-            content: [{ type: "text", text: "Novel을 소개합니다" }],
-          },]
-      }
+    default: {
+      type: "doc",
+      content: [
+        {
+          type: "heading",
+          attrs: { level: 2 },
+          content: [{ type: "text", text: "Novel을 소개합니다" }],
+        },]
+    }
     // default: () => {
     //   return defaultEditorContent;
     // },
@@ -150,7 +150,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
     });
 
     // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
-    if (lastTwo === " /조건" && !isLoading.value){
+    if (lastTwo === " /조건" && !isLoading.value) {
       // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
       // 기존 값 삭제
       localStorage.removeItem('change');
@@ -166,20 +166,20 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
         }
         return true;
       })
-//      console.log(lineText.split('/'));
+      //      console.log(lineText.split('/'));
       let changText = lineText.split(' '); // 공백 단위 쪼개기
       let str = changText.pop(); // '/조건' 제거
-      let changText2 = changText[0]+ " " +changText[1];
+      let changText2 = changText[0] + " " + changText[1];
       let changText3 = '';
-      if(changText.length == 4){
-        changText3 = changText[2]+ " " +changText[3];
-      }else{
+      if (changText.length == 4) {
+        changText3 = changText[2] + " " + changText[3];
+      } else {
         changText3 = changText[2];
       }
       let change = [changText2, changText3];
-//      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-//      console.log(`changText2 : ${changText2}`);
-//      console.log(`changText3 : ${changText3}`);
+      //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
+      //      console.log(`changText2 : ${changText2}`);
+      //      console.log(`changText3 : ${changText3}`);
       // 로컬에 저장
       useStorage('change', change);
       let titleData = localStorage.getItem("change");
@@ -187,7 +187,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
 
       console.log(`change : ${titleData}`);
       // 타입스크립트에서는 null 체크해야됨
-      if(titleData !== null){
+      if (titleData !== null) {
         titleData2 = JSON.parse(titleData);
       }
       console.log(`titleData : ${titleData2}`);
@@ -202,7 +202,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
 
       console.log(titleData2[0] + titleData2[1]);
     }
-    
+
 
 
 
@@ -271,12 +271,12 @@ watch(
     */
     const diff = newCompletion?.slice(oldCompletion?.length);
 
-    if (diff) {    
-  // 새로 완성된 텍스트를 로컬 스토리지에 저장
+    if (diff) {
+      // 새로 완성된 텍스트를 로컬 스토리지에 저장
       useStorage('newText', diff);
       // 차이점이 있다면, 에디터에 그 내용을 삽입
       editor.value?.commands.insertContent(diff);
-          
+
     }
 
   }
@@ -343,8 +343,70 @@ watchEffect(() => {
     editor.value.commands.setContent(content.value);
     hydrated.value = true;
   }
-  
+
 })
+
+
+
+
+
+
+// 조건 꼬리표 클릭이벤트
+// const dynamicElement = ref<Element[] | null>(null);
+
+// nextTick을 사용하여 초기 렌더링 이후에 실행
+nextTick(() => {
+  // HTML 요소에 클릭 이벤트 핸들러 함수 연결
+  const elements = document.querySelectorAll('.condition-tail');
+  if (elements) {
+    // dynamicElement.value = elements;
+    elements.forEach(element => {
+      element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+    });
+  }
+  // console.log(dynamicElement.value);
+});
+
+
+// HTML 요소에 대한 클릭 이벤트 핸들러 함수
+function handleClick(event) {
+  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
+  const clickedElement = event.target;
+
+  // // 클릭한 요소의 태그 이름 (예: "DIV", "BUTTON" 등)
+  // const tagName = clickedElement.tagName;
+
+  // // 클릭한 요소의 ID 속성
+  // const id = clickedElement.id;
+
+  // // 클릭한 요소의 클래스 목록
+  // const classes = clickedElement.classList;
+
+  // // 클릭한 요소의 텍스트 내용
+  // const textContent = clickedElement.textContent;
+
+  // 클릭한 요소의 모든 속성(attribute) 가져오기
+  const attributes = clickedElement.attributes;
+
+  // 모든 속성을 순회하면서 출력
+  for (let i = 0; i < attributes.length; i++) {
+    const attribute = attributes[i];
+    console.log(`Attribute Name: ${attribute.name}, Attribute Value: ${attribute.value}`);
+  }
+
+  console.log(clickedElement);
+
+  // 모달 열기
+  showModal.value = true;
+
+  
+  // const selection = editor.state.selection;
+  // console.log(editor.value?.state);
+  // console.log(editor.value?.storage);
+  // console.log(editor.value?.storage.tableOfContent);
+  // console.log(editor.value?.getJSON());
+}
+
 
 
 </script>
