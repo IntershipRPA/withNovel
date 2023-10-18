@@ -50,9 +50,64 @@ const props = defineProps({
 // const emit = defineEmits(['close']);
 
 // const closeModal = () => {
-//   props.isCondition = false;
 //   emit('close');
 // };
+
+const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
+const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
+const changeToConditionNode = () => {
+  const editor = props.editor;
+  const modalContent = localStorage.getItem('modal__content');
+  editor
+  .chain()
+    .focus()
+    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`)
+    .setConditionRule()
+    .run();
+
+  let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+//  console.log(JSON.stringify(konwhow));
+ 
+  konwhowArr.value.push(konwhow);
+  localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
+//  console.log(konwhowArr.value);
+
+  //객체로 저장
+  let whel = whelkMsg;
+  let tag = tagMsg;
+  let tempValue = temp.value;
+  let unitValue = unit.value;
+  let rangeValue = range.value;
+  let modalText = modalContent;
+  let obj = {whel, tag, tempValue, unitValue, rangeValue, modalText};
+//  console.log(JSON.stringify(obj));
+  konwhowOBJ.value.push(obj); //배열에 추가
+  localStorage.setItem('konwhowOBJ', JSON.stringify(konwhowOBJ.value)); //로컬에 저장
+  // 데이터 가져오기
+  let gatData = localStorage.getItem('konwhowOBJ')
+
+  let gatData2;
+  if(gatData !== null){
+    gatData2 = JSON.parse(gatData);
+  }
+  console.log(`확인1 : ${JSON.stringify(gatData2[1])}`); //전체 가져올 때
+  console.log(`확인2 : ${gatData2[1].whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
+  console.log(`확인3 : ${gatData2[1].tag}`);
+  console.log(`확인4 : ${gatData2[1].tempValue}`);
+ 
+/*
+  localStorage는 무조건 문자열로 저장
+  JSON 데이터를 문자열로 변환하거나, 특수문자를 포함한 문자열을 안전하게 다루기 위해 이스케이프 처리
+*/
+  // const data = localStorage.getItem("konwhowArr");
+  // if(data !== null){
+  //   console.log(data.replace(/\\/g, '').replace(/"/g, ''));
+  // }
+
+
+  localStorage.removeItem('konwhow');
+  useStorage('konwhow', konwhow);//레시피
+};
 
 const stopPropagation = (event) => {
   event.stopPropagation();

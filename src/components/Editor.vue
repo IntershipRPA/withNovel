@@ -189,38 +189,38 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       //      console.log(lineText.split('/'));
       let changText = lineText.split(' '); // 공백 단위 쪼개기
       let str = changText.pop(); // '/조건' 제거
-      let changText2 = changText[0] + " " + changText[1];
+
+      let changText2 = changText[0]+ " " +changText[1];
       let changText3 = '';
       if (changText.length == 4) {
         changText3 = changText[2] + " " + changText[3];
       } else {
         changText3 = changText[2];
       }
-      let change = [changText2, changText3];
-      //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-      //      console.log(`changText2 : ${changText2}`);
-      //      console.log(`changText3 : ${changText3}`);
+      // 한글 제거
+      let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, "")];
+//      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
+//      console.log(`changText2 : ${changText2}`);
+//      console.log(`changText3 : ${changText3}`);
       // 로컬에 저장
       useStorage('change', change);
-      let titleData = localStorage.getItem("change");
-      let titleData2;
+      // let titleData = localStorage.getItem("change");
+      // let titleData2;
 
-      console.log(`change : ${titleData}`);
-      // 타입스크립트에서는 null 체크해야됨
-      if (titleData !== null) {
-        titleData2 = JSON.parse(titleData);
-      }
-      console.log(`titleData : ${titleData2}`);
-      console.log(`whelk 확인 : ${JSON.stringify(titleData2[0])}`);
-      console.log(`tag 확인 : ${JSON.stringify(titleData2[1])}`);
-      // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
-      localStorage.removeItem('whelk');
-      localStorage.removeItem('tag');
-      // 데이터 각각 whelk, tagd에 저장
-      useStorage('whelk', JSON.stringify(titleData2[0]));
-      useStorage('tag', JSON.stringify(titleData2[1]));
-
-      console.log(titleData2[0] + titleData2[1]);
+      // console.log(`change : ${titleData}`);
+      // // 타입스크립트에서는 null 체크해야됨
+      // if(titleData !== null){
+      //   titleData2 = JSON.parse(titleData);
+      // }
+      // console.log(`titleData : ${titleData2}`);
+      // console.log(`whelk 확인 : ${titleData2[0]}`);
+      // console.log(`tag 확인 : ${titleData2[1]}`);
+      // // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
+      // localStorage.removeItem('whelk');
+      // localStorage.removeItem('tag');
+      // // 데이터 각각 whelk, tagd에 저장
+      // useStorage('whelk', titleData2[0]);
+      // useStorage('tag', titleData2[1]);
     }
 
 
