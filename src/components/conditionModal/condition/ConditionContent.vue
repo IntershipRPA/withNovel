@@ -104,9 +104,9 @@ const changeToConditionNode = () => {
     gatData2 = JSON.parse(gatData);
   }
   console.log(`확인1 : ${JSON.stringify(gatData2[1])}`); //전체 가져올 때
-  console.log(`확인2 : ${gatData2[1].whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
-  console.log(`확인3 : ${gatData2[1].tag}`);
-  console.log(`확인4 : ${gatData2[1].tempValue}`);
+  console.log(`확인2 : ${gatData2[1]?.whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
+  console.log(`확인3 : ${gatData2[1]?.tag}`);
+  console.log(`확인4 : ${gatData2[1]?.tempValue}`);
  
 /*
   localStorage는 무조건 문자열로 저장
