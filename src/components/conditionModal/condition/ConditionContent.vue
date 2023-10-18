@@ -20,6 +20,7 @@ import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
+import { useStorage } from "@vueuse/core";
 
 // 설비와 태그 불러오기
 const whelkMsg = localStorage.getItem('whelk')
@@ -65,53 +66,60 @@ const handleConfirm = () => {
   changeToConditionNode(); //conditionRule 노드변경 함수
 };
 
+const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
+const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
 const changeToConditionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__content');
-  const selection = editor.state.selection;
-  // 커서가 있는 줄을 찾기
-  const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
-  const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
-  console.log("here@@@###!!!", lineStart, lineEnd);
-
   editor
-    .chain()
+  .chain()
     .focus()
-    // .deleteRange({ from: 0, to: 12 }) // 수정해야함
-    // .insertContent(`${temp.value}${unit.value} ${range.value} ${modalContent} `)
-    // .setConditionRule({
-    //   attrs: {
-    //     whelk: whelkMsg,
-    //     tag: tagMsg,
-    //     temp: temp.value,
-    //     unit: unit.value,
-    //     range: range.value,
-    //     memo: modalContent,
-    //   }
-    // })
-
-    .deleteRange({ from: lineStart, to: lineEnd })
-    // .insertContent(
-    //   {
-    //     type: "conditionRule",
-    //     attrs: {
-    //       whelk: whelkMsg,
-    //       tag: tagMsg,
-    //       temp: temp.value,
-    //       unit: unit.value,
-    //       range: range.value,
-    //       memo: modalContent,
-    //     },
-    //     content: [{
-    //       type: "text",
-    //       text: `${whelkMsg} ${tagMsg} ${temp.value}${unit.value} ${range.value} ${modalContent} `,
-    //     }],
-    //   },
-    // )
+    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`)
     .setConditionRule()
-
-    .insertContent(`${whelkMsg} ${tagMsg} ${temp.value}${unit.value} ${range.value} ${modalContent} `)
     .run();
+
+  let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+//  console.log(JSON.stringify(konwhow));
+ 
+  konwhowArr.value.push(konwhow);
+  localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
+//  console.log(konwhowArr.value);
+
+  //객체로 저장
+  let whel = whelkMsg;
+  let tag = tagMsg;
+  let tempValue = temp.value;
+  let unitValue = unit.value;
+  let rangeValue = range.value;
+  let modalText = modalContent;
+  let obj = {whel, tag, tempValue, unitValue, rangeValue, modalText};
+//  console.log(JSON.stringify(obj));
+  konwhowOBJ.value.push(obj); //배열에 추가
+  localStorage.setItem('konwhowOBJ', JSON.stringify(konwhowOBJ.value)); //로컬에 저장
+  // 데이터 가져오기
+  let gatData = localStorage.getItem('konwhowOBJ')
+
+  let gatData2;
+  if(gatData !== null){
+    gatData2 = JSON.parse(gatData);
+  }
+  console.log(`확인1 : ${JSON.stringify(gatData2[1])}`); //전체 가져올 때
+  console.log(`확인2 : ${gatData2[1].whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
+  console.log(`확인3 : ${gatData2[1].tag}`);
+  console.log(`확인4 : ${gatData2[1].tempValue}`);
+ 
+/*
+  localStorage는 무조건 문자열로 저장
+  JSON 데이터를 문자열로 변환하거나, 특수문자를 포함한 문자열을 안전하게 다루기 위해 이스케이프 처리
+*/
+  // const data = localStorage.getItem("konwhowArr");
+  // if(data !== null){
+  //   console.log(data.replace(/\\/g, '').replace(/"/g, ''));
+  // }
+
+
+  localStorage.removeItem('konwhow');
+  useStorage('konwhow', konwhow);//레시피
 };
 
 // const stopPropagation = (event) => {
