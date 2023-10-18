@@ -50,9 +50,10 @@ const props = defineProps({
 // const emit = defineEmits(['close']);
 
 // const closeModal = () => {
-//   props.isCondition = false;
 //   emit('close');
 // };
+
+
 
 const stopPropagation = (event) => {
   event.stopPropagation();
