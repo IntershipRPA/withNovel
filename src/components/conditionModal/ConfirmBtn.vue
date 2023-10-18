@@ -6,3 +6,10 @@
 <script setup lang="ts">
 </script>
 
+<style scoped>
+.confirm-btn {
+  position: absolute;
+  right: 50px;
+  bottom: 20px;
+}
+</style>

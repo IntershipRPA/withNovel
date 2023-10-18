@@ -15,6 +15,8 @@ import WhelkCommand from "./condition/whelkExtension";
 import TagCommand from "./condition/tagExtension";
 import ConditionCommand from "./condition/conditionExtension";
 import { ConditionRule } from './condition/conditionRule';
+import ActionCommand from "./action/actionExtension";
+import { ActionRule } from './action/actionRule';
 
 export const defaultExtensions = [
   StarterKit.configure({
@@ -156,4 +158,6 @@ export const defaultExtensions = [
   //   },
   // }),
   ConditionRule,
+  ActionCommand,
+  ActionRule,
 ];

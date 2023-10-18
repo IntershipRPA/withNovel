@@ -7,16 +7,16 @@ import {
 } from "lucide-vue-next";
 import { PluginKey } from '@tiptap/pm/state'
 import { ref } from 'vue';
-import ConditionTooltip from "../../tooltip/ConditionTooltip.vue";
+import ActionTooltip from "../../tooltip/ActionTooltip.vue";
 import SlashCommandList from "./slashCommandList.vue";
 
 const Command = Extension.create({
-  name: "condition-command",
+  name: "action-command",
   addOptions() {
     return {
       suggestion: {
-        pluginKey: new PluginKey('condition-command'),
-        char: "/조건",
+        pluginKey: new PluginKey('action-command'),
+        char: "!",
         command: ({
           editor,
           range,
@@ -60,7 +60,7 @@ const renderItems = () => {
   // console.log("33", component?.ref.modalToggle);
   return {
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
-      component = new VueRenderer(ConditionTooltip, {
+      component = new VueRenderer(ActionTooltip, {
         props,
         editor: props.editor,
       });
@@ -97,7 +97,6 @@ const renderItems = () => {
       }
 
       const onKeyDownResult = component?.ref?.onKeyDown(props.event);
-      // modalToggle.value = component?.ref?.modalToggle;
 
       return onKeyDownResult;
     },
@@ -108,11 +107,10 @@ const renderItems = () => {
   };
 };
 
-const ConditionCommand = Command.configure({
+const ActionCommand = Command.configure({
   suggestion: {
     render: renderItems,
   },
 });
 
-// export const modalToggle = ref(false);
-export default ConditionCommand;
+export default ActionCommand;

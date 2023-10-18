@@ -44,6 +44,7 @@
     "axios": "^1.5.1",
     "convert-csv-to-json": "^2.0.0",
     "lucide-vue-next": "^0.274.0",
+    "pinia": "^2.1.7",
     "sass": "^1.69.3",
     "tailwindcss-animate": "^1.0.7",
     "tippy.js": "^6.3.7",
