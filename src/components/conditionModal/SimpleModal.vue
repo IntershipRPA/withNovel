@@ -86,7 +86,8 @@ const stopPropagation = (event) => {
   z-index: 1;
   position: relative;
   width: 820px;
-  height: 280px;
+  min-height: 280px;
+  max-height: 480px;
   background-color: white;
   border-radius: 10px;
   /* background: rgba(255, 255, 255, 0.3); */

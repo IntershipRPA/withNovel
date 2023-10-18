@@ -190,7 +190,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       let changText = lineText.split(' '); // 공백 단위 쪼개기
       let str = changText.pop(); // '/조건' 제거
 
-      let changText2 = changText[0]+ " " +changText[1];
+      let changText2 = changText[0] + " " + changText[1];
       let changText3 = '';
       if (changText.length == 4) {
         changText3 = changText[2] + " " + changText[3];
@@ -199,9 +199,9 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       }
       // 한글 제거
       let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, "")];
-//      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-//      console.log(`changText2 : ${changText2}`);
-//      console.log(`changText3 : ${changText3}`);
+      //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
+      //      console.log(`changText2 : ${changText2}`);
+      //      console.log(`changText3 : ${changText3}`);
       // 로컬에 저장
       useStorage('change', change);
       // let titleData = localStorage.getItem("change");
@@ -373,23 +373,32 @@ watchEffect(() => {
 
 
 
-// 조건 꼬리표 클릭이벤트
+// 꼬리표 클릭이벤트
 const conditionTailElement = ref<Element[]>([]);
+const actionTailElement = ref<Element[]>([]);
 // console.log("값 할당 이전", conditionTailElement.value);
 
 // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
 watchEffect(() => {
   // console.log("새 watchEffect 실행", checkHydrated.value);
   if (checkHydrated.value === true) {
-    const elements = document.querySelectorAll('.condition-tail') as Element[];
-    conditionTailElement.value = elements;
+    const conElements = document.querySelectorAll('.condition-tail') as Element[];
+    const actElements = document.querySelectorAll('.action-tail') as Element[];
+    conditionTailElement.value = conElements;
+    actionTailElement.value = actElements;
     // console.log("값 할당 이후", conditionTailElement.value);
 
     if (conditionTailElement.value.length !== 0) {
       // console.log("elements detected");
       conditionTailElement.value.forEach((element: Element) => {
-        element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+        element.addEventListener("click", handleClickConditionTail); // 클릭 이벤트 핸들러 연결
         // console.log("element에 클릭 이벤트 연결:", element)
+      });
+    }
+
+    if (actionTailElement.value.length !== 0) {
+      actionTailElement.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClickActionTail);
       });
     }
   }
@@ -400,64 +409,76 @@ onUpdated(() => {
   // console.log("onUpdated called1");
   if (checkHydrated.value === true) {
     // console.log("onUpdated called2");
-    const elements = document.querySelectorAll('.condition-tail') as Element[];
-    conditionTailElement.value = elements;
+    const conElements = document.querySelectorAll('.condition-tail') as Element[];
+    const actElements = document.querySelectorAll('.action-tail') as Element[];
+    conditionTailElement.value = conElements;
+    actionTailElement.value = actElements;
   }
 })
 
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
-function handleClick(event) {
-  // console.log("handleClick 호출")
-  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-  const clickedElement = event.target;
+function handleClickConditionTail(event) {
+  modalStore.isCondition = true;
+  openModal();
 
-  // 클릭한 요소의 클래스 목록
-  const classes = clickedElement.classList;
-  // console.log(classes)
+  // // console.log("handleClick 호출")
+  // // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
+  // const clickedElement = event.target;
 
-  for (let i = 0; i < classes.length; i++) {
-    const item = classes[i];
-    // console.log(`class Name: ${item}`);
-    if (item === 'condition-tail') {
-      // 모달 열기
-      // isCondition.value = true;
-      // showModal.value = true;
-      modalStore.isCondition = true;
-      openModal();
-    }
-  }
+  // // 클릭한 요소의 클래스 목록
+  // const classes = clickedElement.classList;
+  // // console.log(classes)
 
+  // for (let i = 0; i < classes.length; i++) {
+  //   const item = classes[i];
+  //   // console.log(`class Name: ${item}`);
+  //   if (item === 'condition-tail') {
+  //     // 모달 열기
+  //     // isCondition.value = true;
+  //     // showModal.value = true;
+  //     modalStore.isCondition = true;
+  //     openModal();
 
-  // // 클릭한 요소의 태그 이름 (예: "DIV", "BUTTON" 등)
-  // const tagName = clickedElement.tagName;
-
-  // // 클릭한 요소의 ID 속성
-  // const id = clickedElement.id;
-
-  // // 클릭한 요소의 텍스트 내용
-  // const textContent = clickedElement.textContent;
-
-  // 클릭한 요소의 모든 속성(attribute) 가져오기
-  // const attributes = clickedElement.attributes;
-
-  // 모든 속성을 순회하면서 출력
-  // for (let i = 0; i < attributes.length; i++) {
-  //   const attribute = attributes[i];
-  // console.log(`Attribute Name: ${attribute.name}, Attribute Value: ${attribute.value}`);
-  // }
-
-  // console.log(clickedElement);
-
-  // 모달 열기
-  // showModal.value = true;
-
-
-  // const selection = editor.state.selection;
-  // console.log(editor.value?.state);
-  // console.log(editor.value?.storage);
-  // console.log(editor.value?.storage.tableOfContent);
-  // console.log(editor.value?.getJSON());
+  //     return true;
+  //   }
 }
+
+function handleClickActionTail(event) {
+  modalStore.isAction = true;
+  openModal();
+}
+
+
+// // 클릭한 요소의 태그 이름 (예: "DIV", "BUTTON" 등)
+// const tagName = clickedElement.tagName;
+
+// // 클릭한 요소의 ID 속성
+// const id = clickedElement.id;
+
+// // 클릭한 요소의 텍스트 내용
+// const textContent = clickedElement.textContent;
+
+// 클릭한 요소의 모든 속성(attribute) 가져오기
+// const attributes = clickedElement.attributes;
+
+// 모든 속성을 순회하면서 출력
+// for (let i = 0; i < attributes.length; i++) {
+//   const attribute = attributes[i];
+// console.log(`Attribute Name: ${attribute.name}, Attribute Value: ${attribute.value}`);
+// }
+
+// console.log(clickedElement);
+
+// 모달 열기
+// showModal.value = true;
+
+
+// const selection = editor.state.selection;
+// console.log(editor.value?.state);
+// console.log(editor.value?.storage);
+// console.log(editor.value?.storage.tableOfContent);
+// console.log(editor.value?.getJSON());
+
 
 
 

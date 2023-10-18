@@ -68,6 +68,7 @@ const handleConfirm = () => {
 
 const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
 const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
+
 const changeToConditionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__content');
@@ -121,14 +122,6 @@ const changeToConditionNode = () => {
   localStorage.removeItem('konwhow');
   useStorage('konwhow', konwhow);//레시피
 };
-
-// const stopPropagation = (event) => {
-//   event.stopPropagation();
-// };
-
-
-
-
 </script>
 
 <style scoped>
