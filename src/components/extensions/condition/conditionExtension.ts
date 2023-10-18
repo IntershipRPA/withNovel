@@ -7,7 +7,7 @@ import {
 } from "lucide-vue-next";
 import { PluginKey } from '@tiptap/pm/state'
 import { ref } from 'vue';
-import ConditionTooltip from "../tooltip/ConditionTooltip.vue";
+import ConditionTooltip from "../../tooltip/ConditionTooltip.vue";
 import SlashCommandList from "./slashCommandList.vue";
 
 const Command = Extension.create({
@@ -97,7 +97,7 @@ const renderItems = () => {
       }
 
       const onKeyDownResult = component?.ref?.onKeyDown(props.event);
-      modalToggle.value = component?.ref?.modalToggle;
+      // modalToggle.value = component?.ref?.modalToggle;
 
       return onKeyDownResult;
     },
@@ -114,5 +114,5 @@ const ConditionCommand = Command.configure({
   },
 });
 
-export const modalToggle = ref(false);
+// export const modalToggle = ref(false);
 export default ConditionCommand;

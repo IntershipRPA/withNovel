@@ -11,12 +11,12 @@
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
-    <SimpleModal v-if="showModal" :editor="editor" @close="closeModal" />
+    <SimpleModal v-if="isModalOpen" :editor="editor" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch, onUpdated, onMounted, nextTick } from "vue";
+import { watchEffect, type PropType, ref, watch, onUpdated, onMounted, nextTick, computed } from "vue";
 import { useEditor, EditorContent, JSONContent, Extension } from "@tiptap/vue-3";
 import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass } from "@tiptap/core";
@@ -29,13 +29,33 @@ import { getPrevText } from "../lib/editor";
 import { defaultExtensions } from "../components/extensions";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
 import SimpleModal from "../components/conditionModal/SimpleModal.vue";
-import { modalToggle } from "../components/extensions/conditionExtension"
+import { modalToggle } from "./extensions/condition/conditionExtension"
 
 // 모달 설정
-const showModal = modalToggle;
-const closeModal = () => {
-  showModal.value = false;
+// const showModal = modalToggle;
+// const closeModal = () => {
+//   showModal.value = false;
+// };
+// const isCondition = ref(false);
+
+import { useModalStore } from './../stores/modal';
+
+// 모달 설정
+const modalStore = useModalStore(); // 스토어 인스턴스 생성
+
+const isModalOpen = computed(() => modalStore.isModalOpen);
+// const isCondition = computed(() => modalStore.isCondition);
+
+const openModal = () => {
+  modalStore.openModal(); // 모달 열기
 };
+
+// const closeModal = () => {
+//   modalStore.closeModal(); // 모달 닫기
+// };
+
+
+
 
 const props = defineProps({
 
@@ -334,7 +354,7 @@ watch(
 
 // 마운트 시 로컬 저장소에서 편집기 콘텐츠를 로드합니다.
 const hydrated = ref(false); // 에디터에 내용이 성공적으로 설정되었는지를 나타내는 플래그
-
+const checkHydrated = ref(false); // 에디터 내용이 렌더링 된 이후(두번째 마운트)를 감지하는 값
 // 인자로 주어진 함수 내에서 사용된 반응성 값을 감시하고, 그 값이 변경될 때마다 해당 함수를 다시 실행
 // 주어진 컨텐츠로 에디터를 초기화하는 역할
 watchEffect(() => {
@@ -342,8 +362,9 @@ watchEffect(() => {
   if (editor.value && content.value && !hydrated.value) {
     editor.value.commands.setContent(content.value);
     hydrated.value = true;
+  } else if (editor.value && content.value && hydrated.value) {
+    checkHydrated.value = true;
   }
-
 })
 
 
@@ -351,48 +372,61 @@ watchEffect(() => {
 
 
 
+
 // 조건 꼬리표 클릭이벤트
-// const dynamicElement = ref<Element[] | null>(null);
+const conditionTailElement = ref<Element[]>([]);
+// console.log("값 할당 이전", conditionTailElement.value);
 
-// nextTick을 사용하여 초기 렌더링 이후에 실행
-nextTick(() => {
-  console.log("nextTick called");
-  // HTML 요소에 클릭 이벤트 핸들러 함수 연결
-  const elements = document.querySelectorAll('.condition-tail');
-  if (elements) {
-    console.log("elements detected");
-    // dynamicElement.value = elements;
-    elements.forEach(element => {
-      element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
-      console.log("element에 클릭 이벤트 연결:", element)
-    });
+// 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
+watchEffect(() => {
+  // console.log("새 watchEffect 실행", checkHydrated.value);
+  if (checkHydrated.value === true) {
+    const elements = document.querySelectorAll('.condition-tail') as Element[];
+    conditionTailElement.value = elements;
+    // console.log("값 할당 이후", conditionTailElement.value);
+
+    if (conditionTailElement.value.length !== 0) {
+      // console.log("elements detected");
+      conditionTailElement.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+        // console.log("element에 클릭 이벤트 연결:", element)
+      });
+    }
   }
-  // console.log(dynamicElement.value);//
-});
+})
 
-// watch(
-//   () => completion.value,
-//   (completion) => {
-//     // HTML 요소에 클릭 이벤트 핸들러 함수 연결
-//     const elements = document.querySelectorAll('.condition-tail');
-//     if (elements) {
-//       console.log("elements detected");
-//       // dynamicElement.value = elements;
-//       elements.forEach(element => {
-//         element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
-//         console.log("element에 클릭 이벤트 연결:", element)
-//       });
-//     }
-//     // console.log(dynamicElement.value);
-//   }
-// );
-
+// 업데이트 감지
+onUpdated(() => {
+  // console.log("onUpdated called1");
+  if (checkHydrated.value === true) {
+    // console.log("onUpdated called2");
+    const elements = document.querySelectorAll('.condition-tail') as Element[];
+    conditionTailElement.value = elements;
+  }
+})
 
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
 function handleClick(event) {
-  console.log("handleClick 호출")
+  // console.log("handleClick 호출")
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   const clickedElement = event.target;
+
+  // 클릭한 요소의 클래스 목록
+  const classes = clickedElement.classList;
+  // console.log(classes)
+
+  for (let i = 0; i < classes.length; i++) {
+    const item = classes[i];
+    // console.log(`class Name: ${item}`);
+    if (item === 'condition-tail') {
+      // 모달 열기
+      // isCondition.value = true;
+      // showModal.value = true;
+      modalStore.isCondition = true;
+      openModal();
+    }
+  }
+
 
   // // 클릭한 요소의 태그 이름 (예: "DIV", "BUTTON" 등)
   // const tagName = clickedElement.tagName;
@@ -400,25 +434,22 @@ function handleClick(event) {
   // // 클릭한 요소의 ID 속성
   // const id = clickedElement.id;
 
-  // // 클릭한 요소의 클래스 목록
-  // const classes = clickedElement.classList;
-
   // // 클릭한 요소의 텍스트 내용
   // const textContent = clickedElement.textContent;
 
   // 클릭한 요소의 모든 속성(attribute) 가져오기
-  const attributes = clickedElement.attributes;
+  // const attributes = clickedElement.attributes;
 
   // 모든 속성을 순회하면서 출력
-  for (let i = 0; i < attributes.length; i++) {
-    const attribute = attributes[i];
-    console.log(`Attribute Name: ${attribute.name}, Attribute Value: ${attribute.value}`);
-  }
+  // for (let i = 0; i < attributes.length; i++) {
+  //   const attribute = attributes[i];
+  // console.log(`Attribute Name: ${attribute.name}, Attribute Value: ${attribute.value}`);
+  // }
 
-  console.log(clickedElement);
+  // console.log(clickedElement);
 
   // 모달 열기
-  showModal.value = true;
+  // showModal.value = true;
 
 
   // const selection = editor.state.selection;

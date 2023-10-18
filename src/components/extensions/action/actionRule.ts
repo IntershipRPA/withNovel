@@ -3,7 +3,7 @@ import {
   mergeAttributes
 } from '@tiptap/core';
 import { selectParentNode } from '@tiptap/pm/commands';
-export interface ConditionRuleOptions {
+export interface ActionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
     whelk: string;
@@ -17,16 +17,16 @@ export interface ConditionRuleOptions {
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    conditionRule: {
-      setConditionRule: () => ReturnType;
-      toggleCondition: () => ReturnType;
-      unsetCondition: () => ReturnType;
+    actionRule: {
+      setActionRule: () => ReturnType;
+      toggleAction: () => ReturnType;
+      unsetAction: () => ReturnType;
     };
   }
 }
 
-export const ConditionRule = Node.create<ConditionRuleOptions>({
-  name: 'conditionRule',
+export const ActionRule = Node.create<ActionRuleOptions>({
+  name: 'actionRule',
   group: 'block',
   content: 'text*',
   // content: 'block+',
@@ -73,7 +73,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   //       default: null,
   //       renderHTML: attributes => {
   //         return {
-  //           class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
+  //           class: `action-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
   //         }
   //       },
   //     },
@@ -82,18 +82,19 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
   parseHTML() {
     return [
-      { tag: 'condition' },
+      { tag: 'action' },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
+    // console.trace();
     return [
-      'condition',
+      'action',
       { class: 'block flex items-center	' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
       ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 h-10 px-8 mb-2 mt-2 flex items-center` }, 0],
       ['span',
-        { class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center` },
+        { class: `action-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center` },
         // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
         '조건',
       ],
@@ -113,10 +114,10 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
   addCommands() {
     return {
-      setConditionRule: () => ({ commands }: { commands: any; }) => {
+      setActionRule: () => ({ commands }: { commands: any; }) => {
         return commands.toggleNode(this.name)
       },
-      // setConditionRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
+      // setActionRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
       //   // attrs 객체로부터 필요한 속성 값을 추출
       //   const { whelk, tag, temp, unit, range, memo } = attrs;
       //   this.options.settingAttrs.whelk = whelk;
@@ -129,10 +130,10 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
       //   return commands.toggleNode(this.name)
       // },
-      toggleCondition: () => ({ commands }) => {
+      toggleAction: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
-      unsetCondition: () => ({ commands }) => {
+      unsetAction: () => ({ commands }) => {
         return commands.lift(this.name)
       },
     }
