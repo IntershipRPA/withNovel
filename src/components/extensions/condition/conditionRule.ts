@@ -87,6 +87,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   },
 
   renderHTML({ HTMLAttributes }) {
+    // console.trace();
     return [
       'condition',
       { class: 'block flex items-center	' },

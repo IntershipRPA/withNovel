@@ -7,7 +7,7 @@ import {
 } from "lucide-vue-next";
 import { PluginKey } from '@tiptap/pm/state'
 import { ref } from 'vue';
-import ConditionTooltip from "../tooltip/ConditionTooltip.vue";
+import ConditionTooltip from "../../tooltip/ConditionTooltip.vue";
 import SlashCommandList from "./slashCommandList.vue";
 
 const Command = Extension.create({

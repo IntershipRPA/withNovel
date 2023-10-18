@@ -29,7 +29,7 @@ import { getPrevText } from "../lib/editor";
 import { defaultExtensions } from "../components/extensions";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
 import SimpleModal from "../components/conditionModal/SimpleModal.vue";
-import { modalToggle } from "../components/extensions/conditionExtension"
+import { modalToggle } from "./extensions/condition/conditionExtension"
 
 // 모달 설정
 const showModal = modalToggle;
@@ -334,7 +334,7 @@ watch(
 
 // 마운트 시 로컬 저장소에서 편집기 콘텐츠를 로드합니다.
 const hydrated = ref(false); // 에디터에 내용이 성공적으로 설정되었는지를 나타내는 플래그
-
+const checkHydrated = ref(false); // 에디터 내용이 렌더링 된 이후(두번째 마운트)를 감지하는 값
 // 인자로 주어진 함수 내에서 사용된 반응성 값을 감시하고, 그 값이 변경될 때마다 해당 함수를 다시 실행
 // 주어진 컨텐츠로 에디터를 초기화하는 역할
 watchEffect(() => {
@@ -342,55 +342,109 @@ watchEffect(() => {
   if (editor.value && content.value && !hydrated.value) {
     editor.value.commands.setContent(content.value);
     hydrated.value = true;
+  } else if (editor.value && content.value && hydrated.value) {
+    checkHydrated.value = true;
   }
+})
 
+
+// 조건 꼬리표 클릭 이벤트
+// const conditionTailElement = ref<Element[]>([]);
+// const checkHydrated = ref(false);
+// console.log("값 할당 이전", conditionTailElement.value);
+
+// watch(hydrated, (newValue, oldValue) => {
+//   if (newValue) {
+//     nextTick(() => {
+//       const elements = document.querySelectorAll('.condition-tail') as Element[];
+//       conditionTailElement.value = elements;
+//       console.log("값 할당 이후", conditionTailElement.value);
+
+//       if (conditionTailElement.value.length !== 0) {
+//         console.log("elements detected");
+//         conditionTailElement.value.forEach((element: Element) => {
+//           // element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+//           console.log("element에 클릭 이벤트 연결:", element)
+//         });
+//       }
+//     });
+//   }
+// });
+
+// 조건 꼬리표 클릭이벤트
+const conditionTailElement = ref<Element[]>([]);
+// console.log("값 할당 이전", conditionTailElement.value);
+
+// 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
+watchEffect(() => {
+  console.log("새 watchEffect 실행", checkHydrated.value);
+  if (checkHydrated.value === true) {
+    const elements = document.querySelectorAll('.condition-tail') as Element[];
+    conditionTailElement.value = elements;
+    // console.log("값 할당 이후", conditionTailElement.value);
+
+    if (conditionTailElement.value.length !== 0) {
+      // console.log("elements detected");
+      conditionTailElement.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+        // console.log("element에 클릭 이벤트 연결:", element)
+      });
+    }
+  }
+})
+
+// 업데이트 감지
+onUpdated(() => {
+  console.log("onUpdated called1");
+  if (checkHydrated.value === true) {
+    console.log("onUpdated called2");
+    const elements = document.querySelectorAll('.condition-tail') as Element[];
+    conditionTailElement.value = elements;
+    // console.log("값 할당 이후", conditionTailElement.value);
+
+    // if (conditionTailElement.value.length !== 0) {
+    //   // console.log("elements detected");
+    //   conditionTailElement.value.forEach((element: Element) => {
+    //     element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+    //     // console.log("element에 클릭 이벤트 연결:", element)
+    //   });
+    // }
+  }
 })
 
 
 
 
-
-
-// 조건 꼬리표 클릭이벤트
-// const dynamicElement = ref<Element[] | null>(null);
-
 // nextTick을 사용하여 초기 렌더링 이후에 실행
-nextTick(() => {
-  console.log("nextTick called");
-  // HTML 요소에 클릭 이벤트 핸들러 함수 연결
-  const elements = document.querySelectorAll('.condition-tail');
-  if (elements) {
-    console.log("elements detected");
-    // dynamicElement.value = elements;
-    elements.forEach(element => {
-      element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
-      console.log("element에 클릭 이벤트 연결:", element)
-    });
-  }
-  // console.log(dynamicElement.value);//
-});
-
-// watch(
-//   () => completion.value,
-//   (completion) => {
+// nextTick(() => {
+//   console.log("nextTick called, checkHydrated.value is", checkHydrated.value);
+//   if (checkHydrated.value) {
 //     // HTML 요소에 클릭 이벤트 핸들러 함수 연결
-//     const elements = document.querySelectorAll('.condition-tail');
-//     if (elements) {
+//     const elements = document.querySelectorAll('.condition-tail') as Element[];
+//     conditionTailElement.value = elements;
+//     console.log("값 할당 이후", conditionTailElement.value);
+//     // if (elements) {
+//     if (conditionTailElement.value.length !== 0) {
 //       console.log("elements detected");
-//       // dynamicElement.value = elements;
-//       elements.forEach(element => {
-//         element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+//       conditionTailElement.value.forEach((element: Element) => {
+//         // element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
 //         console.log("element에 클릭 이벤트 연결:", element)
 //       });
 //     }
-//     // console.log(dynamicElement.value);
 //   }
-// );
+// });
+
+
+
+
+
+
+
 
 
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
 function handleClick(event) {
-  console.log("handleClick 호출")
+  // console.log("handleClick 호출")
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   const clickedElement = event.target;
 
@@ -415,7 +469,7 @@ function handleClick(event) {
     console.log(`Attribute Name: ${attribute.name}, Attribute Value: ${attribute.value}`);
   }
 
-  console.log(clickedElement);
+  // console.log(clickedElement);
 
   // 모달 열기
   showModal.value = true;

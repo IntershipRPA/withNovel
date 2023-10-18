@@ -11,10 +11,10 @@ import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
 import { InputRule } from "@tiptap/core";
 import SlashCommand from "./slashExtension";
-import WhelkCommand from "./whelkExtension";
-import TagCommand from "./tagExtension";
-import ConditionCommand from "./conditionExtension";
-import { ConditionRule } from './conditionRule';
+import WhelkCommand from "./condition/whelkExtension";
+import TagCommand from "./condition/tagExtension";
+import ConditionCommand from "./condition/conditionExtension";
+import { ConditionRule } from './condition/conditionRule';
 
 export const defaultExtensions = [
   StarterKit.configure({
