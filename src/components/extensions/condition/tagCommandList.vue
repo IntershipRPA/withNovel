@@ -8,7 +8,7 @@
         <LoadingCircle v-if="item.title === 'Continue writing' && isLoading" />
         <!-- 아이콘 -->
         <!-- <component v-else :is="item.icon" size="18" /> -->
-        <p>설비</p>
+        <p>태그</p>
       </div>
       <div>
         <!-- 이름 -->
@@ -21,14 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch, onMounted } from "vue";
+import { PropType, ref, watch } from "vue";
 import { Editor, Range } from "@tiptap/core";
 import { SuggestionItem } from "./whelkExtension"; // type 지정
-import LoadingCircle from "../icons/loadingCircle.vue";
+import LoadingCircle from "../../icons/loadingCircle.vue";
 import { useCompletion } from "ai/vue";
-import { getPrevText } from "../../lib/editor";
+import { getPrevText } from "../../../lib/editor";
 import { useStorage } from "@vueuse/core";
-
 // import axios from "axios";
 
 const props = defineProps({
@@ -71,8 +70,8 @@ const { complete, isLoading } = useCompletion({
 });
 
 const commandListContainer = ref<HTMLDivElement>();
-
 const navigationKeys = ["ArrowUp", "ArrowDown", "Enter"];
+
 function onKeyDown(e: KeyboardEvent) {
   if (navigationKeys.includes(e.key)) {
     e.preventDefault();
@@ -101,34 +100,23 @@ watch(
   () => {
     selectedIndex.value = 0;
   }
+  
 );
+
 
 defineExpose({
   onKeyDown,
 });
-// const whelk = useStorage<string[]>('whelk', []);  // 선택한 설비 리스트 / 초기화 막음
+
 function selectItem(index: number) {
   const item = props.items[index];
-  localStorage.removeItem('whelk');  
-  console.log(`설비 : ${props.items[index].title}`);
-
-  // 선택한 설비 리스트
-//  whelk.value.push(item.title); // 배열로 저장 할 때
-//  localStorage.setItem('whelk', JSON.stringify(whelk.value)); // 배열로 저장 할 때
-  useStorage('whelk', item.title); //하나만 저장
-//  console.log(`설비 리스트 : ${JSON.stringify(whelk.value)}`); // 배열로 저장 할 때
-//  console.log(localStorage.getItem('whelk'));
-  
-   
-
-   
-
-  
-
+  localStorage.removeItem('tag');
+  console.log(`테그 : ${item.title}`);
+  // 로컬스토리지에 테그 선택한거 저장
+  useStorage('tag', item.title);
 
   if (item) {
     if (item.title === "Continue writing") {
-      
       if (isLoading.value) return;
       complete(
         getPrevText(props.editor, {
@@ -164,5 +152,4 @@ function scrollToSelected() {
     updateScrollView(container, item);
   }
 }
-
 </script>

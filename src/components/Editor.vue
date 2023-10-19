@@ -7,15 +7,16 @@
     <BubbleMenu v-if="editor" :editor="editor" />
     <!-- 조건부 렌더링
         editor 객체가 존재하는 경우에만 해당 컴포넌트 렌더링 -->
+    <!-- <EditorContent @click='handleEditorContentClick' :editor="editor" /> -->
     <EditorContent :editor="editor" />
     <!-- 현재의 editor 객체를 전달 -->
     <!-- 모달 -->
-    <SimpleModal v-if="showModal" :message="modalMessage" :editor='editor' @close="closeModal" />
+    <SimpleModal v-if="isModalOpen" :editor="editor" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch } from "vue";
+import { watchEffect, type PropType, ref, watch, onUpdated, onMounted, nextTick, computed } from "vue";
 import { useEditor, EditorContent, JSONContent, Extension } from "@tiptap/vue-3";
 import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass } from "@tiptap/core";
@@ -28,14 +29,32 @@ import { getPrevText } from "../lib/editor";
 import { defaultExtensions } from "../components/extensions";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
 import SimpleModal from "../components/conditionModal/SimpleModal.vue";
-import { modalToggle } from "../components/extensions/conditionExtension"
+import { modalToggle } from "./extensions/condition/conditionExtension"
 
 // 모달 설정
-const showModal = modalToggle;
-const modalMessage = ref("test message");
-const closeModal = () => {
-  showModal.value = false;
+// const showModal = modalToggle;
+// const closeModal = () => {
+//   showModal.value = false;
+// };
+// const isCondition = ref(false);
+
+import { useModalStore } from './../stores/modal';
+
+// 모달 설정
+const modalStore = useModalStore(); // 스토어 인스턴스 생성
+
+const isModalOpen = computed(() => modalStore.isModalOpen);
+// const isCondition = computed(() => modalStore.isCondition);
+
+const openModal = () => {
+  modalStore.openModal(); // 모달 열기
 };
+
+// const closeModal = () => {
+//   modalStore.closeModal(); // 모달 닫기
+// };
+
+
 
 
 const props = defineProps({
@@ -56,15 +75,15 @@ const props = defineProps({
   // 에디터기본 값으로, JSON 형식으로 저장
   defaultValue: {
     type: Object as PropType<JSONContent>,
-      default: {
-        type: "doc",
-        content: [
-          {
-            type: "heading",
-            attrs: { level: 2 },
-            content: [{ type: "text", text: "Novel을 소개합니다" }],
-          },]
-      }
+    default: {
+      type: "doc",
+      content: [
+        {
+          type: "heading",
+          attrs: { level: 2 },
+          content: [{ type: "text", text: "Novel을 소개합니다" }],
+        },]
+    }
     // default: () => {
     //   return defaultEditorContent;
     // },
@@ -151,7 +170,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
     });
 
     // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
-    if (lastTwo === " /조건" && !isLoading.value){
+    if (lastTwo === " /조건" && !isLoading.value) {
       // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
       // 기존 값 삭제
       localStorage.removeItem('change');
@@ -167,15 +186,15 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
         }
         return true;
       })
-//      console.log(lineText.split('/'));
+      //      console.log(lineText.split('/'));
       let changText = lineText.split(' '); // 공백 단위 쪼개기
       let str = changText.pop(); // '/조건' 제거
 
       let changText2 = changText[0]+ " " +changText[1];
       let changText3 = '';
-      if(changText.length == 4){
-        changText3 = changText[2]+ " " +changText[3];
-      }else{
+      if (changText.length == 4) {
+        changText3 = changText[2] + " " + changText[3];
+      } else {
         changText3 = changText[2];
       }
       // 한글 제거
@@ -203,7 +222,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       // useStorage('whelk', titleData2[0]);
       // useStorage('tag', titleData2[1]);
     }
-    
+
 
 
 
@@ -272,12 +291,12 @@ watch(
     */
     const diff = newCompletion?.slice(oldCompletion?.length);
 
-    if (diff) {    
-  // 새로 완성된 텍스트를 로컬 스토리지에 저장
+    if (diff) {
+      // 새로 완성된 텍스트를 로컬 스토리지에 저장
       useStorage('newText', diff);
       // 차이점이 있다면, 에디터에 그 내용을 삽입
       editor.value?.commands.insertContent(diff);
-          
+
     }
 
   }
@@ -335,7 +354,7 @@ watch(
 
 // 마운트 시 로컬 저장소에서 편집기 콘텐츠를 로드합니다.
 const hydrated = ref(false); // 에디터에 내용이 성공적으로 설정되었는지를 나타내는 플래그
-
+const checkHydrated = ref(false); // 에디터 내용이 렌더링 된 이후(두번째 마운트)를 감지하는 값
 // 인자로 주어진 함수 내에서 사용된 반응성 값을 감시하고, 그 값이 변경될 때마다 해당 함수를 다시 실행
 // 주어진 컨텐츠로 에디터를 초기화하는 역할
 watchEffect(() => {
@@ -343,9 +362,76 @@ watchEffect(() => {
   if (editor.value && content.value && !hydrated.value) {
     editor.value.commands.setContent(content.value);
     hydrated.value = true;
+  } else if (editor.value && content.value && hydrated.value) {
+    checkHydrated.value = true;
   }
-  
 })
+
+
+
+
+
+
+
+// 조건 꼬리표 클릭이벤트
+const conditionTailElement = ref<Element[]>([]);
+// console.log("값 할당 이전", conditionTailElement.value);
+
+// 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
+watchEffect(() => {
+  // console.log("새 watchEffect 실행", checkHydrated.value);
+  if (checkHydrated.value === true) {
+    const elements = document.querySelectorAll('.condition-tail') as Element[];
+    conditionTailElement.value = elements;
+    // console.log("값 할당 이후", conditionTailElement.value);
+
+    if (conditionTailElement.value.length !== 0) {
+      // console.log("elements detected");
+      conditionTailElement.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+        // console.log("element에 클릭 이벤트 연결:", element)
+      });
+    }
+  }
+})
+
+// 업데이트 감지
+onUpdated(() => {
+  // console.log("onUpdated called1");
+  if (checkHydrated.value === true) {
+    // console.log("onUpdated called2");
+    const elements = document.querySelectorAll('.condition-tail') as Element[];
+    conditionTailElement.value = elements;
+  }
+})
+
+// HTML 요소에 대한 클릭 이벤트 핸들러 함수
+function handleClick(event) {
+
+  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
+  const clickedElement = event.target;
+  console.log(clickedElement.value);
+  // 클릭한 요소의 클래스 목록
+  const classes = clickedElement.classList;
+
+  
+ 
+
+
+
+
+
+  for (let i = 0; i < classes.length; i++) {
+    const item = classes[i];
+    if (item === 'condition-tail') {
+      // 모달 열기
+      modalStore.isCondition = true;
+      openModal();
+    }
+  }
+
+}
+
 
 
 </script>
