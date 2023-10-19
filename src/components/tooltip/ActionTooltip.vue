@@ -1,5 +1,5 @@
 <template>
-  <div class="condition-tooltip">
+  <div class="action-tooltip">
     <div ref="commandListContainer"
       class="z-50 h-auto max-h-[330px] w-42 overflow-y-auto rounded-md border border-stone-200 bg-white px-4 py-2 shadow-md transition-all text-xs text-stone-500">
       <p>Enter ↲</p>
@@ -19,7 +19,7 @@ import { useModalStore } from '../../stores/modal';
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
-// const isCondition = computed(() => modalStore.isCondition);
+// const isAction = computed(() => modalStore.isAction);
 
 const openModal = () => {
   modalStore.openModal(); // 모달 열기
@@ -81,7 +81,7 @@ function onKeyDown(e: KeyboardEvent) {
         .focus()
         .deleteRange(range)
         .run();
-      modalStore.isCondition = true;
+      modalStore.isAction = true;
       openModal();
       return true;
     }

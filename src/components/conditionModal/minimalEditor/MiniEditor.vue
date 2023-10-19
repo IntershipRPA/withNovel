@@ -1,62 +1,75 @@
 <template>
-  <editor-content :editor="editor" class="text-gray-950 max-h-20 overflow-y-auto hover:overscroll-contain"/>
+  <EditorContent :editor="editor" class="text-gray-950 max-h-20 overflow-y-auto hover:overscroll-contain" />
 </template>
 
-<script>
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
-import { Editor, EditorContent } from '@tiptap/vue-3'
+<script setup lang="ts">
+import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
 import Placeholder from '@tiptap/extension-placeholder'
+import StarterKit from "@tiptap/starter-kit";
+import { useStorage } from '@vueuse/core';
 
-export default {
-  components: {
-    EditorContent,
+const editor = useEditor({
+  extensions: [
+    StarterKit.configure({
+      bulletList: false,
+      orderedList: false,
+      listItem: false,
+      blockquote: false,
+      codeBlock: false,
+      code: false,
+      horizontalRule: false,
+      dropcursor: false,
+      gapcursor: false,
+      heading: false,
+    }),
+    Placeholder.configure({
+      placeholder: '추가 메모를 작성하세요 …',
+    }),
+  ],
+
+  onUpdate: (e) => {
+    const selection = e.editor.state.selection;
+
+    // 기존 값 삭제
+    localStorage.removeItem('modal__content');
+      // 커서가 있는 줄을 찾기
+      const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
+      const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
+
+      // 해당 범위에 있는 텍스트를 가져옴
+      let lineText = '';
+      e.editor.state.doc.nodesBetween(lineStart, lineEnd, node => {
+        if (node.isText) {
+          lineText += node.text
+        }
+        return true;
+      })
+
+      useStorage('modal__content', lineText);
   },
+});
+// onMounted(() => {
+//   editor.value = new Editor({
+//     extensions: [
+//       Document,
+//       Paragraph,
+//       Text,
+//       Placeholder.configure({
+//         placeholder: '추가 메모를 작성하세요 …',
+//       }),
+//     ],
+//   })
+// })
 
-  data() {
-    return {
-      editor: null,
-    }
-  },
-
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        Document,
-        Paragraph,
-        Text,
-        Placeholder.configure({
-          // Use a placeholder:
-          placeholder: '추가 메모를 작성하세요 …',
-          // Use different placeholders depending on the node type:
-          // placeholder: ({ node }) => {
-          //   if (node.type.name === 'heading') {
-          //     return 'What’s the title?'
-          //   }
-
-          //   return 'Can you add some further context?'
-          // },
-        }),
-      ],
-      // content: `
-      //   <p text-gray-400>
-      //     메모를 작성하세요.
-      //   </p>
-      // `,
-    })
-  },
-
-  beforeUnmount() {
-    this.editor.destroy()
-  },
-}
+// onBeforeUnmount(() => {
+//   editor.value.destroy()
+// })
 </script>
 
 <style lang="scss">
 /* Basic editor styles */
 .tiptap {
-  > * + * {
+  >*+* {
     margin-top: 0.75em;
   }
 }
