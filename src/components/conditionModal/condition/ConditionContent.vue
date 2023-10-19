@@ -72,10 +72,17 @@ const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 �
 const changeToConditionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__content');
+  // Stauts 태그 선택시 값이 null인거 제외 시킴
+  let str = "";
+  if(tagMsg === "Status"){
+    str = `"${whelkMsg}"의 "${tagMsg}" ${unit.value}  ${modalContent}`;
+  }else{
+    str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  }
   editor
   .chain()
     .focus()
-    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },`"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`)
+    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },str)
     .setConditionRule()
     .run();
 
@@ -93,7 +100,12 @@ const changeToConditionNode = () => {
   let unitValue = unit.value;
   let rangeValue = range.value;
   let modalText = modalContent;
-  let obj = {whel, tag, tempValue, unitValue, rangeValue, modalText};
+  let obj = {};
+  if(tag === "Status"){
+    obj = {whel, tag, tempValue, unitValue, modalText};
+  }else{
+    obj = {whel, tag, tempValue, unitValue, rangeValue, modalText};
+  }
 //  console.log(JSON.stringify(obj));
   konwhowOBJ.value.push(obj); //배열에 추가
   localStorage.setItem('konwhowOBJ', JSON.stringify(konwhowOBJ.value)); //로컬에 저장
