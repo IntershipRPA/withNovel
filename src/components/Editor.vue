@@ -408,12 +408,18 @@ onUpdated(() => {
 })
 
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
+<<<<<<< HEAD
 function handleClick(event: { target: any; }) {
+=======
+function handleClick(event) {
+  // console.log("handleClick 호출")
+>>>>>>> 505e8387a55816b5fc8f4236b8872d81b67c99f6
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   const clickedElement = event.target;
 
   // 클릭한 요소의 클래스 목록
   const classes = clickedElement.classList;
+<<<<<<< HEAD
    console.log(classes)
 
   for (let i = 0; i < classes.length; i++) {
@@ -425,6 +431,13 @@ function handleClick(event: { target: any; }) {
    
     
 
+=======
+  // console.log(classes)
+
+  for (let i = 0; i < classes.length; i++) {
+    const item = classes[i];
+    // console.log(`class Name: ${item}`);
+>>>>>>> 505e8387a55816b5fc8f4236b8872d81b67c99f6
     if (item === 'condition-tail') {
       // 모달 열기
       // isCondition.value = true;
