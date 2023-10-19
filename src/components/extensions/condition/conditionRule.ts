@@ -90,11 +90,11 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     // console.trace();
     return [
       'condition',
-      { class: 'block flex items-center	' },
+      { class: 'block flex items-end	' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-      ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 h-10 px-8 mb-2 mt-2 flex items-center` }, 0],
+      ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 py-1 px-8 mb-2 mt-2 max-w-3xl flex items-center` }, 0],
       ['span',
-        { class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center` },
+        { class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-5 pl-7 my-2 text-sm text-white -ml-4 flex items-center` },
         // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
         '조건',
       ],
@@ -117,6 +117,8 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       setConditionRule: () => ({ commands }: { commands: any; }) => {
         return commands.toggleNode(this.name)
       },
+<<<<<<< HEAD
+=======
       // setConditionRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
       //   // attrs 객체로부터 필요한 속성 값을 추출
       //   const { whelk, tag, temp, unit, range, memo } = attrs;
@@ -130,6 +132,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
       //   return commands.toggleNode(this.name)
       // },
+>>>>>>> 505e8387a55816b5fc8f4236b8872d81b67c99f6
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
@@ -139,9 +142,12 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     }
   },
 
+<<<<<<< HEAD
+=======
   // addStorage() {
   //   return {
   //     zzzzztestzz: 'testetst',
   //   }
   // }
+>>>>>>> 505e8387a55816b5fc8f4236b8872d81b67c99f6
 });
