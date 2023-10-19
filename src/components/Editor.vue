@@ -190,7 +190,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       let changText = lineText.split(' '); // 공백 단위 쪼개기
       let str = changText.pop(); // '/조건' 제거
 
-      let changText2 = changText[0]+ " " +changText[1];
+      let changText2 = changText[0] + " " + changText[1];
       let changText3 = '';
       if (changText.length == 4) {
         changText3 = changText[2] + " " + changText[3];
@@ -199,9 +199,9 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       }
       // 한글 제거
       let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, "")];
-//      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-//      console.log(`changText2 : ${changText2}`);
-//      console.log(`changText3 : ${changText3}`);
+      //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
+      //      console.log(`changText2 : ${changText2}`);
+      //      console.log(`changText3 : ${changText3}`);
       // 로컬에 저장
       useStorage('change', change);
       // let titleData = localStorage.getItem("change");
@@ -369,27 +369,32 @@ watchEffect(() => {
 
 
 
-
-
-
-
-// 조건 꼬리표 클릭이벤트
+// 꼬리표 클릭이벤트
 const conditionTailElement = ref<Element[]>([]);
+const actionTailElement = ref<Element[]>([]);
 // console.log("값 할당 이전", conditionTailElement.value);
 
 // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
 watchEffect(() => {
   // console.log("새 watchEffect 실행", checkHydrated.value);
   if (checkHydrated.value === true) {
-    const elements = document.querySelectorAll('.condition-tail') as Element[];
-    conditionTailElement.value = elements;
+    const conElements = document.querySelectorAll('.condition-tail') as Element[];
+    const actElements = document.querySelectorAll('.action-tail') as Element[];
+    conditionTailElement.value = conElements;
+    actionTailElement.value = actElements;
     // console.log("값 할당 이후", conditionTailElement.value);
 
     if (conditionTailElement.value.length !== 0) {
       // console.log("elements detected");
       conditionTailElement.value.forEach((element: Element) => {
-        element.addEventListener("click", handleClick); // 클릭 이벤트 핸들러 연결
+        element.addEventListener("click", handleClickConditionTail); // 클릭 이벤트 핸들러 연결
         // console.log("element에 클릭 이벤트 연결:", element)
+      });
+    }
+
+    if (actionTailElement.value.length !== 0) {
+      actionTailElement.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClickActionTail);
       });
     }
   }
@@ -400,36 +405,29 @@ onUpdated(() => {
   // console.log("onUpdated called1");
   if (checkHydrated.value === true) {
     // console.log("onUpdated called2");
-    const elements = document.querySelectorAll('.condition-tail') as Element[];
-    conditionTailElement.value = elements;
+    const conElements = document.querySelectorAll('.condition-tail') as Element[];
+    const actElements = document.querySelectorAll('.action-tail') as Element[];
+    conditionTailElement.value = conElements;
+    actionTailElement.value = actElements;
   }
 })
 
-// HTML 요소에 대한 클릭 이벤트 핸들러 함수
-function handleClick(event) {
-
+function handleClickConditionTail(event) {
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   const clickedElement = event.target;
   console.log(clickedElement.value);
-  // 클릭한 요소의 클래스 목록
-  const classes = clickedElement.classList;
 
-  
- 
+  modalStore.isCondition = true;
+  openModal();
+}
 
+function handleClickActionTail(event) {
+  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
+  const clickedElement = event.target;
+  console.log(clickedElement.value);
 
-
-
-
-  for (let i = 0; i < classes.length; i++) {
-    const item = classes[i];
-    if (item === 'condition-tail') {
-      // 모달 열기
-      modalStore.isCondition = true;
-      openModal();
-    }
-  }
-
+  modalStore.isAction = true;
+  openModal();
 }
 
 
