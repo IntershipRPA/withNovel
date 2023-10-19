@@ -117,6 +117,8 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       setConditionRule: () => ({ commands }: { commands: any; }) => {
         return commands.toggleNode(this.name)
       },
+<<<<<<< HEAD
+=======
       // setConditionRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
       //   // attrs 객체로부터 필요한 속성 값을 추출
       //   const { whelk, tag, temp, unit, range, memo } = attrs;
@@ -130,6 +132,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
       //   return commands.toggleNode(this.name)
       // },
+>>>>>>> 505e8387a55816b5fc8f4236b8872d81b67c99f6
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
@@ -139,9 +142,12 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     }
   },
 
+<<<<<<< HEAD
+=======
   // addStorage() {
   //   return {
   //     zzzzztestzz: 'testetst',
   //   }
   // }
+>>>>>>> 505e8387a55816b5fc8f4236b8872d81b67c99f6
 });

@@ -160,6 +160,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
     ...defaultEditorProps,
     ...props.editorProps,
   },
+
   // onUpdate : 편집기가 업데이트될 때마다 호출되는 콜백 함수
   onUpdate: (e) => {
     const selection = e.editor.state.selection;
@@ -169,6 +170,7 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       chars: 4, // 범위 설정
     });
 
+    
     // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
     if (lastTwo === " /조건" && !isLoading.value) {
       // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
@@ -417,30 +419,12 @@ onUpdated(() => {
 })
 
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
-function handleClickConditionTail(event) {
+function handleClickConditionTail(event: { target: any; }) {
   modalStore.isCondition = true;
   openModal();
-
-  // // console.log("handleClick 호출")
-  // // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-  // const clickedElement = event.target;
-
-  // // 클릭한 요소의 클래스 목록
-  // const classes = clickedElement.classList;
-  // // console.log(classes)
-
-  // for (let i = 0; i < classes.length; i++) {
-  //   const item = classes[i];
-  //   // console.log(`class Name: ${item}`);
-  //   if (item === 'condition-tail') {
-  //     // 모달 열기
-  //     // isCondition.value = true;
-  //     // showModal.value = true;
-  //     modalStore.isCondition = true;
-  //     openModal();
-
-  //     return true;
-  //   }
+  
+  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
+  const clickedElement = event.target;
 }
 
 function handleClickActionTail(event) {
