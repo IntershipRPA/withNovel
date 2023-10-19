@@ -90,11 +90,14 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     // console.trace();
     return [
       'condition',
-      { class: 'block flex items-center	' },
+      { class: 'block flex items-end	' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-      ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 h-10 px-8 mb-2 mt-2 flex items-center` }, 0],
+      ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 py-1 px-8 mb-2 mt-2 flex items-center` }, 0],
       ['span',
-        { class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center` },
+        {
+          class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max`,
+          contenteditable: "false"
+        },
         // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
         '조건',
       ],

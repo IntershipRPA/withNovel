@@ -6,31 +6,78 @@
       <span class="p-2.5">INIT: 일 때</span>
     </div>
     <div>
-      <div class='flex items-center -ml-12' v-for="(condition, index) in conditions" :key="index">
-        <span class='rounded-l-lg shadow-md -z-4 h-10 px-1 pr-5 my-2 -mr-4 flex items-center bg-gray-400'>
-          <!-- {{ condition.andOr }} -->
-          <select :id="`andOr-${index}`" :name="`andOr-${index}`"
-            class="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-800 sm:text-sm">
-            <option selected disabled>-</option>
-            <option>AND</option>
-            <option>OR</option>
-          </select>
-        </span>
-        <!-- <span :class="condition.isChecked ? 'bg-sky-550' : 'bg-gray-500'" -->
-        <span class='rounded-l-lg shadow-md -z-4 h-10 px-3 pr-7 my-2 -mr-4 flex items-center bg-gray-300'>
+      <!-- AND 조건-->
+      <div v-if="conditions.some(item => item.group === 1)" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
+        <span>AND 조건</span>
+        <div v-for="(andArr, index) in conditions.filter(item => item.group === 1)" :key="index">
+          <span class='inline-block rounded-l-lg shadow-md -z-4 h-10 px-1 pr-5 my-2 -mr-4 items-center bg-gray-400'>
+            <!-- 셀렉 박스 -->
+            <select :id="`andOr-${index}`" :name="`andOr-${index}`"
+              class="cursor-pointer h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-800 sm:text-sm"
+              v-model="andArr.andOr" @change="handleSelectedValueChange(andArr)">
+              <option selected disabled>-</option>
+              <option>AND</option>
+              <option>OR</option>
+            </select>
+          </span>
+          <!-- 조건 내용 -->
+          <span class='inline-block items-center rounded-lg shadow-md bg-zinc-100 z-10 py-1 px-8 mb-2 mt-2'>
+            {{ andArr.text }}
+          </span>
+        </div>
+      </div>
+      <!-- OR 조건-->
+      <div v-if="conditions.some(item => item.group === 2)" class="rounded-lg p-5 border-2 border-rose-600">
+        <span>OR 조건</span>
+        <div v-for="(orArr, index) in conditions.filter(item => item.group === 2)" :key="index">
+          <span class='inline-block rounded-l-lg shadow-md -z-4 h-10 px-1 pr-5 my-2 -mr-4 items-center bg-gray-400'>
+            <!-- 셀렉 박스 -->
+            <select :id="`andOr-${index}`" :name="`andOr-${index}`"
+              class="cursor-pointer h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-800 sm:text-sm"
+              v-model="orArr.andOr" @change="handleSelectedValueChange(orArr)">
+              <option selected disabled>-</option>
+              <option>AND</option>
+              <option>OR</option>
+            </select>
+          </span>
+          <!-- 조건 내용 -->
+          <span class='inline-block items-center rounded-lg shadow-md bg-zinc-100 z-10 py-1 px-8 mb-2 mt-2'>
+            {{ orArr.text }}
+          </span>
+        </div>
+      </div>
+      <!-- 초기 조건 목록 -->
+      <div class="waitingCondition">
+        <div class='flex items-center -ml-12' v-for="(condition, index) in conditions.filter(item => item.group === 3)"
+          :key="index">
+          <span class='rounded-l-lg shadow-md -z-4 h-10 px-1 pr-5 my-2 -mr-4 flex items-center bg-gray-400'>
+            <!-- 셀렉 박스 -->
+            <select :id="`andOr-${index}`" :name="`andOr-${index}`"
+              class="cursor-pointer h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-800 sm:text-sm"
+              v-model="condition.andOr" @change="handleSelectedValueChange(condition)">
+              <option selected disabled>조건선택</option>
+              <option>AND</option>
+              <option>OR</option>
+            </select>
+          </span>
+          <!-- <span :class="condition.isChecked ? 'bg-sky-550' : 'bg-gray-500'" -->
+          <!-- 체크 박스 -->
+          <!-- <span class='rounded-l-lg shadow-md -z-4 h-10 px-3 pr-7 my-2 -mr-4 flex items-center bg-gray-300'>
           <input type="checkbox" class="cursor-pointer focus:outline-none w-6 h-6 rounded-lg"
             v-model="condition.isChecked" />
-        </span>
-        <span class='flex items-center rounded-lg shadow-md bg-zinc-100 z-10 h-10 px-8 mb-2 mt-2 max-w-lg'>
-          {{ condition.text }}
-        </span>
+        </span> -->
+          <!-- 조건 내용 -->
+          <span class='flex items-center rounded-lg shadow-md bg-zinc-100 z-10 py-1 px-8 mb-2 mt-2 '>
+            {{ condition.text }}
+          </span>
+        </div>
       </div>
     </div>
     <div class='bg-zinc-100 mt-5 flex items-center'>
       <span>
-        조건불일치 알람 :
+        조건 불일치 알람 발생 :
       </span>
-      <MiniEditor class='inline-block min-w-min max-w-xl'/>
+      <MiniEditor class='inline-block min-w-min max-w-xl' />
     </div>
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
@@ -44,9 +91,9 @@ import ConfirmBtn from '../ConfirmBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 
-// onUpdated(() => {
-//   console.log("클릭", conditions.value)
-// });
+onUpdated(() => {
+  // console.log("선택완료", selectedAndOr.value)
+});
 
 
 const conditions = ref<Condition[]>([]);
@@ -62,12 +109,33 @@ interface Condition {
   text: string,
   isChecked: boolean,
   andOr: string,
+  group: number,
+}
+
+interface AndOrGroup {
+  isAND: boolean,
+  isOR: boolean,
 }
 
 // 조건 가져오기
 const storedData = localStorage.getItem('konwhowArr')
 const storedDataArr = JSON.parse(storedData);
-conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: 'none' }));
+conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: '조건선택', group: 3 }));
+
+// 선택된 값이 변경될 때 처리
+const handleSelectedValueChange = (condition) => {
+  // console.log("변경됨", condition)
+  if (condition.andOr === 'AND') {
+    // console.log("Selected AND")
+    condition.group = 1;
+  }
+
+  if (condition.andOr === 'OR') {
+    // console.log("Selected OR")
+    condition.group = 2;
+  }
+};
+
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
@@ -110,9 +178,9 @@ const changeToActionNode = () => {
   margin: auto;
   margin-top: 60px;
   margin-bottom: 70px;
-  width: 742px;
+  min-width: 1080px;
   min-height: 150px;
-  max-height: 380px;
+  max-height: 680px;
   overflow-y: auto;
   /* background-color: aquamarine; */
 }

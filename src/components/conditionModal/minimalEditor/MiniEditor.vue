@@ -48,22 +48,6 @@ const editor = useEditor({
       useStorage('modal__content', lineText);
   },
 });
-// onMounted(() => {
-//   editor.value = new Editor({
-//     extensions: [
-//       Document,
-//       Paragraph,
-//       Text,
-//       Placeholder.configure({
-//         placeholder: '추가 메모를 작성하세요 …',
-//       }),
-//     ],
-//   })
-// })
-
-// onBeforeUnmount(() => {
-//   editor.value.destroy()
-// })
 </script>
 
 <style lang="scss">
