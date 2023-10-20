@@ -413,9 +413,7 @@ onUpdated(() => {
 })
 
 function handleClickConditionTail(event) {
-  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-  const clickedElement = event.target;
-  console.log(clickedElement.value);
+  console.log(getNovelContentFromClick())
 
   modalStore.isCondition = true;
   openModal();
@@ -423,13 +421,31 @@ function handleClickConditionTail(event) {
 
 function handleClickActionTail(event) {
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-  const clickedElement = event.target;
-  console.log(clickedElement.value);
-
+  // const clickedElement = event.target;
+  // console.log(clickedElement.value);
+  // console.log(getNovelContentFromClick())
   modalStore.isAction = true;
   openModal();
 }
 
+// local Storage에 "novel__content" 키로 저장된 값을 가져오는 함수
+const getNovelContentFromClick = () => {
+  // // click 이벤트의 e 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
+  // const clickedElement = e.target;
+  // console.log(clickedElement);
+  // const offset = calculateOffset(e, targetElement);
+  // const position = editor.value?.view.posAtDOM(clickedElement, 0);
+
+  const location = editor.value?.state.selection.$anchor; // 커서 위치 정보 가져오기
+  // const node = position?.node; // 해당 위치의 노드 가져오기
+  const locationNum = location?.path[1];
+  // console.log("포지션", locationNum);
+  const contentObj = content?.value?.content[locationNum];
+  // console.log(contentObj.attrs);
+  // console.log("노드",node);
+
+  return contentObj;
+}
 
 
 </script>

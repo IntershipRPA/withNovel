@@ -9,7 +9,7 @@ import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
-import { InputRule } from "@tiptap/core";
+import { InputRule, Mark, markInputRule } from "@tiptap/core";
 import SlashCommand from "./slashExtension";
 import WhelkCommand from "./condition/whelkExtension";
 import TagCommand from "./condition/tagExtension";
