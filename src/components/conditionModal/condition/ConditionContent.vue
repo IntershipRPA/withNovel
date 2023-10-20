@@ -1,20 +1,20 @@
 <template>
-    <div class="modal-family text-lg">
-      <div class="first p-2.5 content-center">
-        <p>{{ whelkMsg }}</p>
-      </div>
-      <div class="second p-2.5 content-center">
-        <p>{{ tagMsg }}</p>
-      </div>
-      <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
-        @rangeSelected='updateRangeValue' />
-      <MiniEditor class='p-2.5 content-center ' />
+  <div class="modal-family text-lg">
+    <div class="first p-2.5 content-center">
+      <p>{{ whelkMsg }}</p>
     </div>
-    <ConfirmBtn @click.stop="handleConfirm" />
+    <div class="second p-2.5 content-center">
+      <p>{{ tagMsg }}</p>
+    </div>
+    <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
+      @rangeSelected='updateRangeValue' />
+    <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
+  </div>
+  <ConfirmBtn @click.stop="handleConfirm" />
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, defineEmits, ref } from "vue";
+import { PropType, computed, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
@@ -41,8 +41,8 @@ const updateRangeValue = (value: string) => {
 };
 
 const props = defineProps({
-  whelkMsg: { type: String, default: "test whelkMsg" },
-  tagMsg: { type: String, default: "test tagMsg" },
+  // whelkMsg: { type: String, default: "test whelkMsg" },
+  // tagMsg: { type: String, default: "test tagMsg" },
   editor: {
     type: Object as PropType<Editor>,
     required: true,
@@ -74,24 +74,33 @@ const changeToConditionNode = () => {
   const modalContent = localStorage.getItem('modal__content');
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
-  if(tagMsg === "Status"){
-    str = `"${whelkMsg}"의 "${tagMsg}" ${unit.value}  ${modalContent}`;
-  }else{
+  if (tagMsg === "Status") {
+    str = `"${whelkMsg}"의 "${tagMsg}" ${modalContent}`;
+  } else {
     str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   }
   editor
-  .chain()
+    .chain()
     .focus()
-    .insertContentAt({ from: editor.state.selection.$from.before(1) , to: editor.state.selection.$from.after(1) },str)
-    .setConditionRule()
+    .insertContentAt({ from: editor.state.selection.$from.before(1), to: editor.state.selection.$from.after(1) }, str)
+    .setConditionRule({
+      attrs: {
+        whelk: whelkMsg,
+        tag: tagMsg,
+        temp: temp.value,
+        unit: unit.value,
+        range: range.value,
+        memo: modalContent,
+      }
+    })
     .run();
 
   let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
-//  console.log(JSON.stringify(konwhow));
- 
+  //  console.log(JSON.stringify(konwhow));
+
   konwhowArr.value.push(konwhow);
   localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
-//  console.log(konwhowArr.value);
+  //  console.log(konwhowArr.value);
 
   //객체로 저장
   let whel = whelkMsg;
@@ -101,30 +110,30 @@ const changeToConditionNode = () => {
   let rangeValue = range.value;
   let modalText = modalContent;
   let obj = {};
-  if(tag === "Status"){
-    obj = {whel, tag, tempValue, unitValue, modalText};
-  }else{
-    obj = {whel, tag, tempValue, unitValue, rangeValue, modalText};
+  if (tag === "Status") {
+    obj = { whel, tag, tempValue, unitValue, modalText };
+  } else {
+    obj = { whel, tag, tempValue, unitValue, rangeValue, modalText };
   }
-//  console.log(JSON.stringify(obj));
+  //  console.log(JSON.stringify(obj));
   konwhowOBJ.value.push(obj); //배열에 추가
   localStorage.setItem('konwhowOBJ', JSON.stringify(konwhowOBJ.value)); //로컬에 저장
   // 데이터 가져오기
   let gatData = localStorage.getItem('konwhowOBJ')
 
   let gatData2;
-  if(gatData !== null){
+  if (gatData !== null) {
     gatData2 = JSON.parse(gatData);
   }
   console.log(`확인1 : ${JSON.stringify(gatData2[1])}`); //전체 가져올 때
   console.log(`확인2 : ${gatData2[1]?.whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
   console.log(`확인3 : ${gatData2[1]?.tag}`);
   console.log(`확인4 : ${gatData2[1]?.tempValue}`);
- 
-/*
-  localStorage는 무조건 문자열로 저장
-  JSON 데이터를 문자열로 변환하거나, 특수문자를 포함한 문자열을 안전하게 다루기 위해 이스케이프 처리
-*/
+
+  /*
+    localStorage는 무조건 문자열로 저장
+    JSON 데이터를 문자열로 변환하거나, 특수문자를 포함한 문자열을 안전하게 다루기 위해 이스케이프 처리
+  */
   // const data = localStorage.getItem("konwhowArr");
   // if(data !== null){
   //   console.log(data.replace(/\\/g, '').replace(/"/g, ''));

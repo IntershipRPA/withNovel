@@ -78,10 +78,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from "vue";
+import { ref } from "vue";
 const tagMsg = localStorage.getItem('tag');
 const props = defineProps({
-  message3: { type: String, default: "test3 message" },
+  // message3: { type: String, default: "test3 message" },
   // tempValue: { type: String, default: "tempValue"},
   // unitValue: { type: String, default:"℃"},
   // range: { type: String, default:"이상"},
