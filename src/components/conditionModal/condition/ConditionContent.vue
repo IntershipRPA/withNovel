@@ -75,7 +75,7 @@ const changeToConditionNode = () => {
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if(tagMsg === "Status"){
-    str = `"${whelkMsg}"의 "${tagMsg}" ${unit.value}  ${modalContent}`;
+    str = `"${whelkMsg}"의 "${tagMsg}"를 ${unit.value}  ${modalContent}`;
   }else{
     str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   }

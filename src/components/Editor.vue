@@ -19,7 +19,7 @@
 import { watchEffect, type PropType, ref, watch, onUpdated, onMounted, nextTick, computed } from "vue";
 import { useEditor, EditorContent, JSONContent, Extension } from "@tiptap/vue-3";
 import { EditorProps } from "@tiptap/pm/view";
-import { Editor as EditorClass } from "@tiptap/core";
+import { Editor as EditorClass, Editor } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
 import { useCompletion } from "ai/vue";
 
@@ -30,7 +30,7 @@ import { defaultExtensions } from "../components/extensions";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
 import SimpleModal from "../components/conditionModal/SimpleModal.vue";
 import { modalToggle } from "./extensions/condition/conditionExtension"
-
+import { useModalStore } from './../stores/modal';
 // 모달 설정
 // const showModal = modalToggle;
 // const closeModal = () => {
@@ -38,7 +38,8 @@ import { modalToggle } from "./extensions/condition/conditionExtension"
 // };
 // const isCondition = ref(false);
 
-import { useModalStore } from './../stores/modal';
+
+
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
@@ -58,6 +59,15 @@ const openModal = () => {
 
 
 const props = defineProps({
+
+
+  editor: {
+      type: Object as PropType<Editor>,
+      required: true,
+    },
+
+
+
 
   // 완성(자동완성) API의 엔드포인트 URL
   completionApi: {
@@ -405,17 +415,61 @@ onUpdated(() => {
   }
 })
 
+
+
 // HTML 요소에 대한 클릭 이벤트 핸들러 함수
-function handleClick(event) {
+function handleClick(event: { target: any; editor: { state: { selection: any; doc: { nodesBetween: (arg0: any, arg1: any, arg2: (node: any) => boolean) => void; }; }; }; }) {
 
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   const clickedElement = event.target;
-  console.log(clickedElement.value);
+ 
   // 클릭한 요소의 클래스 목록
   const classes = clickedElement.classList;
 
   
- 
+
+  // 바로 이전 형제 요소 가져오기
+  const previousSibling = clickedElement.previousElementSibling;
+ // console.log(previousSibling);
+
+  const textContent = previousSibling.textContent.replace(/["']/g, ""); // 또는 .innerText로 텍스트만 가져오기
+  const parts = textContent.split('를'); // 설비,태그 추출
+  console.log(parts);
+
+  const parts2 = parts[0].replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").split(' '); // 설비,태그 추출
+  console.log(parts2);
+
+  let whel = parts2[0]+ " " +parts2[1]; //설비
+  let tag = '';                       //태그
+  if (parts2.length == 4) {
+    tag = parts2[2] + " " + parts2[3];
+  } else {
+    tag = parts2[2];
+  }
+  console.log(whel + "   " + tag);
+  
+  const parts3 = parts[1].replace(/^\s+/, '').split(' '); // 맨앞에 공백 제거 후 나머지 추출
+  console.log(parts3);
+  let tempValue = parts3[0];
+  let unitValue = parts3[1];
+  let rangeValue = parts3[2];
+  let memo = parts3[3];
+  console.log(tempValue + " " + unitValue + " " + rangeValue + " " + memo);
+
+  // 각 데이터 로컬에 저장
+  localStorage.removeItem('whel');
+  localStorage.removeItem('tag');
+  localStorage.removeItem('tempValue');
+  localStorage.removeItem('unitValue');
+  localStorage.removeItem('rangeValue');
+  localStorage.removeItem('memo');
+  useStorage('whel', whel);
+  useStorage('tag', tag);
+  useStorage('tempValue', tempValue);
+  useStorage('unitValue', unitValue);
+  useStorage('rangeValue', rangeValue);
+  useStorage('memo', memo);
+
 
 
 

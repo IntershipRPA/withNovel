@@ -3,6 +3,7 @@ import {
   mergeAttributes
 } from '@tiptap/core';
 import { selectParentNode } from '@tiptap/pm/commands';
+import ConditionTooltipVue from '../../tooltip/ConditionTooltip.vue';
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
@@ -94,8 +95,9 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
       ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-10 h-10 px-8 mb-2 mt-2 flex items-center` }, 0],
       ['span',
-        { class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center` },
-        // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+        { class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`, contenteditable: "false"},
+        
+        //mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
         '조건',
       ],
     ]
