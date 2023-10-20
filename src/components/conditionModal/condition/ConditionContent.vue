@@ -99,7 +99,7 @@ const changeToConditionNode = () => {
   let konwhow;
 //  console.log(JSON.stringify(konwhow));
   if(tagMsg === "Status"){
-    konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${started.value} ${range.value} ${modalContent}`;
+    konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${started.value} ${modalContent}`;
   }else if(tagMsg === "Winding Temp"){
     konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   }else{

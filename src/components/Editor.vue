@@ -450,10 +450,26 @@ function handleClick(event: { target: any; editor: { state: { selection: any; do
   
   const parts3 = parts[1].replace(/^\s+/, '').split(' '); // 맨앞에 공백 제거 후 나머지 추출
   console.log(parts3);
-  let tempValue = parts3[0];
-  let unitValue = parts3[1];
-  let rangeValue = parts3[2];
-  let memo = parts3[3];
+  let tempValue;
+  let unitValue;
+  let rangeValue;
+  let memo;
+  if(tag === "Winding Temp" || tag === "Press"){
+    tempValue = parts3[0];
+    unitValue = parts3[1];
+    rangeValue = parts3[2];
+    memo = parts3[3];
+  }else{
+    tempValue = null;
+    rangeValue = null;
+    unitValue = parts3[0];
+    memo = parts3[2];
+  }
+
+
+
+
+
   console.log(tempValue + " " + unitValue + " " + rangeValue + " " + memo);
 
   // 각 데이터 로컬에 저장
