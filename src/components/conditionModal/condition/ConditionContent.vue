@@ -7,7 +7,7 @@
         <p>{{ tagMsg }}</p>
       </div>
       <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
-        @rangeSelected='updateRangeValue' />
+        @rangeSelected='updateRangeValue' @barSelected='updateBarValue' @startedSelected='updateStartedValue'/>
       <MiniEditor class='p-2.5 content-center ' />
     </div>
     <ConfirmBtn @click.stop="handleConfirm" />
@@ -30,6 +30,8 @@ const tagMsg = localStorage.getItem('tag')
 const temp = ref<number | null>(null); // 온도
 const unit = ref<string>("℃"); // 단위
 const range = ref<string>("이상"); // 범위
+const bar = ref<string>("bar");
+const started = ref<string>("started");
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -38,6 +40,12 @@ const updateUnitValue = (value: string) => {
 };
 const updateRangeValue = (value: string) => {
   range.value = value;
+};
+const updateBarValue= (value: string) => {
+  bar.value = value;
+};
+const updateStartedValue= (value: string) => {
+  started.value = value;
 };
 
 const props = defineProps({
@@ -75,9 +83,11 @@ const changeToConditionNode = () => {
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if(tagMsg === "Status"){
-    str = `"${whelkMsg}"의 "${tagMsg}"를 ${unit.value}  ${modalContent}`;
-  }else{
+    str = `"${whelkMsg}"의 "${tagMsg}"를 ${started.value}  ${modalContent}`;
+  }else if (tagMsg === "Winding Temp"){
     str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  }else{
+    str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${bar.value} ${range.value} ${modalContent}`;
   }
   editor
   .chain()
@@ -86,8 +96,15 @@ const changeToConditionNode = () => {
     .setConditionRule()
     .run();
 
-  let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  let konwhow;
 //  console.log(JSON.stringify(konwhow));
+  if(tagMsg === "Status"){
+    konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${started.value} ${range.value} ${modalContent}`;
+  }else if(tagMsg === "Winding Temp"){
+    konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  }else{
+    konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${bar.value} ${range.value} ${modalContent}`;
+  }
  
   konwhowArr.value.push(konwhow);
   localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
@@ -100,11 +117,15 @@ const changeToConditionNode = () => {
   let unitValue = unit.value;
   let rangeValue = range.value;
   let modalText = modalContent;
+  let barValue = bar.value;
+  let startedValue = started.value;
   let obj = {};
   if(tag === "Status"){
-    obj = {whel, tag, tempValue, unitValue, modalText};
-  }else{
+    obj = {whel, tag, tempValue, startedValue, modalText};
+  }else if(tagMsg === "Winding Temp"){
     obj = {whel, tag, tempValue, unitValue, rangeValue, modalText};
+  }else{
+    obj = {whel, tag, tempValue, barValue, rangeValue, modalText};
   }
 //  console.log(JSON.stringify(obj));
   konwhowOBJ.value.push(obj); //배열에 추가
