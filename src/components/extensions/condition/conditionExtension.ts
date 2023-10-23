@@ -59,7 +59,12 @@ const renderItems = () => {
   // const range = Command.options.range;
   // console.log("33", component?.ref.modalToggle);
   return {
+    
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
+      localStorage.removeItem('temp');
+      localStorage.removeItem('memo');
+      
+      localStorage.setItem('memo', '');
       component = new VueRenderer(ConditionTooltip, {
         props,
         editor: props.editor,
