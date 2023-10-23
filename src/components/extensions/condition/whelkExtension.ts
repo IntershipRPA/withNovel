@@ -104,6 +104,23 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Air Compressor",
+      searchTerms: ["에어","콤프레샤","공기"],
+      description: "에어컴프레서",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setHighlight({ color: '#ffc5e4' })
+          .insertContent("Air Compressor")
+          .unsetHighlight()
+          .run();
+      },
+    },
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();

@@ -372,6 +372,7 @@ watchEffect(() => {
 // 꼬리표 클릭이벤트
 const conditionTailElement = ref<Element[]>([]);
 const actionTailElement = ref<Element[]>([]);
+const recipeTailElement = ref<Element[]>([]);
 // console.log("값 할당 이전", conditionTailElement.value);
 
 // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
@@ -380,23 +381,53 @@ watchEffect(() => {
   if (checkHydrated.value === true) {
     const conElements = document.querySelectorAll('.condition-tail') as Element[];
     const actElements = document.querySelectorAll('.action-tail') as Element[];
+    const recElements = document.querySelectorAll('.recipe-tail') as Element[];
+
     conditionTailElement.value = conElements;
     actionTailElement.value = actElements;
+    recipeTailElement.value = recElements;
+
     // console.log("값 할당 이후", conditionTailElement.value);
 
+    // 조건
     if (conditionTailElement.value.length !== 0) {
       // console.log("elements detected");
       conditionTailElement.value.forEach((element: Element) => {
         element.addEventListener("click", handleClickConditionTail); // 클릭 이벤트 핸들러 연결
-        // console.log("element에 클릭 이벤트 연결:", element)
+
       });
     }
 
+    // 액션
     if (actionTailElement.value.length !== 0) {
       actionTailElement.value.forEach((element: Element) => {
         element.addEventListener("click", handleClickActionTail);
       });
     }
+
+    // 레시피
+    if (recipeTailElement.value.length !== 0) {
+      recipeTailElement.value.forEach((element: Element) => {
+        // 이전에 연결된 이벤트 리스너를 제거하고 추가
+        element.removeEventListener("click", handleClickRecipeTail);
+        element.addEventListener("click", handleClickRecipeTail);
+
+        // 삭제 버튼
+        const nextSibling = element.nextSibling;
+
+        // 마우스 호버 이벤트 연결
+        element.removeEventListener("mouseenter", handleMouseEnter);
+        element.removeEventListener("mouseleave", handleMouseLeave);
+
+        element.addEventListener("mouseenter", handleMouseEnter);
+        element.addEventListener("mouseleave", handleMouseLeave);
+
+        // 삭제 이벤트 연결
+        nextSibling?.removeEventListener("click", handleClickRecipeDelete);
+        nextSibling?.addEventListener("click", handleClickRecipeDelete);
+      });
+    }
+
   }
 })
 
@@ -407,11 +438,14 @@ onUpdated(() => {
     // console.log("onUpdated called2");
     const conElements = document.querySelectorAll('.condition-tail') as Element[];
     const actElements = document.querySelectorAll('.action-tail') as Element[];
+    const recElements = document.querySelectorAll('.recipe-tail') as Element[];
     conditionTailElement.value = conElements;
     actionTailElement.value = actElements;
+    recipeTailElement.value = recElements;
   }
 })
 
+// 조건 꼬리표 클릭
 function handleClickConditionTail(event) {
   console.log(getNovelContentFromClick())
 
@@ -419,6 +453,7 @@ function handleClickConditionTail(event) {
   openModal();
 }
 
+// 액션 꼬리표 클릭
 function handleClickActionTail(event) {
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   // const clickedElement = event.target;
@@ -427,6 +462,38 @@ function handleClickActionTail(event) {
   modalStore.isAction = true;
   openModal();
 }
+
+// 레시피 꼬리표 클릭
+function handleClickRecipeTail(event) {
+  console.log(getNovelContentFromClick())
+
+  modalStore.isRecipe = true;
+  openModal();
+}
+
+function handleMouseEnter(event) {
+  console.log("호버인"); // 디버깅 목적으로 콘솔에 로그 출력
+  const nextSibling = event.target.nextSibling;
+  nextSibling.class = "hover-in";
+  // nextSibling.style.display = "block";
+  console.log(nextSibling.class);
+}
+
+function handleMouseLeave(event) {
+  console.log("호버아웃"); // 디버깅 목적으로 콘솔에 로그 출력
+  const nextSibling = event.target.nextSibling;
+  nextSibling.class = "hover-out";
+  // nextSibling.style.display = "none";
+  console.log(nextSibling);
+}
+
+// 삭제 이벤트 핸들러
+function handleClickRecipeDelete(event) {
+  console.log("삭제 클릭됨")
+
+}
+
+
 
 // local Storage에 "novel__content" 키로 저장된 값을 가져오는 함수
 const getNovelContentFromClick = () => {

@@ -16,6 +16,7 @@
       <!-- 본문 -->
       <ConditionContent v-if="isCondition" :editor="editor" />
       <ActionContent v-if="isAction" :editor="editor" />
+      <RecipeContent v-if="isRecipe" :editor="editor" />
     </div>
   </div>
 </template>
@@ -25,6 +26,7 @@ import { PropType, Ref, computed, ref } from "vue";
 import { Editor, Range } from '@tiptap/core';
 import ConditionContent from './condition/ConditionContent.vue'
 import ActionContent from './action/ActionContent.vue'
+import RecipeContent from './recipe/RecipeContent.vue'
 import { useModalStore } from '../../stores/modal';
 
 // 모달 설정
@@ -32,6 +34,7 @@ const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const isCondition = computed(() => modalStore.isCondition);
 const isAction = computed(() => modalStore.isAction);
+const isRecipe = computed(() => modalStore.isRecipe);
 
 const closeModal = () => {
   modalStore.closeModal(); // 모달 닫기
@@ -70,7 +73,7 @@ const stopPropagation = (event) => {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 100;
 }
 
 .modal-wrapper {
