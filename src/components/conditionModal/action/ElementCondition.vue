@@ -26,7 +26,7 @@
 import { onBeforeUpdate, onUpdated, ref } from 'vue';
 
 onUpdated(() => {
-  console.log("선택완료", props.num)
+  // console.log("선택완료", props.num)
 });
 
 const props = defineProps({

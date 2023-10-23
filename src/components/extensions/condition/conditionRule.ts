@@ -97,7 +97,10 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       'condition',
       { class: 'block flex items-end	' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-      ['p', { class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-20 py-1 px-8 mb-2 mt-2 flex items-center`, contenteditable: "false" }, 0],
+      ['p', {
+        class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-20 py-1 px-8 mb-2 mt-2 flex items-center `,
+        // contenteditable: "false"
+      }, 0],
       ['span',
         {
           class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max`,
@@ -130,8 +133,18 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
-      unsetCondition: () => ({ commands }) => {
-        return commands.lift(this.name)
+      // 조건 삭제
+      unsetCondition: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
+        return (
+          chain()
+            .focus()
+            .deleteNode("conditionRule")
+            .insertContentAt({
+              from: editor.state.selection.$from.before(1),
+              to: editor.state.selection.$from.before(1)
+            }, text)
+            .run()
+        );
       },
     }
   },
