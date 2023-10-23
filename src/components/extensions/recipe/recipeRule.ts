@@ -93,7 +93,8 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       { class: 'block flex items-center' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
       ['p', {
-        class: `inline-block rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center`
+        class: `inline-block rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center`,
+        contenteditable: "false"
       }, 0],
       ['span',
         {
@@ -102,14 +103,6 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
         },
         // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
         '레시피',
-      ],
-      ['span',
-        {
-          class: `recipe-delete cursor-pointer rounded-r-lg shadow-md bg-red-500 hover:bg-red-700 z-1 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
-          contenteditable: "false",
-          style: "display: block;"
-        },
-        '삭제',
       ],
     ]
   },

@@ -408,23 +408,9 @@ watchEffect(() => {
     // 레시피
     if (recipeTailElement.value.length !== 0) {
       recipeTailElement.value.forEach((element: Element) => {
-        // 이전에 연결된 이벤트 리스너를 제거하고 추가
-        element.removeEventListener("click", handleClickRecipeTail);
+        // // 이전에 연결된 이벤트 리스너를 제거하고 추가
+        // element.removeEventListener("click", handleClickRecipeTail);
         element.addEventListener("click", handleClickRecipeTail);
-
-        // 삭제 버튼
-        const nextSibling = element.nextSibling;
-
-        // 마우스 호버 이벤트 연결
-        element.removeEventListener("mouseenter", handleMouseEnter);
-        element.removeEventListener("mouseleave", handleMouseLeave);
-
-        element.addEventListener("mouseenter", handleMouseEnter);
-        element.addEventListener("mouseleave", handleMouseLeave);
-
-        // 삭제 이벤트 연결
-        nextSibling?.removeEventListener("click", handleClickRecipeDelete);
-        nextSibling?.addEventListener("click", handleClickRecipeDelete);
       });
     }
 
@@ -447,7 +433,7 @@ onUpdated(() => {
 
 // 조건 꼬리표 클릭
 function handleClickConditionTail(event) {
-  console.log(getNovelContentFromClick())
+  // console.log(getNovelContentFromClick())
 
   modalStore.isCondition = true;
   openModal();
@@ -465,35 +451,11 @@ function handleClickActionTail(event) {
 
 // 레시피 꼬리표 클릭
 function handleClickRecipeTail(event) {
-  console.log(getNovelContentFromClick())
+  // console.log(getNovelContentFromClick())
 
   modalStore.isRecipe = true;
   openModal();
 }
-
-function handleMouseEnter(event) {
-  console.log("호버인"); // 디버깅 목적으로 콘솔에 로그 출력
-  const nextSibling = event.target.nextSibling;
-  nextSibling.class = "hover-in";
-  // nextSibling.style.display = "block";
-  console.log(nextSibling.class);
-}
-
-function handleMouseLeave(event) {
-  console.log("호버아웃"); // 디버깅 목적으로 콘솔에 로그 출력
-  const nextSibling = event.target.nextSibling;
-  nextSibling.class = "hover-out";
-  // nextSibling.style.display = "none";
-  console.log(nextSibling);
-}
-
-// 삭제 이벤트 핸들러
-function handleClickRecipeDelete(event) {
-  console.log("삭제 클릭됨")
-
-}
-
-
 
 // local Storage에 "novel__content" 키로 저장된 값을 가져오는 함수
 const getNovelContentFromClick = () => {

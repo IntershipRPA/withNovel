@@ -11,6 +11,7 @@
     <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
+  <DeleteBtn @click.stop="handleDelete" />
 </template>
 
 <script setup lang="ts">
@@ -18,6 +19,7 @@ import { PropType, computed, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
+import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import { useStorage } from "@vueuse/core";
@@ -143,6 +145,25 @@ const changeToConditionNode = () => {
   localStorage.removeItem('konwhow');
   useStorage('konwhow', konwhow);//레시피
 };
+
+const handleDelete = () => {
+  deleteConditionNode();
+  closeModal();
+};
+
+const deleteConditionNode = () => {
+  const editor = props.editor;
+  
+  // // 삭제 전 객체로 저장
+  // const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+  // const locationNum = location?.path[1];
+  // const json = editor.getJSON();
+  // // 해당 노드의 정보를 담은 객체
+  // const contentObj = json?.content[locationNum];
+
+  // 노드 삭제
+  editor.chain().toggleNode('conditionRule', 'paragraph').run();
+}
 </script>
 
 <style scoped>

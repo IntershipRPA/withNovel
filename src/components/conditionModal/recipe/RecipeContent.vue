@@ -1,9 +1,13 @@
 <template>
   <div class="modal-family text-lg flex flex-col">
     <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
-      <span class="p-2.5">설비 Air Compressor</span>
+      <!-- <span class="p-2.5">설비 Air Compressor</span>
       <span class="p-2.5">태그 Status</span>
-      <span class="p-2.5">INIT: 일 때</span>
+      <span class="p-2.5">INIT: 일 때</span> -->
+      <span>액션 : </span>
+      <span>
+        {{ action }}
+      </span>
     </div>
     <div>
       <!-- AND 조건-->
@@ -32,6 +36,7 @@
     </div>
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
+  <DeleteBtn @click.stop="handleDelete" />
 </template>
 
 <script setup lang="ts">
@@ -39,6 +44,7 @@ import { PropType, computed, onUpdated, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
+import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementCondition from './ElementCondition.vue';
@@ -49,12 +55,7 @@ import ElementCondition from './ElementCondition.vue';
 
 
 const conditions = ref<Condition[]>([]);
-
-// 조건 가져오기
-const storedData = localStorage.getItem('konwhowArr')
-const storedDataArr = JSON.parse(storedData);
-conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: '조건선택', group: 3 }));
-
+const action = ref('DEFAULT ACTION TEXT');
 
 const props = defineProps({
   editor: {
@@ -70,29 +71,33 @@ interface Condition {
   group: number,
 }
 
-// interface AndOrGroup {
-//   isAND: boolean,
-//   isOR: boolean,
-// }
+// 조건 가져오기
+const docs = props.editor.getJSON()?.content;
 
-// // 조건 가져오기
-// const storedData = localStorage.getItem('konwhowArr')
-// const storedDataArr = JSON.parse(storedData);
-// conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: '조건선택', group: 3 }));
+if (docs) {
+  const conditionElements = docs.filter((element) => element.type === "conditionRule");
+  if (conditionElements.length > 0) {
+    conditions.value = conditionElements.map((element) => ({
+      text: element.content[0]?.text,
+      isChecked: false,
+      andOr: '조건선택',
+      group: 3
+    }));
+  } else {
+    alert("조건이 지정되지 않았습니다.")
+  }
+}
 
-// // 선택된 값이 변경될 때 처리
-// const handleSelectedValueChange = (condition) => {
-//   // console.log("변경됨", condition)
-//   if (condition.andOr === 'AND') {
-//     // console.log("Selected AND")
-//     condition.group = 1;
-//   }
+// 액션 가져오기
+if (docs) {
+  const actionElements = docs.filter((element) => element.type === "actionRule");
+  if (actionElements.length > 0) {
+    action.value = actionElements[0].content[0].text;
+  } else {
+    alert("액션이 지정되지 않았습니다.")
+  }
+}
 
-//   if (condition.andOr === 'OR') {
-//     // console.log("Selected OR")
-//     condition.group = 2;
-//   }
-// };
 
 
 // 모달 설정
@@ -126,6 +131,26 @@ const changeToRecipeNode = () => {
     .insertContent(`레시피 지정 완료`)
     .run();
 };
+
+const handleDelete = () => {
+  deleteRecipeNode();
+  closeModal();
+};
+
+const deleteRecipeNode = () => {
+  const editor = props.editor;
+
+  // // 삭제 전 객체로 저장
+  // const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+  // const locationNum = location?.path[1];
+  // const json = editor.getJSON();
+  // // 해당 노드의 정보를 담은 객체
+  // const contentObj = json?.content[locationNum];
+
+  // 노드 삭제
+  editor.chain().toggleNode('recipeRule', 'paragraph').run();
+}
+
 </script>
 
 <style scoped>

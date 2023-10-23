@@ -63,7 +63,7 @@ const handleSelectedValueChange = (condition) => {
   }
 };
 
-// 이벤트 엠미터를 통해 부모에게 변경 사항을 알림
+// 이벤트 에미터를 통해 부모에게 변경 사항을 알림
 const emits = defineEmits(['update:sharedData']);
 
 </script>
