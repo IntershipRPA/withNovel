@@ -7,16 +7,16 @@ import {
 } from "lucide-vue-next";
 import { PluginKey } from '@tiptap/pm/state'
 import { ref } from 'vue';
-import ActionTooltip from "../../tooltip/ActionTooltip.vue";
+import RecipeTooltip from "../../tooltip/RecipeTooltip.vue";
 import SlashCommandList from "./slashCommandList.vue";
 
 const Command = Extension.create({
-  name: "action-command",
+  name: "recipe-command",
   addOptions() {
     return {
       suggestion: {
-        pluginKey: new PluginKey('action-command'),
-        char: "/액션",
+        pluginKey: new PluginKey('recipe-command'),
+        char: "/레시피",
         command: ({
           editor,
           range,
@@ -60,7 +60,7 @@ const renderItems = () => {
   // console.log("33", component?.ref.modalToggle);
   return {
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
-      component = new VueRenderer(ActionTooltip, {
+      component = new VueRenderer(RecipeTooltip, {
         props,
         editor: props.editor,
       });
@@ -107,10 +107,10 @@ const renderItems = () => {
   };
 };
 
-const ActionCommand = Command.configure({
+const RecipeCommand = Command.configure({
   suggestion: {
     render: renderItems,
   },
 });
 
-export default ActionCommand;
+export default RecipeCommand;
