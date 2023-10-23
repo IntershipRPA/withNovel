@@ -1,5 +1,5 @@
 <template>
-  <EditorContent :editor="editor" class="text-gray-950 max-h-20 overflow-y-auto hover:overscroll-contain" />
+  <EditorContent :editor="editor" class="text-gray-950 max-h-20 overflow-y-auto hover:overscroll-contain"/>
 </template>
 
 <script setup lang="ts">
@@ -7,8 +7,24 @@ import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from "@tiptap/starter-kit";
 import { useStorage } from '@vueuse/core';
+import { ref } from "vue";
+
+const memo = ref<string>(String(localStorage.getItem('memo'))); // 메모
+
+const props = defineProps({
+  placeholder: {
+    type: String,
+    default: '추가 메모를 작성하세요 …',
+    // required: true,
+  },
+  storageKey: {
+    type: String,
+    required: true,
+  },
+})
 
 const editor = useEditor({
+  content: memo.value,
   extensions: [
     StarterKit.configure({
       bulletList: false,
@@ -23,7 +39,7 @@ const editor = useEditor({
       heading: false,
     }),
     Placeholder.configure({
-      placeholder: '추가 메모를 작성하세요 …',
+      placeholder: props.placeholder,
     }),
   ],
 
@@ -31,7 +47,7 @@ const editor = useEditor({
     const selection = e.editor.state.selection;
 
     // 기존 값 삭제
-    localStorage.removeItem('modal__content');
+    localStorage.removeItem(props.storageKey);
       // 커서가 있는 줄을 찾기
       const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
       const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
@@ -44,26 +60,10 @@ const editor = useEditor({
         }
         return true;
       })
-
-      useStorage('modal__content', lineText);
+  
+      useStorage(props.storageKey, lineText);
   },
 });
-// onMounted(() => {
-//   editor.value = new Editor({
-//     extensions: [
-//       Document,
-//       Paragraph,
-//       Text,
-//       Placeholder.configure({
-//         placeholder: '추가 메모를 작성하세요 …',
-//       }),
-//     ],
-//   })
-// })
-
-// onBeforeUnmount(() => {
-//   editor.value.destroy()
-// })
 </script>
 
 <style lang="scss">
