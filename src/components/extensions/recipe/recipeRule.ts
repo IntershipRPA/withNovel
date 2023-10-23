@@ -2,7 +2,7 @@ import {
   Node,
   mergeAttributes
 } from '@tiptap/core';
-import { selectParentNode } from '@tiptap/pm/commands';
+import { chainCommands, selectParentNode } from '@tiptap/pm/commands';
 export interface RecipeRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
@@ -34,6 +34,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
   defining: true,
   draggable: false,
   // draggable: true,
+  // atom: true,
 
   // addOptions() {
   //   return {
@@ -50,7 +51,6 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
   // },
 
   // addAttributes() {
-  //   return {
   //     whelk: {
   //       default: this.options.settingAttrs.whelk,
   //     },
@@ -93,8 +93,8 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       { class: 'block flex items-center' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
       ['p', {
-        class: `inline-block rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center`,
-        contenteditable: "false"
+        class: `inline-block rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center `,
+        // contenteditable: "false"
       }, 0],
       ['span',
         {
@@ -121,31 +121,40 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
   addCommands() {
     return {
       setRecipeRule: () => ({ commands }: { commands: any; }) => {
+        // attrs 객체로부터 필요한 속성 값을 추출
+        // const { whelk, tag, temp, unit, range, memo } = attrs;
+        // this.options.settingAttrs.whelk = whelk;
+        // this.options.settingAttrs.tag = tag;
+        // this.options.settingAttrs.temp = temp;
+        // this.options.settingAttrs.unit = unit;
+        // this.options.settingAttrs.range = range;
+        // this.options.settingAttrs.memo = memo;
+        // commands.insertContent(`${whelk} ${tag} ${temp}${unit} ${range} ${memo} `)
+
         return commands.toggleNode(this.name)
       },
-      // setRecipeRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
-      //   // attrs 객체로부터 필요한 속성 값을 추출
-      //   const { whelk, tag, temp, unit, range, memo } = attrs;
-      //   this.options.settingAttrs.whelk = whelk;
-      //   this.options.settingAttrs.tag = tag;
-      //   this.options.settingAttrs.temp = temp;
-      //   this.options.settingAttrs.unit = unit;
-      //   this.options.settingAttrs.range = range;
-      //   this.options.settingAttrs.memo = memo;
-      //   commands.insertContent(`${whelk} ${tag} ${temp}${unit} ${range} ${memo} `)
-
-      //   return commands.toggleNode(this.name)
-      // },
       toggleRecipe: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
-      unsetRecipe: () => ({ commands }) => {
-        return commands.lift(this.name)
+      // 레시피 삭제
+      unsetRecipe: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
+        return (
+          chain()
+            .focus()
+            .deleteNode("recipeRule")
+            .insertContentAt({
+              from: editor.state.selection.$from.before(1),
+              to: editor.state.selection.$from.before(1)
+            }, text)
+            .run()
+        );
       },
+
     }
   },
 
   // addStorage() {
+  //   console.log("here")
   //   return {
   //     zzzzztestzz: 'testetst',
   //   }

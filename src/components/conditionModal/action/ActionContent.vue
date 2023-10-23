@@ -145,16 +145,24 @@ const handleDelete = () => {
 
 const deleteActionNode = () => {
   const editor = props.editor;
-  
-  // // 삭제 전 객체로 저장
-  // const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
-  // const locationNum = location?.path[1];
-  // const json = editor.getJSON();
-  // // 해당 노드의 정보를 담은 객체
-  // const contentObj = json?.content[locationNum];
+
+  // 삭제 전 객체로 저장
+  const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+  const locationNum = location?.path[1];
+  const json = editor.getJSON();
+  // 해당 노드의 정보를 담은 객체
+  const contentObj = json?.content[locationNum];
+  const contentText = contentObj?.content[0]?.text;
+
+  // console.log("here", contentText);
 
   // 노드 삭제
-  editor.chain().toggleNode('actionRule', 'paragraph').run();
+  if (contentObj.type == "actionRule") {
+    editor.commands.unsetAction({
+      text: contentText,
+      editor: editor,
+    });
+  }
 }
 
 </script>

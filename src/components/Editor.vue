@@ -452,7 +452,6 @@ function handleClickActionTail(event) {
 // 레시피 꼬리표 클릭
 function handleClickRecipeTail(event) {
   // console.log(getNovelContentFromClick())
-
   modalStore.isRecipe = true;
   openModal();
 }
