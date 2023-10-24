@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 const tagMsg = localStorage.getItem('tag');
-console.log(tagMsg);
+// console.log(tagMsg);
 const props = defineProps({
   // message3: { type: String, default: "test3 message" },
   // tempValue: { type: String, default: "tempValue"},
@@ -110,6 +110,7 @@ const onBarSelected = () => {
   emits('barSelected', bar.value);
 };
 const onStartedSelected = () => {
+  console.log('startedSelected', started.value);
   emits('startedSelected', started.value);
 };
 
