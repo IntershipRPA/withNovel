@@ -136,22 +136,22 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
         return commands.toggleNode(this.name, attrs ,attrs);
 
       },
-      // toggleCondition: () => ({ commands }) => {
-      //   return commands.toggleWrap(this.name)
-      // },
+      toggleCondition: () => ({ commands }) => {
+        return commands.toggleWrap(this.name)
+      },
       // // 조건 삭제
-      // unsetCondition: ({ text, editor }: { text?: string, editor?: any }) => ({ chain }) => {
-      //   return (
-      //     chain()
-      //       .focus()
-      //       .deleteNode("conditionRule")
-      //       .insertContentAt({
-      //         from: editor.state.selection.$from.before(1),
-      //         to: editor.state.selection.$from.before(1)
-      //       }, text)
-      //       .run()
-      //   );
-      // },
+      unsetCondition: ({ text, editor }: { text?: string, editor?: any }) => ({ chain }: {chain: any}) => {
+        return (
+          chain()
+            .focus()
+            .deleteNode("conditionRule")
+            .insertContentAt({
+              from: editor.state.selection.$from.before(1),
+              to: editor.state.selection.$from.before(1)
+            }, text)
+            .run()
+        );
+      },
     }
   },
 
