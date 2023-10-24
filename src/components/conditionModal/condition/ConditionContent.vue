@@ -8,10 +8,12 @@
     </div>
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
       @rangeSelected='updateRangeValue' />
-    <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
+
+    <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'memo'"/>
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
   <DeleteBtn @click.stop="handleDelete" />
+
 </template>
 
 <script setup lang="ts">
@@ -29,9 +31,10 @@ const whelkMsg = localStorage.getItem('whelk')
 const tagMsg = localStorage.getItem('tag')
 
 // 인풋에 입력한 값 불러오기
-const temp = ref<number | null>(null); // 온도
-const unit = ref<string>("℃"); // 단위
-const range = ref<string>("이상"); // 범위
+const temp = ref<number | null>(Number(localStorage.getItem('temp'))); // 온도
+const unit = ref<string>(String(localStorage.getItem('unit'))); // 단위
+const range = ref<string>(String(localStorage.getItem('range'))); // 범위
+const memo = ref<string>(String(localStorage.getItem('memo'))); // 메모
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -40,6 +43,9 @@ const updateUnitValue = (value: string) => {
 };
 const updateRangeValue = (value: string) => {
   range.value = value;
+};
+const updateMemoValue = (value: string) => {
+  memo.value = value;
 };
 
 const props = defineProps({
@@ -73,11 +79,13 @@ const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 �
 
 const changeToConditionNode = () => {
   const editor = props.editor;
-  const modalContent = localStorage.getItem('modal__content');
+  const modalContent = localStorage.getItem('memo');
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if (tagMsg === "Status") {
-    str = `"${whelkMsg}"의 "${tagMsg}" ${modalContent}`;
+
+    str = `"${whelkMsg}"의 "${tagMsg}"를 ${modalContent}`;
+
   } else {
     str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   }

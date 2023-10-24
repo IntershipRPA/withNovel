@@ -3,8 +3,11 @@
     <div class="first p-2.5 content-center">
       <p>{{ whelkMsg }}</p>
     </div>
+
+
     <div class="second p-2.5 content-center">
       <p>{{ tagMsg }}</p>
+
     </div>
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
       @rangeSelected='updateRangeValue' />
@@ -22,7 +25,9 @@ import ConfirmBtn from '../ConfirmBtn.vue';
 import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
+
 import { useStorage } from "@vueuse/core";
+
 
 
 // 설비와 태그 불러오기
@@ -43,6 +48,12 @@ const updateRangeValue = (value: string) => {
   range.value = value;
 };
 
+// 조건 가져오기
+const storedData = localStorage.getItem('konwhowArr')
+const storedDataArr = JSON.parse(storedData);
+conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: '조건선택', group: 3 }));
+
+
 const props = defineProps({
   // whelkMsg: { type: String, default: "test whelkMsg" },
   // tagMsg: { type: String, default: "test tagMsg" },
@@ -55,6 +66,7 @@ const props = defineProps({
   //   required: true,
   // },
 })
+
 
 
 // 모달 설정
@@ -175,8 +187,10 @@ const deleteActionNode = () => {
   flex-wrap: wrap;
   margin: auto;
   margin-top: 60px;
+
   width: 742px;
   height: 150px;
+
   /* background-color: aquamarine; */
 }
 

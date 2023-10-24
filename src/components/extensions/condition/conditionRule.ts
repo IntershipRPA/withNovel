@@ -18,7 +18,7 @@ export interface ConditionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
-      setConditionRule: () => ReturnType;
+      setConditionRule: (attrs: { whelk: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
       toggleCondition: () => ReturnType;
       unsetCondition: () => ReturnType;
     };
@@ -41,24 +41,30 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       settingAttrs: {
         // whelk: 'defaultWhelk',
         whelk: localStorage.getItem('whelk'),
-        tag: 'defaultTag',
-        temp: 'defaultTemp',
-        unit: 'defaultUnit',
-        range: 'defaultRange',
-        memo: 'defaultMemo',
+
+        tag: localStorage.getItem('tag'),
+        temp: localStorage.getItem('temp'),
+        unit: localStorage.getItem('unit'),
+        range: localStorage.getItem('range'),
+        memo: localStorage.getItem('memo'),
+
       }
     }
   },
 
   // 'novel__content' 에 attrs로 저장됨
   addAttributes() {
-    // console.log("here3", this.options.settingAttrs);
+
+ //    console.log("here3", this.options.settingAttrs);
+
     return {
       whelk: {
         default: this.options.settingAttrs.whelk,
       },
       tag: {
-        default: 'testTag',
+
+        default: this.options.settingAttrs.tag,
+
       },
       temp: {
         default: this.options.settingAttrs.temp,
@@ -76,7 +82,9 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
         default: null,
         renderHTML: attributes => {
           return {
+
             class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max`,
+
             contenteditable: "false"
           }
         },
@@ -97,6 +105,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       'condition',
       { class: 'block flex items-end	' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+
       ['p', {
         class: `inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-20 py-1 px-8 mb-2 mt-2 flex items-center `,
         // contenteditable: "false"
@@ -104,6 +113,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
       ['span',
         {
           class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max`,
+
           contenteditable: "false"
         },
         // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
@@ -114,21 +124,21 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
   addCommands() {
     return {
-      // setConditionRule: () => ({ commands }: { commands: any; }) => {
-      //   return commands.toggleNode(this.name)
-      // },
-      setConditionRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
+
+      setConditionRule: attrs => ({ commands }) => {
         // attrs 객체로부터 필요한 속성 값을 추출
-        const { whelk, tag, temp, unit, range, memo } = attrs;
-        this.options.settingAttrs.whelk = whelk;
-        this.options.settingAttrs.tag = tag;
-        this.options.settingAttrs.temp = temp;
-        this.options.settingAttrs.unit = unit;
-        this.options.settingAttrs.range = range;
-        this.options.settingAttrs.memo = memo;
-        // commands.insertContent(`${whelk} ${tag} ${temp}${unit} ${range} ${memo} `)
-        // console.log("here1", this.options.settingAttrs);
-        return commands.toggleNode(this.name)
+        const { whelk, tag, temp, unit, range } = attrs;
+  
+        // toggleNode 메소드를 호출하여 새로운 노드를 생성
+        // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
+        return commands.toggleNode(this.name, {
+          whelk,
+          tag,
+          temp,
+          unit,
+          range,
+        });
+
       },
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
