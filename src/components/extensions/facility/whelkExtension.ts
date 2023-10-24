@@ -64,9 +64,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#ffc5e4' })
+          .setFacility({facility: "Comp Motor"})
           .insertContent("Comp Motor")
-          .unsetHighlight()
+          .unsetFacility()
           .run();
       },
     },
@@ -81,9 +81,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#ffc5e4' })
+          .setFacility({facility: "Receiver Tank"})
           .insertContent("Receiver Tank")
-          .unsetHighlight()
+          .unsetFacility()
           .run();
       },
     },
@@ -98,9 +98,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#ffc5e4' })
+          .setFacility({facility: "After Cooler"})
           .insertContent("After Cooler")
-          .unsetHighlight()
+          .unsetFacility()
           .run();
       },
     },
@@ -115,9 +115,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#ffc5e4' })
+          .setFacility({facility: "Air Compressor"})
           .insertContent("Air Compressor")
-          .unsetHighlight()
+          .unsetFacility()
           .run();
       },
     },

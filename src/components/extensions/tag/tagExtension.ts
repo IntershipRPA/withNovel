@@ -63,9 +63,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#bedcff' })
+          .setTag({ tag: `Winding Temp`})
           .insertContent(`Winding Temp`)
-          .unsetHighlight()
+          .unsetTag()
           .run();
       },
     },
@@ -80,9 +80,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#bedcff' })
+          .setTag({tag: `Press`})
           .insertContent(`Press`)
-          .unsetHighlight()
+          .unsetTag()
           .run();
       },
     },
@@ -97,9 +97,9 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#bedcff' })
+          .setTag({tag: `Status`})
           .insertContent(`Status`)
-          .unsetHighlight()
+          .unsetTag()
           .run();
       },
     },

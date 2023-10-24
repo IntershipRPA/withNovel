@@ -11,14 +11,16 @@ import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
 import { InputRule, Mark, markInputRule } from "@tiptap/core";
 import SlashCommand from "./slashExtension";
-import WhelkCommand from "./condition/whelkExtension";
-import TagCommand from "./condition/tagExtension";
+import WhelkCommand from "./facility/whelkExtension";
+import TagCommand from "./tag/tagExtension";
 import ConditionCommand from "./condition/conditionExtension";
 import { ConditionRule } from './condition/conditionRule';
 import ActionCommand from "./action/actionExtension";
 import { ActionRule } from './action/actionRule';
 import RecipeCommand from './recipe/recipeExtension';
 import { RecipeRule } from './recipe/recipeRule';
+import { FacilityMark } from './facility/facilityMark';
+import { TagMark } from './tag/tagMark';
 
 export const defaultExtensions = [
   StarterKit.configure({
@@ -164,4 +166,6 @@ export const defaultExtensions = [
   ActionRule,
   RecipeCommand,
   RecipeRule,
+  FacilityMark,
+  TagMark,
 ];
