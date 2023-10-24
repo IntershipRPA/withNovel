@@ -141,7 +141,6 @@ export const ActionRule = Node.create<ActionRuleOptions>({
       },
       // 액션 삭제
       unsetAction: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
-        console.log("액션삭제 요청함")
         return (
           chain()
             .focus()
