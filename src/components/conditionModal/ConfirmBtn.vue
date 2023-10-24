@@ -9,7 +9,7 @@
 <style scoped>
 .confirm-btn {
   position: absolute;
-  right: 50px;
+  right: 40px;
   bottom: 20px;
 }
 </style>

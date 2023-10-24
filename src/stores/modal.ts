@@ -5,6 +5,7 @@ export const useModalStore = defineStore('modal', {
     isModalOpen: false,
     isCondition: false,
     isAction: false,
+    isRecipe: false,
   }),
   actions: {
     openModal() {
@@ -14,6 +15,7 @@ export const useModalStore = defineStore('modal', {
       this.isModalOpen = false;
       this.isCondition = false;
       this.isAction = false;
+      this.isRecipe = false;
     },
   },
 });

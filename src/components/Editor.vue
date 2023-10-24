@@ -372,6 +372,9 @@ watchEffect(() => {
 // 꼬리표 클릭이벤트
 const conditionTailElement = ref<Element[]>([]);
 const actionTailElement = ref<Element[]>([]);
+
+const recipeTailElement = ref<Element[]>([]);
+
 // console.log("값 할당 이전", conditionTailElement.value);
 
 // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
@@ -380,23 +383,43 @@ watchEffect(() => {
   if (checkHydrated.value === true) {
     const conElements = document.querySelectorAll('.condition-tail') as Element[];
     const actElements = document.querySelectorAll('.action-tail') as Element[];
+
+    const recElements = document.querySelectorAll('.recipe-tail') as Element[];
+
     conditionTailElement.value = conElements;
     actionTailElement.value = actElements;
+    recipeTailElement.value = recElements;
+
+
     // console.log("값 할당 이후", conditionTailElement.value);
 
+    // 조건
     if (conditionTailElement.value.length !== 0) {
       // console.log("elements detected");
       conditionTailElement.value.forEach((element: Element) => {
         element.addEventListener("click", handleClickConditionTail); // 클릭 이벤트 핸들러 연결
-        // console.log("element에 클릭 이벤트 연결:", element)
+
+
       });
     }
 
+    // 액션
     if (actionTailElement.value.length !== 0) {
       actionTailElement.value.forEach((element: Element) => {
         element.addEventListener("click", handleClickActionTail);
       });
     }
+
+    // 레시피
+    if (recipeTailElement.value.length !== 0) {
+      recipeTailElement.value.forEach((element: Element) => {
+        // // 이전에 연결된 이벤트 리스너를 제거하고 추가
+        // element.removeEventListener("click", handleClickRecipeTail);
+        element.addEventListener("click", handleClickRecipeTail);
+      });
+    }
+
+
   }
 })
 
@@ -407,8 +430,11 @@ onUpdated(() => {
     // console.log("onUpdated called2");
     const conElements = document.querySelectorAll('.condition-tail') as Element[];
     const actElements = document.querySelectorAll('.action-tail') as Element[];
+    const recElements = document.querySelectorAll('.recipe-tail') as Element[];
+
     conditionTailElement.value = conElements;
     actionTailElement.value = actElements;
+    recipeTailElement.value = recElements;
   }
 })
 
@@ -468,18 +494,34 @@ function handleClickConditionTail(event) {
 
 
 
+  
+  }
+})
+
+// 조건 꼬리표 클릭
+function handleClickConditionTail(event) {
+  // console.log(getNovelContentFromClick())
 
 
   modalStore.isCondition = true;
   openModal();
 }
 
+
+// 액션 꼬리표 클릭
 function handleClickActionTail(event) {
   // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
   // const clickedElement = event.target;
   // console.log(clickedElement.value);
   // console.log(getNovelContentFromClick())
   modalStore.isAction = true;
+  openModal();
+}
+
+// 레시피 꼬리표 클릭
+function handleClickRecipeTail(event) {
+  // console.log(getNovelContentFromClick())
+  modalStore.isRecipe = true;
   openModal();
 }
 
@@ -496,7 +538,9 @@ const getNovelContentFromClick = () => {
   const locationNum = location?.path[1];
   // console.log("포지션", locationNum);
   const contentObj = content?.value?.content[locationNum];
-//   console.log(contentObj.attrs);
+
+  // console.log(contentObj.attrs);
+
   // console.log("노드",node);
 
   return contentObj;

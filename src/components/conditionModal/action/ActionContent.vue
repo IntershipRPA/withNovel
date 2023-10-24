@@ -1,54 +1,52 @@
 <template>
-  <div class="modal-family text-lg flex flex-col">
-    <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
-      <span class="p-2.5">설비 Air Compressor</span>
-      <span class="p-2.5">태그 Status</span>
-      <span class="p-2.5">INIT: 일 때</span>
+  <div class="modal-family text-lg">
+    <div class="first p-2.5 content-center">
+      <p>{{ whelkMsg }}</p>
     </div>
-    <div>
-      <!-- AND 조건-->
-      <div v-if="conditions.some(item => item.group === 1)" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
-        <span>AND 조건</span>
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 1)" :key="index"
-          :condition='condition' :num="index" />
-      </div>
-      <!-- OR 조건-->
-      <div v-if="conditions.some(item => item.group === 2)" class="rounded-lg p-5 border-2 border-rose-600">
-        <span>OR 조건</span>
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 2)" :key="index"
-          :condition='condition' :num="index" />
-      </div>
-      <!-- 초기 조건 목록 -->
-      <div class="waitingCondition">
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 3)" :key="index"
-          :condition='condition' :num="index" />
-      </div>
+
+
+    <div class="second p-2.5 content-center">
+      <p>{{ tagMsg }}</p>
+
     </div>
-    <div class='bg-zinc-100 mt-5 flex items-center'>
-      <span>
-        조건 불일치 알람 발생 :
-      </span>
-      <MiniEditor class='inline-block min-w-min max-w-xl' :placeholder="'알람 내용을 작성하세요 …'" :storageKey="'modal__action'" />
-    </div>
+    <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
+      @rangeSelected='updateRangeValue' />
+    <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__action'" />
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
+  <DeleteBtn @click.stop="handleDelete" />
 </template>
 
 <script setup lang="ts">
 import { PropType, computed, onUpdated, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
-import ThirdModalChild from './ThirdModalChild.vue';
+import ThirdModalChild from '../condition/ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
+import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
-import ElementCondition from './ElementCondition.vue';
 
-// onUpdated(() => {
-//   // console.log("선택완료", selectedAndOr.value)
-// });
+import { useStorage } from "@vueuse/core";
 
 
-const conditions = ref<Condition[]>([]);
+
+// 설비와 태그 불러오기
+const whelkMsg = localStorage.getItem('whelk')
+const tagMsg = localStorage.getItem('tag')
+
+// 인풋에 입력한 값 불러오기
+const temp = ref<number | null>(null); // 온도
+const unit = ref<string>("℃"); // 단위
+const range = ref<string>("이상"); // 범위
+const updateTempValue = (value: number) => {
+  temp.value = value;
+};
+const updateUnitValue = (value: string) => {
+  unit.value = value;
+};
+const updateRangeValue = (value: string) => {
+  range.value = value;
+};
 
 // 조건 가져오기
 const storedData = localStorage.getItem('konwhowArr')
@@ -57,42 +55,18 @@ conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, an
 
 
 const props = defineProps({
+  // whelkMsg: { type: String, default: "test whelkMsg" },
+  // tagMsg: { type: String, default: "test tagMsg" },
   editor: {
     type: Object as PropType<Editor>,
     required: true,
   },
+  // range: {
+  //   type: Object as PropType<Range>,
+  //   required: true,
+  // },
 })
 
-interface Condition {
-  text: string,
-  isChecked: boolean,
-  andOr: string,
-  group: number,
-}
-
-// interface AndOrGroup {
-//   isAND: boolean,
-//   isOR: boolean,
-// }
-
-// // 조건 가져오기
-// const storedData = localStorage.getItem('konwhowArr')
-// const storedDataArr = JSON.parse(storedData);
-// conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: '조건선택', group: 3 }));
-
-// // 선택된 값이 변경될 때 처리
-// const handleSelectedValueChange = (condition) => {
-//   // console.log("변경됨", condition)
-//   if (condition.andOr === 'AND') {
-//     // console.log("Selected AND")
-//     condition.group = 1;
-//   }
-
-//   if (condition.andOr === 'OR') {
-//     // console.log("Selected OR")
-//     condition.group = 2;
-//   }
-// };
 
 
 // 모달 설정
@@ -107,39 +81,116 @@ const handleConfirm = () => {
   changeToActionNode(); //actionRule 노드변경 함수
 };
 
+const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
+const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
+
 const changeToActionNode = () => {
   const editor = props.editor;
-  // const modalContent = localStorage.getItem('modal__content');
-  const selection = editor.state.selection;
-  // 커서가 있는 줄을 찾기
-  const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
-  const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
-  // console.log("here@@@###!!!", lineStart, lineEnd);
-
+  const modalContent = localStorage.getItem('modal__content');
+  // Stauts 태그 선택시 값이 null인거 제외 시킴
+  let str = "";
+  if (tagMsg === "Status") {
+    str = `"${whelkMsg}"의 "${tagMsg}" ${modalContent}`;
+  } else {
+    str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  }
   editor
     .chain()
     .focus()
-
-    // .deleteRange({ from: lineStart, to: lineEnd })
+    .insertContentAt({ from: editor.state.selection.$from.before(1), to: editor.state.selection.$from.after(1) }, str)
     .setActionRule()
-
-    .insertContent(`액션 지정 완료`)
     .run();
+
+  let konwhow = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  //  console.log(JSON.stringify(konwhow));
+
+  konwhowArr.value.push(konwhow);
+  localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
+  //  console.log(konwhowArr.value);
+
+  //객체로 저장
+  let whel = whelkMsg;
+  let tag = tagMsg;
+  let tempValue = temp.value;
+  let unitValue = unit.value;
+  let rangeValue = range.value;
+  let modalText = modalContent;
+  let obj = {};
+  if (tag === "Status") {
+    obj = { whel, tag, tempValue, unitValue, modalText };
+  } else {
+    obj = { whel, tag, tempValue, unitValue, rangeValue, modalText };
+  }
+  //  console.log(JSON.stringify(obj));
+  konwhowOBJ.value.push(obj); //배열에 추가
+  localStorage.setItem('konwhowOBJ', JSON.stringify(konwhowOBJ.value)); //로컬에 저장
+  // 데이터 가져오기
+  let gatData = localStorage.getItem('konwhowOBJ')
+
+  let gatData2;
+  if (gatData !== null) {
+    gatData2 = JSON.parse(gatData);
+  }
+  console.log(`확인1 : ${JSON.stringify(gatData2[1])}`); //전체 가져올 때
+  console.log(`확인2 : ${gatData2[1]?.whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
+  console.log(`확인3 : ${gatData2[1]?.tag}`);
+  console.log(`확인4 : ${gatData2[1]?.tempValue}`);
+
+  /*
+    localStorage는 무조건 문자열로 저장
+    JSON 데이터를 문자열로 변환하거나, 특수문자를 포함한 문자열을 안전하게 다루기 위해 이스케이프 처리
+  */
+  // const data = localStorage.getItem("konwhowArr");
+  // if(data !== null){
+  //   console.log(data.replace(/\\/g, '').replace(/"/g, ''));
+  // }
+
+
+  localStorage.removeItem('konwhow');
+  useStorage('konwhow', konwhow);//레시피
 };
+
+const handleDelete = () => {
+  deleteActionNode();
+  closeModal();
+};
+
+const deleteActionNode = () => {
+  const editor = props.editor;
+
+  // 삭제 전 객체로 저장
+  const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+  const locationNum = location?.path[1];
+  const json = editor.getJSON();
+  // 해당 노드의 정보를 담은 객체
+  const contentObj = json?.content[locationNum];
+  const contentText = contentObj?.content[0]?.text;
+
+  // console.log("here", contentText);
+
+  // 노드 삭제
+  if (contentObj.type == "actionRule") {
+    editor.commands.unsetAction({
+      text: contentText,
+      editor: editor,
+    });
+  }
+}
+
 </script>
 
 <style scoped>
 .modal-family {
-  /* justify-content: center; */
+  display: flex;
+  justify-content: center;
   align-items: center;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
   margin: auto;
   margin-top: 60px;
-  margin-bottom: 70px;
-  min-width: 1080px;
-  min-height: 150px;
-  max-height: 480px;
-  overflow-y: auto;
+
+  width: 742px;
+  height: 150px;
+
   /* background-color: aquamarine; */
 }
 

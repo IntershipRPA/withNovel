@@ -17,6 +17,8 @@ import ConditionCommand from "./condition/conditionExtension";
 import { ConditionRule } from './condition/conditionRule';
 import ActionCommand from "./action/actionExtension";
 import { ActionRule } from './action/actionRule';
+import RecipeCommand from './recipe/recipeExtension';
+import { RecipeRule } from './recipe/recipeRule';
 
 export const defaultExtensions = [
   StarterKit.configure({
@@ -160,4 +162,6 @@ export const defaultExtensions = [
   ConditionRule,
   ActionCommand,
   ActionRule,
+  RecipeCommand,
+  RecipeRule,
 ];

@@ -23,6 +23,18 @@ const props = defineProps({
   },
 })
 
+const props = defineProps({
+  placeholder: {
+    type: String,
+    default: '추가 메모를 작성하세요 …',
+    // required: true,
+  },
+  storageKey: {
+    type: String,
+    required: true,
+  },
+})
+
 const editor = useEditor({
   content: memo.value,
   extensions: [
@@ -60,7 +72,7 @@ const editor = useEditor({
         }
         return true;
       })
-  
+
       useStorage(props.storageKey, lineText);
   },
 });

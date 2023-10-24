@@ -2,8 +2,8 @@ import {
   Node,
   mergeAttributes
 } from '@tiptap/core';
-import { selectParentNode } from '@tiptap/pm/commands';
-export interface ActionRuleOptions {
+import { chainCommands, selectParentNode } from '@tiptap/pm/commands';
+export interface RecipeRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
     whelk: string;
@@ -17,16 +17,16 @@ export interface ActionRuleOptions {
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    actionRule: {
-      setActionRule: () => ReturnType;
-      toggleAction: () => ReturnType;
-      unsetAction: () => ReturnType;
+    recipeRule: {
+      setRecipeRule: () => ReturnType;
+      toggleRecipe: () => ReturnType;
+      unsetRecipe: () => ReturnType;
     };
   }
 }
 
-export const ActionRule = Node.create<ActionRuleOptions>({
-  name: 'actionRule',
+export const RecipeRule = Node.create<RecipeRuleOptions>({
+  name: 'recipeRule',
   group: 'block',
   content: 'text*',
   // content: 'block+',
@@ -34,6 +34,7 @@ export const ActionRule = Node.create<ActionRuleOptions>({
   defining: true,
   draggable: false,
   // draggable: true,
+  // atom: true,
 
   // addOptions() {
   //   return {
@@ -50,7 +51,6 @@ export const ActionRule = Node.create<ActionRuleOptions>({
   // },
 
   // addAttributes() {
-  //   return {
   //     whelk: {
   //       default: this.options.settingAttrs.whelk,
   //     },
@@ -73,7 +73,7 @@ export const ActionRule = Node.create<ActionRuleOptions>({
   //       default: null,
   //       renderHTML: attributes => {
   //         return {
-  //           class: `action-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
+  //           class: `recipe-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 -z-4 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
   //         }
   //       },
   //     },
@@ -82,27 +82,27 @@ export const ActionRule = Node.create<ActionRuleOptions>({
 
   parseHTML() {
     return [
-      { tag: 'action' },
+      { tag: 'recipe' },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
     // console.trace();
     return [
-      'action',
-      { class: 'block flex items-center	' },
+      'recipe',
+      { class: 'block flex items-center' },
       // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
       ['p', {
-        class: `inline-block rounded-lg shadow-md bg-amber-100 hover:bg-amber-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center `,
+        class: `inline-block rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center `,
         // contenteditable: "false"
       }, 0],
       ['span',
         {
-          class: `action-tail cursor-pointer rounded-r-lg shadow-md bg-amber-400 hover:bg-amber-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
+          class: `recipe-tail cursor-pointer rounded-r-lg shadow-md bg-green-400 hover:bg-green-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
           contenteditable: "false"
         },
         // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-        '액션',
+        '레시피',
       ],
     ]
   },
@@ -120,32 +120,28 @@ export const ActionRule = Node.create<ActionRuleOptions>({
 
   addCommands() {
     return {
-      setActionRule: () => ({ commands }: { commands: any; }) => {
+      setRecipeRule: () => ({ commands }: { commands: any; }) => {
+        // attrs 객체로부터 필요한 속성 값을 추출
+        // const { whelk, tag, temp, unit, range, memo } = attrs;
+        // this.options.settingAttrs.whelk = whelk;
+        // this.options.settingAttrs.tag = tag;
+        // this.options.settingAttrs.temp = temp;
+        // this.options.settingAttrs.unit = unit;
+        // this.options.settingAttrs.range = range;
+        // this.options.settingAttrs.memo = memo;
+        // commands.insertContent(`${whelk} ${tag} ${temp}${unit} ${range} ${memo} `)
+
         return commands.toggleNode(this.name)
       },
-      // setActionRule: ({ attrs }: { attrs: any; }) => ({ commands }: { commands: any; }) => {
-      //   // attrs 객체로부터 필요한 속성 값을 추출
-      //   const { whelk, tag, temp, unit, range, memo } = attrs;
-      //   this.options.settingAttrs.whelk = whelk;
-      //   this.options.settingAttrs.tag = tag;
-      //   this.options.settingAttrs.temp = temp;
-      //   this.options.settingAttrs.unit = unit;
-      //   this.options.settingAttrs.range = range;
-      //   this.options.settingAttrs.memo = memo;
-      //   commands.insertContent(`${whelk} ${tag} ${temp}${unit} ${range} ${memo} `)
-
-      //   return commands.toggleNode(this.name)
-      // },
-      toggleAction: () => ({ commands }) => {
+      toggleRecipe: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
-      // 액션 삭제
-      unsetAction: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
-        console.log("액션삭제 요청함")
+      // 레시피 삭제
+      unsetRecipe: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
         return (
           chain()
             .focus()
-            .deleteNode("actionRule")
+            .deleteNode("recipeRule")
             .insertContentAt({
               from: editor.state.selection.$from.before(1),
               to: editor.state.selection.$from.before(1)
@@ -158,6 +154,7 @@ export const ActionRule = Node.create<ActionRuleOptions>({
   },
 
   // addStorage() {
+  //   console.log("here")
   //   return {
   //     zzzzztestzz: 'testetst',
   //   }
