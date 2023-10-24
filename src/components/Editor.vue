@@ -438,6 +438,7 @@ onUpdated(() => {
   }
 })
 
+// 조건 꼬리표 클릭
 function handleClickConditionTail(event) {
   //클릭한 곳 데이터 가져오기
   let str = getNovelContentFromClick().content[0].text;
@@ -492,20 +493,10 @@ function handleClickConditionTail(event) {
   useStorage('range', range);
   useStorage('memo', memo);
 
-
-
-  
-  }
-})
-
-// 조건 꼬리표 클릭
-function handleClickConditionTail(event) {
-  // console.log(getNovelContentFromClick())
-
-
   modalStore.isCondition = true;
-  openModal();
+  openModal();  
 }
+
 
 
 // 액션 꼬리표 클릭

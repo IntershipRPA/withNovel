@@ -1,17 +1,32 @@
 <template>
   <div class="modal-family text-lg">
-    <div class="first p-2.5 content-center">
-      <p>{{ whelkMsg }}</p>
+    <div class="first p-2.5 content-center relative -top-2.5 ">
+      <div>
+        <p class="text-sm text-gray-400 mb-1 ">
+          선택한 설비
+        </p>
+        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+          {{ whelkMsg }}
+        </p>
+      </div>
     </div>
-
-
-    <div class="second p-2.5 content-center">
-      <p>{{ tagMsg }}</p>
-
+    <div class='mr-4'>의</div>
+    <div class="second p-2.5 content-center relative -top-2.5 ">
+      <div>
+        <p class="text-sm text-gray-400 mb-1 ">
+          선택한 태그
+        </p>
+        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+          {{ tagMsg }}
+        </p>
+      </div>
     </div>
+    <div class='mr-4'>를</div>
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
-      @rangeSelected='updateRangeValue' />
-    <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__action'" />
+      @rangeSelected='updateRangeValue' @startedSelected='updateRangeValue' />
+    <div class="min-w-full mb-20 px-14">
+      <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__action'" />
+    </div>
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
   <DeleteBtn @click.stop="handleDelete" />
@@ -37,7 +52,7 @@ const tagMsg = localStorage.getItem('tag')
 // 인풋에 입력한 값 불러오기
 const temp = ref<number | null>(null); // 온도
 const unit = ref<string>("℃"); // 단위
-const range = ref<string>("이상"); // 범위
+const range = ref<string>(tagMsg === "Status" ? "started" : "이상");; // 범위
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -45,14 +60,9 @@ const updateUnitValue = (value: string) => {
   unit.value = value;
 };
 const updateRangeValue = (value: string) => {
+  console.log("here", value);
   range.value = value;
 };
-
-// 조건 가져오기
-const storedData = localStorage.getItem('konwhowArr')
-const storedDataArr = JSON.parse(storedData);
-conditions.value = storedDataArr.map(item => ({ text: item, isChecked: false, andOr: '조건선택', group: 3 }));
-
 
 const props = defineProps({
   // whelkMsg: { type: String, default: "test whelkMsg" },
@@ -86,11 +96,12 @@ const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 �
 
 const changeToActionNode = () => {
   const editor = props.editor;
-  const modalContent = localStorage.getItem('modal__content');
+  const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
+  localStorage.removeItem('modal__action');
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if (tagMsg === "Status") {
-    str = `"${whelkMsg}"의 "${tagMsg}" ${modalContent}`;
+    str = `"${whelkMsg}"의 "${tagMsg}" ${range.value} ${modalContent}`;
   } else {
     str = `"${whelkMsg}"의 "${tagMsg}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   }
@@ -187,19 +198,19 @@ const deleteActionNode = () => {
   flex-wrap: wrap;
   margin: auto;
   margin-top: 60px;
-
   width: 742px;
-  height: 150px;
-
+  min-height: 250px;
+  max-height: 480px;
+  overflow-y: auto;
   /* background-color: aquamarine; */
 }
 
 .first {
-  background-color: #ffc5e4;
+  /* background-color: #ffc5e4; */
 }
 
 .second {
-  background-color: #bedcff;
+  /* background-color: #bedcff; */
 }
 
 .third {

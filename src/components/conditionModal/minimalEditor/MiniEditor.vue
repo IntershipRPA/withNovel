@@ -1,5 +1,5 @@
 <template>
-  <EditorContent :editor="editor" class="text-gray-950 max-h-20 overflow-y-auto hover:overscroll-contain"/>
+  <EditorContent :editor="editor" class="text-gray-950 max-h-24 overflow-y-auto hover:overscroll-contain "/>
 </template>
 
 <script setup lang="ts">
@@ -9,7 +9,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { useStorage } from '@vueuse/core';
 import { ref } from "vue";
 
-const memo = ref<string>(String(localStorage.getItem('memo'))); // 메모
 
 const props = defineProps({
   placeholder: {
@@ -22,18 +21,8 @@ const props = defineProps({
     required: true,
   },
 })
+const memo = ref<string>(String(localStorage.getItem(props.storageKey))); // 메모
 
-const props = defineProps({
-  placeholder: {
-    type: String,
-    default: '추가 메모를 작성하세요 …',
-    // required: true,
-  },
-  storageKey: {
-    type: String,
-    required: true,
-  },
-})
 
 const editor = useEditor({
   content: memo.value,

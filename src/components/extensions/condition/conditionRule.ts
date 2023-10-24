@@ -1,4 +1,5 @@
 import {
+  CommandProps,
   Node,
   mergeAttributes
 } from '@tiptap/core';
@@ -18,7 +19,7 @@ export interface ConditionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
-      setConditionRule: (attrs: { whelk: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
+      setConditionRule: (attrs: any) => ReturnType;
       toggleCondition: () => ReturnType;
       unsetCondition: () => ReturnType;
     };
@@ -125,37 +126,32 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   addCommands() {
     return {
 
-      setConditionRule: attrs => ({ commands }) => {
+      setConditionRule: (attrs) => ( { commands }: { commands: any } ) => {
         // attrs 객체로부터 필요한 속성 값을 추출
         const { whelk, tag, temp, unit, range } = attrs;
-  
+        console.log(whelk + "  " + tag + " " + temp + " " + unit + " " + range);
         // toggleNode 메소드를 호출하여 새로운 노드를 생성
         // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
-        return commands.toggleNode(this.name, {
-          whelk,
-          tag,
-          temp,
-          unit,
-          range,
-        });
+        //   toggleNode('paragraph'전환해야 하는 노드의 유형, 'heading'토글에 사용해야 하는 노드 유형, { level: 1 }노드에 적용되어야 하는 속성)
+        return commands.toggleNode(this.name, attrs ,attrs);
 
       },
-      toggleCondition: () => ({ commands }) => {
-        return commands.toggleWrap(this.name)
-      },
-      // 조건 삭제
-      unsetCondition: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
-        return (
-          chain()
-            .focus()
-            .deleteNode("conditionRule")
-            .insertContentAt({
-              from: editor.state.selection.$from.before(1),
-              to: editor.state.selection.$from.before(1)
-            }, text)
-            .run()
-        );
-      },
+      // toggleCondition: () => ({ commands }) => {
+      //   return commands.toggleWrap(this.name)
+      // },
+      // // 조건 삭제
+      // unsetCondition: ({ text, editor }: { text?: string, editor?: any }) => ({ chain }) => {
+      //   return (
+      //     chain()
+      //       .focus()
+      //       .deleteNode("conditionRule")
+      //       .insertContentAt({
+      //         from: editor.state.selection.$from.before(1),
+      //         to: editor.state.selection.$from.before(1)
+      //       }, text)
+      //       .run()
+      //   );
+      // },
     }
   },
 
