@@ -90,7 +90,7 @@ export const TagMark = Mark.create<TagOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Shift-f': () => this.editor.commands.toggleTag(), // ctrl+shift+'F'키를 단축키로 지정
+      'Mod-Shift-t': () => this.editor.commands.toggleTag(), // ctrl+shift+'T'키를 단축키로 지정
     }
   },
 
