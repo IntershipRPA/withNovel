@@ -30,7 +30,7 @@ export const ActionRule = Node.create<ActionRuleOptions>({
   group: 'block',
   content: 'text*',
   // content: 'block+',
-  marks: '',
+  marks: '_',
   defining: true,
   draggable: false,
   // draggable: true,
@@ -144,11 +144,12 @@ export const ActionRule = Node.create<ActionRuleOptions>({
         return (
           chain()
             .focus()
-            .deleteNode("actionRule")
-            .insertContentAt({
-              from: editor.state.selection.$from.before(1),
-              to: editor.state.selection.$from.before(1)
-            }, text)
+            // .deleteNode("actionRule")
+            .toggleNode(this.name, 'paragraph')
+            // .insertContentAt({
+            //   from: editor.state.selection.$from.before(1),
+            //   to: editor.state.selection.$from.before(1)
+            // }, text)
             .run()
         );
       },

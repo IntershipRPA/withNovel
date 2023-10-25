@@ -2,19 +2,20 @@ import { Editor, Range, Extension } from "@tiptap/core";
 import { VueRenderer } from "@tiptap/vue-3";
 import tippy from "tippy.js";
 import Suggestion from "@tiptap/suggestion";
-import { Cog } from "lucide-vue-next";
-import TagCommandList from "./tagCommandList.vue";
+import {
+  Cog,
+} from "lucide-vue-next";
+import WhelkCommandList from "./whelkCommandList.vue";
 import axios from "axios";
 import { PluginKey } from '@tiptap/pm/state'
-import { useStorage } from "@vueuse/core";
 
 const Command = Extension.create({
-  name: "tag-command",
+  name: "whelk-command",
   addOptions() {
     return {
       suggestion: {
-        pluginKey: new PluginKey('tag-command'),
-        char: "$",
+        pluginKey: new PluginKey('whelk-command'),
+        char: "@",
         command: ({
           editor,
           range,
@@ -53,9 +54,9 @@ export interface SuggestionItem {
 const getSuggestionItems = async ({ query }: { query: string }) => {
   return [
     {
-      title: "Winding Temp",
-      searchTerms: ["온도", "윈딩"],
-      description: "권선온도계",
+      title: "Comp Motor",
+      description: "콤프레샤",
+      searchTerms: ["콤프","모터", "컴프레서", "압축기", "콤프레샤"],
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
         editor
@@ -63,16 +64,16 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#bedcff' })
-          .insertContent(`Winding Temp`)
-          .unsetHighlight()
+          .setFacility({facility: "Comp Motor"})
+          .insertContent("Comp Motor")
+          .unsetFacility()
           .run();
       },
     },
     {
-      title: "Press",
-      searchTerms: ["가공", "압축", "프레스"],
-      description: "압력",
+      title: "Receiver Tank",
+      searchTerms: ["리시버", "탱크", "압축공기"],
+      description: "리시버 탱크",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
         editor
@@ -80,16 +81,16 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#bedcff' })
-          .insertContent(`Press`)
-          .unsetHighlight()
+          .setFacility({facility: "Receiver Tank"})
+          .insertContent("Receiver Tank")
+          .unsetFacility()
           .run();
       },
     },
     {
-      title: "Status",
-      searchTerms: ["값"],
-      description: "상태",
+      title: "After Cooler",
+      searchTerms: ["애프터","쿨러","냉각"],
+      description: "후방냉각기",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
         editor
@@ -97,9 +98,26 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .toggleNode("paragraph", "paragraph")
-          .setHighlight({ color: '#bedcff' })
-          .insertContent(`Status`)
-          .unsetHighlight()
+          .setFacility({facility: "After Cooler"})
+          .insertContent("After Cooler")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Air Compressor",
+      searchTerms: ["에어","콤프레샤","공기"],
+      description: "에어컴프레서",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Air Compressor"})
+          .insertContent("Air Compressor")
+          .unsetFacility()
           .run();
       },
     },
@@ -122,7 +140,7 @@ const renderItems = () => {
 
   return {
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
-      component = new VueRenderer(TagCommandList, {
+      component = new VueRenderer(WhelkCommandList, {
         props,
         editor: props.editor,
       });
@@ -166,11 +184,11 @@ const renderItems = () => {
   };
 };
 
-const TagCommand = Command.configure({
+const WhelkCommand = Command.configure({
   suggestion: {
     items: getSuggestionItems,
     render: renderItems,
   },
 });
 
-export default TagCommand;
+export default WhelkCommand;

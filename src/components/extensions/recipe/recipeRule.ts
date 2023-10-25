@@ -30,7 +30,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
   group: 'block',
   content: 'text*',
   // content: 'block+',
-  marks: '',
+  marks: '_',
   defining: true,
   draggable: false,
   // draggable: true,

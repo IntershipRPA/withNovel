@@ -148,11 +148,12 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
         return (
           chain()
             .focus()
-            .deleteNode("conditionRule")
-            .insertContentAt({
-              from: editor.state.selection.$from.before(1),
-              to: editor.state.selection.$from.before(1)
-            }, text)
+            // .deleteNode("conditionRule")
+            .toggleNode(this.name, 'paragraph')
+            // .insertContentAt({
+            //   from: editor.state.selection.$from.before(1),
+            //   to: editor.state.selection.$from.before(1)
+            // }, text)
             .run()
         );
       },
