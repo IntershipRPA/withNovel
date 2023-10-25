@@ -102,7 +102,7 @@ const onBarSelected = () => {
   emits('barSelected', bar.value);
 };
 const onStartedSelected = () => {
-  console.log('startedSelected', started.value);
+  // console.log('startedSelected', started.value);
   emits('startedSelected', started.value);
 };
 

@@ -22,6 +22,7 @@
         />
       </button>
       <ColorSelector :editor="editor" />
+      <ConditionActionSelector :editor="editor" />
     </div>
   </BubbleMenu>
 </template>
@@ -41,6 +42,7 @@ import {
 import NodeSelector from "./NodeSelector.vue";
 import LinkSelector from "./LinkSelector.vue";
 import ColorSelector from "./ColorSelector.vue";
+import ConditionActionSelector from "./ConditionActionSelector.vue";
 
 const props = defineProps({
   editor: {

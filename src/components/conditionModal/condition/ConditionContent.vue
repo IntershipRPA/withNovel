@@ -23,7 +23,7 @@
     </div>
     <div class='mr-4'>를</div>
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
-      @rangeSelected='updateRangeValue' :tagMsg='tagMsg'/>
+      @rangeSelected='updateRangeValue' @startedSelected='updateRangeValue' :tagMsg='tagMsg'/>
     <div class="min-w-full mb-20 px-14">
       <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
     </div>
@@ -49,7 +49,7 @@ const tagMsg = ref<String>('태그');
 // 인풋에 입력한 값 불러오기
 const temp = ref<number | null>(0); // 온도
 const unit = ref<string>("℃"); // 단위
-const range = ref<string>("이상"); // 범위
+  const range = ref<string>(tagMsg.value === "Status" ? "started" : "이상");; // 범위
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -101,8 +101,8 @@ const handleConfirm = () => {
   changeToConditionNode(); //conditionRule 노드변경 함수
 };
 
-const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
-const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
+// const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
+// const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
 
 // 현재 커서의 위치의 내용을 지울 범위 지정 함수
 const getRange = () => {
@@ -123,7 +123,7 @@ const getRange = () => {
 // 조건 노드로 변경
 const changeToConditionNode = () => {
   const editor = props.editor;
-  const modalContent = localStorage.getItem('modal__condition');
+  const modalContent = localStorage.getItem('modal__condition') ?? ''; // null이면 빈 문자열 반환
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if (tagMsg.value === "Status") {
