@@ -4,6 +4,7 @@ import {
   mergeAttributes
 } from '@tiptap/core';
 import { selectParentNode } from '@tiptap/pm/commands';
+import { ActionRule } from '../action/actionRule';
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
@@ -132,8 +133,9 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
         console.log(whelk + "  " + tag + " " + temp + " " + unit + " " + range);
         // toggleNode 메소드를 호출하여 새로운 노드를 생성
         // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
-        //   toggleNode('paragraph'전환해야 하는 노드의 유형, 'heading'토글에 사용해야 하는 노드 유형, { level: 1 }노드에 적용되어야 하는 속성)
-        return commands.toggleNode(this.name, attrs ,attrs);
+        
+        console.log(this.name);
+        return commands.setNode(this.name, attrs);
 
       },
       toggleCondition: () => ({ commands }) => {
