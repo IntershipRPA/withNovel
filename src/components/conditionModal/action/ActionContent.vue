@@ -44,13 +44,23 @@ import { useModalStore } from '../../../stores/modal';
 import { useStorage } from "@vueuse/core";
 
 const facMsg = ref<String>('설비');
-const tagMsg = ref<String>('태그');
+
+const tagMsg = ref<String>(localStorage.getItem('tag'));
+console.log(JSON.parse(JSON.stringify(tagMsg.value)))
+let unitValue = "";
+if(JSON.parse(JSON.stringify(tagMsg.value)) === "Press"){
+  unitValue = "bar";
+}else{
+  unitValue = "℃";
+}
 
 
 // 인풋에 입력한 값 불러오기
-const temp = ref<number | null>(null); // 온도
-const unit = ref<string>("℃"); // 단위
-const range = ref<string>(tagMsg.value === "Status" ? "started" : "이상");; // 범위
+const temp = ref<number | null>(Number(localStorage.getItem('temp'))); // 온도
+const unit = ref<string>(unitValue); // 단위
+const range = ref<string>(String(localStorage.getItem('range')));; // 범위
+
+
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -130,7 +140,7 @@ const getRange = () => {
 const changeToActionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
-  localStorage.removeItem('modal__action');
+
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if (tagMsg.value === "Status") {
@@ -139,11 +149,21 @@ const changeToActionNode = () => {
     str = `${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   }
 
+
+  let attrs = {
+    fac: facMsg,
+    tag: tagMsg,
+    temp: String(temp.value),
+    unit: unit.value,
+    range: range.value,
+    memo: modalContent
+  };
+
   editor
     .chain()
     .focus()
     .deleteRange(getRange())
-    .setActionRule()
+    .setActionRule(attrs)
     .setFacility({ facility: facMsg.value })
     .insertContent(facMsg.value)
     .unsetFacility()
