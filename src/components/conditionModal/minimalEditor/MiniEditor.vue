@@ -21,11 +21,10 @@ const props = defineProps({
     required: true,
   },
 })
-const memo = ref<string>(String(localStorage.getItem(props.storageKey))); // 메모
-
-
+const memo = ref<string>(String(localStorage.getItem('memo'))); // 메모
+//console.log(JSON.parse(JSON.stringify(memo.value)));
 const editor = useEditor({
-  content: memo.value,
+  content: JSON.parse(JSON.stringify(memo.value)),
   extensions: [
     StarterKit.configure({
       bulletList: false,
@@ -65,6 +64,14 @@ const editor = useEditor({
       useStorage(props.storageKey, lineText);
   },
 });
+
+
+
+
+
+
+
+
 </script>
 
 <style lang="scss">

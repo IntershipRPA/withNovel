@@ -78,6 +78,7 @@ export const FacilityMark = Mark.create<FacilityOptions>({
   addCommands() {
     return {
       setFacility: attributes => ({ commands }) => {
+//        console.log("setFacility called", attributes);
         return commands.setMark(this.name, attributes)
       },
       toggleFacility: attributes => ({ commands }) => {

@@ -78,7 +78,7 @@ if (docs) {
   const conditionElements = docs.filter((element) => element.type === "conditionRule");
   if (conditionElements.length > 0) {
     conditions.value = conditionElements.map((element) => ({
-      text: element.content[0]?.text,
+      text: element.content?.map(item => item.text).join(''),
       isChecked: false,
       andOr: '조건선택',
       group: 3
@@ -92,7 +92,8 @@ if (docs) {
 if (docs) {
   const actionElements = docs.filter((element) => element.type === "actionRule");
   if (actionElements.length > 0) {
-    action.value = actionElements[0].content[0].text;
+    action.value = actionElements[0].content?.map(item => item.text).join('');
+    // action.value = actionElements[0].content[0].text;
   } else {
     alert("액션이 지정되지 않았습니다.")
   }

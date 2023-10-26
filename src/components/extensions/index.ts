@@ -21,6 +21,7 @@ import RecipeCommand from './recipe/recipeExtension';
 import { RecipeRule } from './recipe/recipeRule';
 import { FacilityMark } from './facility/facilityMark';
 import { TagMark } from './tag/tagMark';
+import { MarkCondition } from './markCondition/markCondition';
 
 export const defaultExtensions = [
   StarterKit.configure({
@@ -166,6 +167,7 @@ export const defaultExtensions = [
   ActionRule,
   RecipeCommand,
   RecipeRule,
+  MarkCondition,
   FacilityMark,
   TagMark,
 ];

@@ -1,10 +1,8 @@
 import {
-  CommandProps,
   Node,
   mergeAttributes
 } from '@tiptap/core';
 import { selectParentNode } from '@tiptap/pm/commands';
-import { ActionRule } from '../action/actionRule';
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
@@ -20,7 +18,7 @@ export interface ConditionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
-      setConditionRule: (attrs: any) => ReturnType;
+      setConditionRule: (attrs: { whelk: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
       toggleCondition: () => ReturnType;
       unsetCondition: () => ReturnType;
     };
@@ -127,30 +125,32 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   addCommands() {
     return {
 
-      setConditionRule: (attrs) => ( { commands }: { commands: any } ) => {
+      setConditionRule: attrs => ({ commands }) => {
         // attrs 객체로부터 필요한 속성 값을 추출
-        const { whelk, tag, temp, unit, range } = attrs;
-        console.log(whelk + "  " + tag + " " + temp + " " + unit + " " + range);
+        // const { whelk, tag, temp, unit, range } = attrs;
+        // console.log(whelk + "  " + tag + " " + temp + " " + unit + " " + range);
         // toggleNode 메소드를 호출하여 새로운 노드를 생성
         // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
         
-        console.log(this.name);
+        // console.log(this.name);
         return commands.setNode(this.name, attrs);
+
 
       },
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
-      // // 조건 삭제
-      unsetCondition: ({ text, editor }: { text?: string, editor?: any }) => ({ chain }: {chain: any}) => {
+      // 조건 삭제
+      unsetCondition: ({ text, editor }: { text: string, editor: any }) => ({ chain }) => {
         return (
           chain()
             .focus()
-            .deleteNode("conditionRule")
-            .insertContentAt({
-              from: editor.state.selection.$from.before(1),
-              to: editor.state.selection.$from.before(1)
-            }, text)
+            // .deleteNode("conditionRule")
+            .toggleNode(this.name, 'paragraph')
+            // .insertContentAt({
+            //   from: editor.state.selection.$from.before(1),
+            //   to: editor.state.selection.$from.before(1)
+            // }, text)
             .run()
         );
       },
