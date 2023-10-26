@@ -23,7 +23,7 @@ import { Editor as EditorClass } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
 import { useCompletion } from "ai/vue";
 
-//import { defaultEditorContent } from "../lib/default-content";
+import { defaultEditorContent2 } from "../lib/default-content2";
 import { defaultEditorProps } from "../lib/props";
 import { getPrevText } from "../lib/editor";
 import { defaultExtensions } from "../components/extensions";
@@ -75,18 +75,18 @@ const props = defineProps({
   // 에디터기본 값으로, JSON 형식으로 저장
   defaultValue: {
     type: Object as PropType<JSONContent>,
-    default: {
-      type: "doc",
-      content: [
-        {
-          type: "heading",
-          attrs: { level: 2 },
-          content: [{ type: "text", text: "Novel을 소개합니다" }],
-        },]
-    }
-    // default: () => {
-    //   return defaultEditorContent;
-    // },
+    // default: {
+    //   type: "doc",
+    //   content: [
+    //     {
+    //       type: "heading",
+    //       attrs: { level: 2 },
+    //       content: [{ type: "text", text: "Novel을 소개합니다" }],
+    //     },]
+    // }
+    default: () => {
+      return defaultEditorContent2;
+    },
   },
 
   // Tiptap 편집기에 추가할 확장 기능
@@ -526,4 +526,5 @@ const getNovelContentFromClick = () => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

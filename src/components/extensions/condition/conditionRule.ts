@@ -6,7 +6,7 @@ import { selectParentNode } from '@tiptap/pm/commands';
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
-    whelk: string;
+    fac: string;
     tag: string;
     temp: string;
     unit: string;
@@ -18,7 +18,7 @@ export interface ConditionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
-      setConditionRule: (attrs: { whelk: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
+      setConditionRule: (attrs: { fac: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
       toggleCondition: () => ReturnType;
       unsetCondition: () => ReturnType;
     };
@@ -39,8 +39,8 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        // whelk: 'defaultWhelk',
-        whelk: localStorage.getItem('whelk'),
+        // fac: 'defaultWhelk',
+        fac: localStorage.getItem('fac'),
 
         tag: localStorage.getItem('tag'),
         temp: localStorage.getItem('temp'),
@@ -58,8 +58,8 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
  //    console.log("here3", this.options.settingAttrs);
 
     return {
-      whelk: {
-        default: this.options.settingAttrs.whelk,
+      fac: {
+        default: this.options.settingAttrs.fac,
       },
       tag: {
 
@@ -125,21 +125,18 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   addCommands() {
     return {
 
-      setConditionRule: attrs => ({ commands }) => {
+      setConditionRule: (attrs) => ( { commands }: { commands: any } ) => {
         // attrs 객체로부터 필요한 속성 값을 추출
-        const { whelk, tag, temp, unit, range } = attrs;
-  
+        const { fac, tag, temp, unit, range } = attrs;
+        console.log(fac + "  " + tag + " " + temp + " " + unit + " " + range);
         // toggleNode 메소드를 호출하여 새로운 노드를 생성
         // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
-        return commands.toggleNode(this.name, {
-          whelk,
-          tag,
-          temp,
-          unit,
-          range,
-        });
+        
+        console.log(this.name);
+        return commands.setNode(this.name, attrs);
 
       },
+
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },
