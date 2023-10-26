@@ -23,7 +23,7 @@
     </div>
     <div class='mr-4'>를</div>
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
-      @rangeSelected='updateRangeValue' @startedSelected='updateRangeValue' :tagMsg='tagMsg'/>
+      @rangeSelected='updateRangeValue' :tagMsg='tagMsg'/>
     <div class="min-w-full mb-20 px-14">
       <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
     </div>
@@ -43,13 +43,18 @@ import { useModalStore } from '../../../stores/modal';
 import { useStorage } from "@vueuse/core";
 
 const facMsg = ref<String>('설비');
-const tagMsg = ref<String>('태그');
-
-
+const tagMsg = ref<String>(localStorage.getItem('tag'));
+//console.log(JSON.parse(JSON.stringify(tagMsg.value)))
+let unitValue = "";
+if(JSON.parse(JSON.stringify(tagMsg.value)) === "Press"){
+  unitValue = "bar";
+}else{
+  unitValue = "℃";
+}
 // 인풋에 입력한 값 불러오기
-const temp = ref<number | null>(0); // 온도
-const unit = ref<string>("℃"); // 단위
-  const range = ref<string>(tagMsg.value === "Status" ? "started" : "이상");; // 범위
+const temp = ref<number | null>(Number(localStorage.getItem('temp'))); // 온도
+const unit = ref<string>(unitValue); // 단위
+  const range = ref<string>(String(localStorage.getItem('range'))); // 범위
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -59,6 +64,11 @@ const updateUnitValue = (value: string) => {
 const updateRangeValue = (value: string) => {
   range.value = value;
 };
+
+// console.log(`unit 확인 : ${unit.value}`);
+// console.log(`unit 확인 : ${unitValue}`);
+
+
 
 const props = defineProps({
   editor: {
@@ -83,6 +93,7 @@ const setDataFacilityTag = () => {
   // console.log(getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'tagMark'))[0].marks[0].attrs?.tag);
   facMsg.value = getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'facilityMark'))[0].marks[0].attrs?.facility;
   tagMsg.value = getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'tagMark'))[0].marks[0].attrs?.tag;
+  // console.log(tagMsg.value);
 }
 
 // 설비, 태그 데이터 초기 세팅
@@ -131,7 +142,7 @@ const changeToConditionNode = () => {
   } else {
     str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
   }
-
+ 
   let attrs = {
     fac: facMsg,
     tag: tagMsg,
@@ -141,11 +152,12 @@ const changeToConditionNode = () => {
     memo: modalContent
   };
   
+  
   editor
     .chain()
     .focus()
     .deleteRange(getRange())
-    .setConditionRule(attrs) 
+    .setConditionRule(attrs)
     .setFacility({ facility: facMsg.value })
     .insertContent(facMsg.value)
     .unsetFacility()

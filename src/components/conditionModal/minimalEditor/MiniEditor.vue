@@ -1,6 +1,5 @@
 <template>
-  <EditorContent
-  :editor="editor" class="text-gray-950 max-h-24 overflow-y-auto hover:overscroll-contain "/>
+  <EditorContent :editor="editor" class="text-gray-950 max-h-24 overflow-y-auto hover:overscroll-contain "/>
 </template>
 
 <script setup lang="ts">
@@ -26,8 +25,6 @@ const props = defineProps({
     required: false,
   },
 })
-// const memo = ref<string | null>(localStorage.getItem(props.storageKey)) ?? ''; // 메모
-// const memo = ref<string | null>('');
 
 const isSavedContent = () => {
   if(!props.savedContent){
@@ -83,26 +80,7 @@ const editor = useEditor({
   },
 });
 
-onUpdated(() => {
-  // console.log(editor._rawValue?.options.content)
-  console.log(editor.value?.options.content)
-  console.log(editor.value?.state)
-})
 
-// watchEffect(() => {
-//   console.log(editor.value?.options.content)
-// });
-
-// watch(() => editor.value?.options.content, (newContent, oldContent) => {
-//   console.log('Editor content changed:', newContent);
-// });
-
-// const emits = defineEmits(['contentChanged']);
-
-
-// const onContentChanged = () => {
-//   emits('contentChanged', memo.value);
-// };
 </script>
 
 <style lang="scss">

@@ -127,13 +127,14 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
       setConditionRule: (attrs) => ( { commands }: { commands: any } ) => {
         // attrs 객체로부터 필요한 속성 값을 추출
-        const { fac, tag, temp, unit, range } = attrs;
-        console.log(fac + "  " + tag + " " + temp + " " + unit + " " + range);
+        // const { whelk, tag, temp, unit, range } = attrs;
+        // console.log(whelk + "  " + tag + " " + temp + " " + unit + " " + range);
         // toggleNode 메소드를 호출하여 새로운 노드를 생성
         // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
         
-        console.log(this.name);
+        // console.log(this.name);
         return commands.setNode(this.name, attrs);
+
 
       },
 

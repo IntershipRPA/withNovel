@@ -470,58 +470,12 @@ onUpdated(() => {
 
 // 조건 꼬리표 클릭
 function handleClickConditionTail(event) {
-  //   //클릭한 곳 데이터 가져오기
-  //   let str = getNovelContentFromClick().content[0].text;
-  //   console.log(str);
+//   //클릭한 곳 데이터 가져오기
 
-  //   const parts = str.split('를'); // 설비,태그, 조건 분리
-  // //  console.log(parts[0] + "    " + parts[1]);
-  //   const parts2 = parts[0].replace(/["]/g, "").split('의'); // 설비,태그 추출
-  // //  console.log(parts2[1].replace(/^\s+/, ''));
-
-  //   let whelk = parts2[0];
-  //   let tag = parts2[1].replace(/^\s+/, ''); //맨앞 공백 제거
-  //   let temp;
-  //   if(tag !== "Status"){
-  //     temp = parts[1].replace(/^\s+/, '').split(" ")[0];
-  //   }else{
-  //     temp = '';
-  //   }
-
-  //   let unit;
-  //   if(tag !== "Status"){
-  //     unit = parts[1].replace(/^\s+/, '').split(" ")[1];
-  //   }else{
-  //     unit = '';
-  //   }
-
-  //   let range;
-  //   if(tag !== "Status"){
-  //     range = parts[1].replace(/^\s+/, '').split(" ")[2];
-  //   }else{
-  //     range = '';
-  //   }
-
-  //   let memo;
-  //   if(tag !== "Status"){
-  //     memo = parts[1].split(/이상|미만|이하|초과/)[1].replace(/^\s+/, '');
-  //   }else{
-  //     memo = parts[1].replace(/^\s+/, '');
-  //   }
-  //   console.log(memo)
-  //   // 각 데이터 로컬에 저장
-  //   localStorage.removeItem('whelk');
-  //   localStorage.removeItem('tag');
-  //   localStorage.removeItem('temp');
-  //   localStorage.removeItem('unit');
-  //   localStorage.removeItem('range');
-  //   localStorage.removeItem('memo');
-  //   useStorage('whelk', whelk);
-  //   useStorage('tag', tag);
-  //   useStorage('temp', temp);
-  //   useStorage('unit', unit);
-  //   useStorage('range', range);
-  //   useStorage('memo', memo);
+  localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
+  localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
+  localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
+  localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
 
   modalStore.isCondition = true;
   openModal();
@@ -531,10 +485,10 @@ function handleClickConditionTail(event) {
 
 // 액션 꼬리표 클릭
 function handleClickActionTail(event) {
-  // event 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-  // const clickedElement = event.target;
-  // console.log(clickedElement.value);
-  // console.log(getNovelContentFromClick())
+  localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
+  localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
+  localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
+  localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
   modalStore.isAction = true;
   openModal();
 }
