@@ -8,7 +8,7 @@ import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from "@tiptap/starter-kit";
 import { useStorage } from '@vueuse/core';
-import { ref } from "vue";
+import { onUpdated, ref, watch, watchEffect } from "vue";
 
 
 const props = defineProps({
@@ -21,11 +21,25 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  savedContent: {
+    type: String,
+    required: false,
+  },
 })
 // const memo = ref<string | null>(localStorage.getItem(props.storageKey)) ?? ''; // 메모
+// const memo = ref<string | null>('');
+
+const isSavedContent = () => {
+  if(!props.savedContent){
+    return ''
+  } else {
+    useStorage(props.storageKey, props.savedContent);
+    return props.savedContent;
+  }
+}
 
 const editor = useEditor({
-  // content: memo.value,
+  content: isSavedContent(),
   extensions: [
     StarterKit.configure({
       bulletList: false,
@@ -63,10 +77,25 @@ const editor = useEditor({
       })
 
       // memo.value = lineText;
+      // console.log(memo.value)
       // emits('contentChanged', memo.value);
       useStorage(props.storageKey, lineText);
   },
 });
+
+onUpdated(() => {
+  // console.log(editor._rawValue?.options.content)
+  console.log(editor.value?.options.content)
+  console.log(editor.value?.state)
+})
+
+// watchEffect(() => {
+//   console.log(editor.value?.options.content)
+// });
+
+// watch(() => editor.value?.options.content, (newContent, oldContent) => {
+//   console.log('Editor content changed:', newContent);
+// });
 
 // const emits = defineEmits(['contentChanged']);
 

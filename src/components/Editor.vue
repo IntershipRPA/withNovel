@@ -39,6 +39,7 @@ import { modalToggle } from "./extensions/condition/conditionExtension"
 // const isCondition = ref(false);
 
 import { useModalStore } from './../stores/modal';
+import { AlarmCheck } from 'lucide-vue-next';
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
@@ -374,6 +375,10 @@ const conditionTailElement = ref<Element[]>([]);
 const actionTailElement = ref<Element[]>([]);
 const recipeTailElement = ref<Element[]>([]);
 
+const recipeBtnActivated = ref<Element[]>([]);
+const recipeBtnAuto = ref<Element[]>([]);
+const recipeBtnRun = ref<Element[]>([]);
+
 // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
 watchEffect(() => {
   if (checkHydrated.value === true) {
@@ -381,9 +386,18 @@ watchEffect(() => {
     const actElements = document.querySelectorAll('.action-tail') as Element[];
     const recElements = document.querySelectorAll('.recipe-tail') as Element[];
 
+    const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
+    const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
+    const recBtnRunElements = document.querySelectorAll('.recipe-btn-run') as Element[];
+
     conditionTailElement.value = conElements;
     actionTailElement.value = actElements;
     recipeTailElement.value = recElements;
+
+    recipeBtnActivated.value = recBtnActElements;
+    recipeBtnAuto.value = recBtnAutoElements;
+    recipeBtnRun.value = recBtnRunElements;
+
 
     // 조건
     if (conditionTailElement.value.length !== 0) {
@@ -408,6 +422,28 @@ watchEffect(() => {
         element.addEventListener("click", handleClickRecipeTail);
       });
     }
+
+    // 레시피 활성화 버튼
+    if (recipeBtnActivated.value.length !== 0) {
+      recipeBtnActivated.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClickRecBtnAct);
+      });
+    }
+
+    // 레시피 자동화 버튼
+    if (recipeBtnAuto.value.length !== 0) {
+      recipeBtnAuto.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClickRecBtnAuto);
+      });
+    }
+
+    // 레시피 실행 버튼
+    if (recipeBtnRun.value.length !== 0) {
+      recipeBtnRun.value.forEach((element: Element) => {
+        element.addEventListener("click", handleClickRecBtnRun);
+      });
+    }
+
   }
 })
 
@@ -418,69 +454,77 @@ onUpdated(() => {
     const actElements = document.querySelectorAll('.action-tail') as Element[];
     const recElements = document.querySelectorAll('.recipe-tail') as Element[];
 
+    const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
+    const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
+    const recBtnRunElements = document.querySelectorAll('.recipe-btn-run') as Element[];
+
     conditionTailElement.value = conElements;
     actionTailElement.value = actElements;
     recipeTailElement.value = recElements;
+
+    recipeBtnActivated.value = recBtnActElements;
+    recipeBtnAuto.value = recBtnAutoElements;
+    recipeBtnRun.value = recBtnRunElements;
   }
 })
 
 // 조건 꼬리표 클릭
 function handleClickConditionTail(event) {
-//   //클릭한 곳 데이터 가져오기
-//   let str = getNovelContentFromClick().content[0].text;
-//   console.log(str);
+  //   //클릭한 곳 데이터 가져오기
+  //   let str = getNovelContentFromClick().content[0].text;
+  //   console.log(str);
 
-//   const parts = str.split('를'); // 설비,태그, 조건 분리
-// //  console.log(parts[0] + "    " + parts[1]);
-//   const parts2 = parts[0].replace(/["]/g, "").split('의'); // 설비,태그 추출
-// //  console.log(parts2[1].replace(/^\s+/, ''));
+  //   const parts = str.split('를'); // 설비,태그, 조건 분리
+  // //  console.log(parts[0] + "    " + parts[1]);
+  //   const parts2 = parts[0].replace(/["]/g, "").split('의'); // 설비,태그 추출
+  // //  console.log(parts2[1].replace(/^\s+/, ''));
 
-//   let whelk = parts2[0];
-//   let tag = parts2[1].replace(/^\s+/, ''); //맨앞 공백 제거
-//   let temp;
-//   if(tag !== "Status"){
-//     temp = parts[1].replace(/^\s+/, '').split(" ")[0];
-//   }else{
-//     temp = '';
-//   }
+  //   let whelk = parts2[0];
+  //   let tag = parts2[1].replace(/^\s+/, ''); //맨앞 공백 제거
+  //   let temp;
+  //   if(tag !== "Status"){
+  //     temp = parts[1].replace(/^\s+/, '').split(" ")[0];
+  //   }else{
+  //     temp = '';
+  //   }
 
-//   let unit;
-//   if(tag !== "Status"){
-//     unit = parts[1].replace(/^\s+/, '').split(" ")[1];
-//   }else{
-//     unit = '';
-//   }
+  //   let unit;
+  //   if(tag !== "Status"){
+  //     unit = parts[1].replace(/^\s+/, '').split(" ")[1];
+  //   }else{
+  //     unit = '';
+  //   }
 
-//   let range;
-//   if(tag !== "Status"){
-//     range = parts[1].replace(/^\s+/, '').split(" ")[2];
-//   }else{
-//     range = '';
-//   }
+  //   let range;
+  //   if(tag !== "Status"){
+  //     range = parts[1].replace(/^\s+/, '').split(" ")[2];
+  //   }else{
+  //     range = '';
+  //   }
 
-//   let memo;
-//   if(tag !== "Status"){
-//     memo = parts[1].split(/이상|미만|이하|초과/)[1].replace(/^\s+/, '');
-//   }else{
-//     memo = parts[1].replace(/^\s+/, '');
-//   }
-//   console.log(memo)
-//   // 각 데이터 로컬에 저장
-//   localStorage.removeItem('whelk');
-//   localStorage.removeItem('tag');
-//   localStorage.removeItem('temp');
-//   localStorage.removeItem('unit');
-//   localStorage.removeItem('range');
-//   localStorage.removeItem('memo');
-//   useStorage('whelk', whelk);
-//   useStorage('tag', tag);
-//   useStorage('temp', temp);
-//   useStorage('unit', unit);
-//   useStorage('range', range);
-//   useStorage('memo', memo);
+  //   let memo;
+  //   if(tag !== "Status"){
+  //     memo = parts[1].split(/이상|미만|이하|초과/)[1].replace(/^\s+/, '');
+  //   }else{
+  //     memo = parts[1].replace(/^\s+/, '');
+  //   }
+  //   console.log(memo)
+  //   // 각 데이터 로컬에 저장
+  //   localStorage.removeItem('whelk');
+  //   localStorage.removeItem('tag');
+  //   localStorage.removeItem('temp');
+  //   localStorage.removeItem('unit');
+  //   localStorage.removeItem('range');
+  //   localStorage.removeItem('memo');
+  //   useStorage('whelk', whelk);
+  //   useStorage('tag', tag);
+  //   useStorage('temp', temp);
+  //   useStorage('unit', unit);
+  //   useStorage('range', range);
+  //   useStorage('memo', memo);
 
   modalStore.isCondition = true;
-  openModal();  
+  openModal();
 }
 
 
@@ -501,6 +545,32 @@ function handleClickRecipeTail(event) {
   modalStore.isRecipe = true;
   openModal();
 }
+
+// 레시피 활성화 버튼 클릭
+function handleClickRecBtnAct (event) {
+  console.log("활성화 클릭", getNovelContentFromClick()?.attrs?.activated)
+  const getAttrs = getNovelContentFromClick()?.attrs;
+  getAttrs.activated = !getNovelContentFromClick()?.attrs?.activated;
+
+  // editor?.value?.commands.setRecipeRule(getAttrs)
+};
+
+// 레시피 자동화 버튼 클릭
+function handleClickRecBtnAuto (event) {
+  console.log("자동화 클릭", getNovelContentFromClick()?.attrs?.auto)
+  const getAttrs = getNovelContentFromClick()?.attrs;
+  getAttrs.auto = !getNovelContentFromClick()?.attrs?.auto;
+
+};
+
+// 레시피 수동으로 실행 버튼 클릭
+function handleClickRecBtnRun (event) {
+  console.log("실행 실행 클릭")
+  alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
+};
+
+
+
 
 // local Storage에 "novel__content" 키로 저장된 값을 가져오는 함수
 const getNovelContentFromClick = () => {
@@ -526,5 +596,4 @@ const getNovelContentFromClick = () => {
 
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

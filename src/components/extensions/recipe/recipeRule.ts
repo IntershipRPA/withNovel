@@ -194,7 +194,12 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
 
     // or조건과 and조건의 string -> array
     function stringToArray(str, delimiter = '$') {
-      return str.split(delimiter);
+      if (typeof str === 'string') {
+        return str.split(delimiter);
+      } else {
+        console.error('Invalid string', str);
+        return [];
+      }
     }
     // console.log("앤드조건",this.options.settingAttrs.andCondition)
     // console.log("올조건",this.options.settingAttrs.orCondition)
@@ -215,20 +220,20 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       'div',
       // 1번째
       {
-        class: `rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 px-8 mb-2 mt-2 py-5 items-center `,
-        // contenteditable: "false"
+        class: `select-text rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 px-8 mb-2 mt-2 py-5 items-center `,
+        // contenteditable: "true"
       },
       // 2번째 - 레시피 이름
       [
-        'div', { class: 'recipe-name mb-5 text-2xl text-left font-semibold' }, `${this.options.settingAttrs.recipeName}`
+        'div', { class: 'recipe-name mb-10 text-2xl text-left font-semibold' }, `${this.options.settingAttrs.recipeName}`
       ],
       // 3번째 - 액션
       [
-        'div', { class: 'action  mb-2' }, `${this.options.settingAttrs.action} 액션을 실행하기 위해 아래 조건들이 충족되어야 한다.`
+        'div', { class: 'action  mb-4' }, `${this.options.settingAttrs.action} 액션을 실행하기 위해 아래 조건들이 충족되어야 한다.`
       ],
       // >> 이 사이에 AND조건과 OR조건이 들어간다. <<
       [
-        'div', { class: 'alarm-msg  mt-2' }, `조건 불일치시 알람 메세지로는 "${this.options.settingAttrs.alarmMsg}"으로 설정하여`
+        'div', { class: 'alarm-msg  mt-10' }, `조건 불일치시 알람 메세지로는 "${this.options.settingAttrs.alarmMsg}"으로 설정하여`
       ],
       [
         'div', { class: 'alarm-msg-to ' }, `${this.options.settingAttrs.alarmMsgTo} 담당자에게 알람을 전달한다.`
@@ -358,7 +363,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
         ['span',
           {
             class: `recipe-btn-activated cursor-pointer rounded-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white flex items-center min-w-max`,
-            contenteditable: "false"
+            contenteditable: "false",
           },
           // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
           `활성화 ${String(this.options.settingAttrs.activated)}`,
@@ -366,7 +371,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
         ['span',
           {
             class: `recipe-btn-auto cursor-pointer rounded-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white ml-4 flex items-center min-w-max`,
-            contenteditable: "false"
+            contenteditable: "false",
           },
           // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
           `자동화 ${String(this.options.settingAttrs.auto)}`,
