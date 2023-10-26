@@ -7,7 +7,7 @@ import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from "@tiptap/starter-kit";
 import { useStorage } from '@vueuse/core';
-import { ref } from "vue";
+import { onUpdated, ref, watch, watchEffect } from "vue";
 
 
 const props = defineProps({
@@ -20,11 +20,23 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  savedContent: {
+    type: String,
+    required: false,
+  },
 })
-const memo = ref<string>(String(localStorage.getItem('memo'))); // 메모
-//console.log(JSON.parse(JSON.stringify(memo.value)));
+
+const isSavedContent = () => {
+  if(!props.savedContent){
+    return ''
+  } else {
+    useStorage(props.storageKey, props.savedContent);
+    return props.savedContent;
+  }
+}
+
 const editor = useEditor({
-  content: JSON.parse(JSON.stringify(memo.value)),
+  content: isSavedContent(),
   extensions: [
     StarterKit.configure({
       bulletList: false,
@@ -62,16 +74,11 @@ const editor = useEditor({
       })
 
       // memo.value = lineText;
+      // console.log(memo.value)
       // emits('contentChanged', memo.value);
       useStorage(props.storageKey, lineText);
   },
 });
-
-
-
-
-
-
 
 
 </script>

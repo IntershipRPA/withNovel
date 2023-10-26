@@ -1,6 +1,6 @@
 <template>
   <div class="modal-family text-lg flex flex-col">
-    <RecipeNameVue />
+    <RecipeNameVue :savedName='savedAttrs.recipeName' />
     <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
       <!-- <span class="p-2.5">설비 Air Compressor</span>
       <span class="p-2.5">태그 Status</span>
@@ -35,12 +35,12 @@
           조건 불일치 알람 발생 :
         </span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'알람 내용을 작성하세요 …'"
-          :storageKey="'recipe_alarmMsg'" />
+          :storageKey="'recipe_alarmMsg'" :savedContent='savedAttrs.alarmMsg' />
       </div>
       <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
         <span class="text-gray-500">전달 담당자 :</span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'이름을 입력하세요.'"
-          :storageKey="'recipe_alarmMsgTo'" />
+          :storageKey="'recipe_alarmMsgTo'" :savedContent='savedAttrs.alarmMsgTo' />
       </div>
     </div>
     <!-- <div>
@@ -115,13 +115,47 @@ if (docs) {
 }
 
 
-
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const closeModal = () => {
   modalStore.closeModal(); // 모달 닫기
 };
+
+
+// "novel__content"에서 해당 노드 정보 불러오기
+const getContent = () => {
+  // const allData = props.editor.getJSON();
+  const location = props.editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+  const locationNum = location?.path[1];
+  const contentObj = docs[locationNum];
+  return contentObj;
+};
+
+const savedContent = getContent();
+
+interface attrs {
+  recipeName: string,
+  action: string,
+  andCondition: string,
+  orCondition: string,
+  alarmMsg: string,
+  alarmMsgTo: string,
+  auto: boolean,
+  activated: boolean,
+}
+
+const savedAttrs :attrs = {
+  recipeName: savedContent?.attrs?.recipeName,
+  action: savedContent?.attrs?.action,
+  andCondition: savedContent?.attrs?.andCondition,
+  orCondition: savedContent?.attrs?.orCondition,
+  alarmMsg: savedContent?.attrs?.alarmMsg,
+  alarmMsgTo: savedContent?.attrs?.alarmMsgTo,
+  auto: savedContent?.attrs?.auto,
+  activated: savedContent?.attrs?.activated,
+}
+
 
 // 완료버튼 클릭
 const handleConfirm = () => {
@@ -130,9 +164,14 @@ const handleConfirm = () => {
 };
 
 // 조건 문자열 변환
-const conditionsArrToString = (arr, andOr, delimiter = '$') => {
+const conditionsArrToString = (arr, andOr: string, delimiter = '$') => {
   const conditionString = arr.filter(item => item?.andOr === andOr).map(item => item?.text);
-  return conditionString.join(delimiter);
+  if (conditionString.length > 0) {
+    return conditionString.join(delimiter);
+  } else {
+    console.log('레시피 내에', andOr, '조건 선택 없음');
+    return '';
+  }
 }
 
 // onUpdated(() => {
@@ -144,20 +183,10 @@ const conditionsArrToString = (arr, andOr, delimiter = '$') => {
 // 레시피 노드 전환
 const changeToRecipeNode = () => {
   const editor = props.editor;
-  // const modalContent = localStorage.getItem('modal__content');
-  const selection = editor.state.selection;
-  // 커서가 있는 줄을 찾기
-  const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
-  const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
-  // console.log("here@@@###!!!", lineStart, lineEnd);
 
-  
-
-  const attrs = {
+  const attrs: attrs = {
     recipeName: localStorage.getItem("recipe_name"),
     action: action.value,
-    // andCondition: 'test44',
-    // orCondition: 'test44',
     andCondition: conditionsArrToString(conditions.value, 'AND'),
     orCondition: conditionsArrToString(conditions.value, 'OR'),
     alarmMsg: localStorage.getItem("recipe_alarmMsg"),
@@ -173,7 +202,7 @@ const changeToRecipeNode = () => {
     // .deleteRange({ from: lineStart, to: lineEnd })
     .setRecipeRule(attrs)
 
-    .insertContent(`레시피 지정 완료`)
+    // .insertContent(`레시피 지정 완료`)
     .run();
 
   // 로컬스토리지 키 삭제
