@@ -1,5 +1,6 @@
 <template>
-  <EditorContent :editor="editor" class="text-gray-950 max-h-24 overflow-y-auto hover:overscroll-contain "/>
+  <EditorContent
+  :editor="editor" class="text-gray-950 max-h-24 overflow-y-auto hover:overscroll-contain "/>
 </template>
 
 <script setup lang="ts">
@@ -21,11 +22,10 @@ const props = defineProps({
     required: true,
   },
 })
-const memo = ref<string>(String(localStorage.getItem(props.storageKey))); // 메모
-
+// const memo = ref<string | null>(localStorage.getItem(props.storageKey)) ?? ''; // 메모
 
 const editor = useEditor({
-  content: memo.value,
+  // content: memo.value,
   extensions: [
     StarterKit.configure({
       bulletList: false,
@@ -62,9 +62,18 @@ const editor = useEditor({
         return true;
       })
 
+      // memo.value = lineText;
+      // emits('contentChanged', memo.value);
       useStorage(props.storageKey, lineText);
   },
 });
+
+// const emits = defineEmits(['contentChanged']);
+
+
+// const onContentChanged = () => {
+//   emits('contentChanged', memo.value);
+// };
 </script>
 
 <style lang="scss">

@@ -1,5 +1,6 @@
 <template>
   <div class="modal-family text-lg flex flex-col">
+    <RecipeNameVue />
     <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
       <!-- <span class="p-2.5">설비 Air Compressor</span>
       <span class="p-2.5">태그 Status</span>
@@ -28,12 +29,23 @@
           :condition='condition' :num="index" />
       </div>
     </div>
-    <div class='bg-zinc-100 mt-5 flex items-center'>
-      <span>
-        조건 불일치 알람 발생 :
-      </span>
-      <MiniEditor class='inline-block min-w-min max-w-xl' :placeholder="'알람 내용을 작성하세요 …'" :storageKey="'modal__recipe'" />
+    <div class='my-5 flex items-center'>
+      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
+        <span class="text-gray-500">
+          조건 불일치 알람 발생 :
+        </span>
+        <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'알람 내용을 작성하세요 …'"
+          :storageKey="'recipe_alarmMsg'" />
+      </div>
+      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
+        <span class="text-gray-500">전달 담당자 :</span>
+        <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'이름을 입력하세요.'"
+          :storageKey="'recipe_alarmMsgTo'" />
+      </div>
     </div>
+    <!-- <div>
+      <ElementChecked />
+    </div> -->
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
   <DeleteBtn @click.stop="handleDelete" />
@@ -48,6 +60,9 @@ import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementCondition from './ElementCondition.vue';
+import RecipeNameVue from './RecipeName.vue';
+import ElementChecked from './ElementChecked.vue';
+import { timestamp } from '@vueuse/core';
 
 // onUpdated(() => {
 //   // console.log("선택완료", selectedAndOr.value)
@@ -108,11 +123,25 @@ const closeModal = () => {
   modalStore.closeModal(); // 모달 닫기
 };
 
+// 완료버튼 클릭
 const handleConfirm = () => {
   closeModal();
   changeToRecipeNode(); //recipeRule 노드변경 함수
 };
 
+// 조건 문자열 변환
+const conditionsArrToString = (arr, andOr, delimiter = '$') => {
+  const conditionString = arr.filter(item => item?.andOr === andOr).map(item => item?.text);
+  return conditionString.join(delimiter);
+}
+
+// onUpdated(() => {
+
+//   console.log(conditionsArrToString(conditions.value, 'AND'));
+//   console.log(conditionsArrToString(conditions.value, 'OR'));
+// })
+
+// 레시피 노드 전환
 const changeToRecipeNode = () => {
   const editor = props.editor;
   // const modalContent = localStorage.getItem('modal__content');
@@ -122,16 +151,39 @@ const changeToRecipeNode = () => {
   const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
   // console.log("here@@@###!!!", lineStart, lineEnd);
 
+  
+
+  const attrs = {
+    recipeName: localStorage.getItem("recipe_name"),
+    action: action.value,
+    // andCondition: 'test44',
+    // orCondition: 'test44',
+    andCondition: conditionsArrToString(conditions.value, 'AND'),
+    orCondition: conditionsArrToString(conditions.value, 'OR'),
+    alarmMsg: localStorage.getItem("recipe_alarmMsg"),
+    alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
+    auto: false,
+    activated: false,
+  }
+
   editor
     .chain()
     .focus()
 
     // .deleteRange({ from: lineStart, to: lineEnd })
-    .setRecipeRule()
+    .setRecipeRule(attrs)
 
     .insertContent(`레시피 지정 완료`)
     .run();
+
+  // 로컬스토리지 키 삭제
+  localStorage.removeItem('recipe_name');
+  localStorage.removeItem('recipe_alarmMsg');
+  localStorage.removeItem('recipe_alarmMsgTo');
 };
+
+
+
 
 const handleDelete = () => {
   deleteRecipeNode();

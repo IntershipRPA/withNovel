@@ -132,20 +132,20 @@ const changeToConditionNode = () => {
     str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
   }
 
+  let attrs = {
+    fac: facMsg,
+    tag: tagMsg,
+    temp: String(temp.value),
+    unit: unit.value,
+    range: range.value,
+    memo: modalContent
+  };
+  
   editor
     .chain()
     .focus()
     .deleteRange(getRange())
-    .setConditionRule({
-      attrs: {
-        fac: facMsg.value,
-        tag: tagMsg.value,
-        temp: temp.value,
-        unit: unit.value,
-        range: range.value,
-        memo: modalContent,
-      }
-    })
+    .setConditionRule(attrs) 
     .setFacility({ facility: facMsg.value })
     .insertContent(facMsg.value)
     .unsetFacility()
