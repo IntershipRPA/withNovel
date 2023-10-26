@@ -6,7 +6,7 @@ import { selectParentNode } from '@tiptap/pm/commands';
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
-    whelk: string;
+    fac: string;
     tag: string;
     temp: string;
     unit: string;
@@ -18,7 +18,7 @@ export interface ConditionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
-      setConditionRule: (attrs: { whelk: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
+      setConditionRule: (attrs: { fac: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
       toggleCondition: () => ReturnType;
       unsetCondition: () => ReturnType;
     };
@@ -39,8 +39,8 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        // whelk: 'defaultWhelk',
-        whelk: localStorage.getItem('whelk'),
+        // fac: 'defaultWhelk',
+        fac: localStorage.getItem('fac'),
 
         tag: localStorage.getItem('tag'),
         temp: localStorage.getItem('temp'),
@@ -58,8 +58,8 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
  //    console.log("here3", this.options.settingAttrs);
 
     return {
-      whelk: {
-        default: this.options.settingAttrs.whelk,
+      fac: {
+        default: this.options.settingAttrs.fac,
       },
       tag: {
 
@@ -125,7 +125,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
   addCommands() {
     return {
 
-      setConditionRule: attrs => ({ commands }) => {
+      setConditionRule: (attrs) => ( { commands }: { commands: any } ) => {
         // attrs 객체로부터 필요한 속성 값을 추출
         // const { whelk, tag, temp, unit, range } = attrs;
         // console.log(whelk + "  " + tag + " " + temp + " " + unit + " " + range);
@@ -137,6 +137,7 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
 
 
       },
+
       toggleCondition: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },

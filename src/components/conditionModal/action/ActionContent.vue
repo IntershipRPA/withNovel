@@ -44,6 +44,7 @@ import { useModalStore } from '../../../stores/modal';
 import { useStorage } from "@vueuse/core";
 
 const facMsg = ref<String>('설비');
+
 const tagMsg = ref<String>(localStorage.getItem('tag'));
 console.log(JSON.parse(JSON.stringify(tagMsg.value)))
 let unitValue = "";
@@ -58,6 +59,8 @@ if(JSON.parse(JSON.stringify(tagMsg.value)) === "Press"){
 const temp = ref<number | null>(Number(localStorage.getItem('temp'))); // 온도
 const unit = ref<string>(unitValue); // 단위
 const range = ref<string>(String(localStorage.getItem('range')));; // 범위
+
+
 const updateTempValue = (value: number) => {
   temp.value = value;
 };
@@ -137,7 +140,7 @@ const getRange = () => {
 const changeToActionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
-  
+
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if (tagMsg.value === "Status") {

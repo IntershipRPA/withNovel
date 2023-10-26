@@ -61,6 +61,8 @@ const editor = useEditor({
         return true;
       })
 
+      // memo.value = lineText;
+      // emits('contentChanged', memo.value);
       useStorage(props.storageKey, lineText);
   },
 });

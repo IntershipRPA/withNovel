@@ -171,8 +171,6 @@ const changeToConditionNode = () => {
     .run();
 
 
-
-
   // let konwhow = `"${facMsg.value}"의 "${tagMsg.value}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   // //  console.log(JSON.stringify(konwhow));
 
