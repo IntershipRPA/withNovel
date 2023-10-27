@@ -135,7 +135,7 @@ export const ActionRule = Node.create<ActionRuleOptions>({
       setActionRule: (attrs) => ({ commands }: { commands: any; }) => {
         // attrs 객체로부터 필요한 속성 값을 추출
         // const { whelk, tag, temp, unit, range } = attrs;
-        console.log(attrs);
+        // console.log(attrs);
         // toggleNode 메소드를 호출하여 새로운 노드를 생성
         // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
         

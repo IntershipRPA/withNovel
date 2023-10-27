@@ -519,7 +519,7 @@ function handleClickRecBtnAuto (event) {
 
 // 레시피 수동으로 실행 버튼 클릭
 function handleClickRecBtnRun (event) {
-  console.log("실행 실행 클릭")
+  console.log("실행 클릭")
   alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
 };
 

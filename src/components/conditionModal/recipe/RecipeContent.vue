@@ -1,7 +1,7 @@
 <template>
   <div class="modal-family text-lg flex flex-col">
     <RecipeNameVue :savedName='savedAttrs.recipeName' />
-    <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
+    <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8 p-5'>
       <!-- <span class="p-2.5">설비 Air Compressor</span>
       <span class="p-2.5">태그 Status</span>
       <span class="p-2.5">INIT: 일 때</span> -->
@@ -29,15 +29,15 @@
           :condition='condition' :num="index" />
       </div>
     </div>
-    <div class='my-5 flex items-center'>
-      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
+    <div class='my-3 flex items-center flex-wrap justify-center content-between'>
+      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center my-2">
         <span class="text-gray-500">
           조건 불일치 알람 발생 :
         </span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'알람 내용을 작성하세요 …'"
           :storageKey="'recipe_alarmMsg'" :savedContent='savedAttrs.alarmMsg' />
       </div>
-      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
+      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center my-2">
         <span class="text-gray-500">전달 담당자 :</span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'이름을 입력하세요.'"
           :storageKey="'recipe_alarmMsgTo'" :savedContent='savedAttrs.alarmMsgTo' />
@@ -119,6 +119,11 @@ if (docs) {
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const closeModal = () => {
+  // 로컬스토리지 키 삭제
+  localStorage.removeItem('recipe_name');
+  localStorage.removeItem('recipe_alarmMsg');
+  localStorage.removeItem('recipe_alarmMsgTo');
+
   modalStore.closeModal(); // 모달 닫기
 };
 
@@ -145,7 +150,7 @@ interface attrs {
   activated: boolean,
 }
 
-const savedAttrs :attrs = {
+const savedAttrs: attrs = {
   recipeName: savedContent?.attrs?.recipeName,
   action: savedContent?.attrs?.action,
   andCondition: savedContent?.attrs?.andCondition,
@@ -157,10 +162,64 @@ const savedAttrs :attrs = {
 }
 
 
+
+// and조건과 or조건으로 이미 지정되어 있다면
+// conditions에서 일치하는 text를 찾고 andOr을 부여하고 해당 그룹으로 위치를 이동시킨다.
+if (savedAttrs.andCondition || savedAttrs.orCondition) {
+  // string을 '$'로 구분하여 -> Array 로 바꾸는 함수
+  function stringToArray(str, delimiter = '$') {
+    if (typeof str === 'string') {
+      return str.split(delimiter);
+    } else {
+      return [];
+    }
+  }
+
+  // 비교 함수
+  type AndOrType = 'AND' | 'OR';
+  function findCommonElements(andOr: AndOrType, savedArr, arr) {
+    if (andOr === 'AND') {
+      for (const text of savedArr) {
+        for (const obj of arr) {
+          if (obj.text === text) {
+            obj.andOr = 'AND';
+            obj.group = 1;
+          }
+        }
+      }
+    }
+
+    if (andOr === 'OR') {
+      for (const text of savedArr) {
+        for (const obj of arr) {
+          if (obj.text === text) {
+            obj.andOr = 'OR';
+            obj.group = 2;
+          }
+        }
+      }
+    }
+  }
+
+  // 실행하기
+  const andConditions = stringToArray(savedAttrs.andCondition)
+  const orConditions = stringToArray(savedAttrs.orCondition)
+
+  if (andConditions) {
+    findCommonElements("AND", andConditions, conditions.value)
+  }
+
+  if (orConditions) {
+    findCommonElements("OR", orConditions, conditions.value)
+  }
+
+}
+
+
 // 완료버튼 클릭
 const handleConfirm = () => {
-  closeModal();
   changeToRecipeNode(); //recipeRule 노드변경 함수
+  closeModal();
 };
 
 // 조건 문자열 변환
@@ -202,13 +261,13 @@ const changeToRecipeNode = () => {
     // .deleteRange({ from: lineStart, to: lineEnd })
     .setRecipeRule(attrs)
 
-    // .insertContent(`레시피 지정 완료`)
+    .insertContent(`레시피 지정 완료`)
     .run();
 
-  // 로컬스토리지 키 삭제
-  localStorage.removeItem('recipe_name');
-  localStorage.removeItem('recipe_alarmMsg');
-  localStorage.removeItem('recipe_alarmMsgTo');
+  // // 로컬스토리지 키 삭제
+  // localStorage.removeItem('recipe_name');
+  // localStorage.removeItem('recipe_alarmMsg');
+  // localStorage.removeItem('recipe_alarmMsgTo');
 };
 
 
@@ -251,10 +310,13 @@ const deleteRecipeNode = () => {
   margin: auto;
   margin-top: 60px;
   margin-bottom: 70px;
-  min-width: 1080px;
+  min-width: 900px;
   min-height: 150px;
   max-height: 480px;
   overflow-y: auto;
+
+  margin-left: 16px;
+  margin-right: 16px;
   /* background-color: aquamarine; */
 }
 

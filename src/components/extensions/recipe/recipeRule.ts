@@ -91,10 +91,12 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
         parseHTML: element => element.getAttribute('andCondition'),
         renderHTML: attributes => {
           if (!attributes.andCondition) {
+            this.options.settingAttrs.andCondition = [];
             return {}
           }
           else {
             this.options.settingAttrs.andCondition = attributes.andCondition;
+            // console.log("AND옵션셋팅", this.options.settingAttrs.andCondition)
           }
           return {
             'andCondition': attributes.andCondition,
@@ -106,10 +108,12 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
         parseHTML: element => element.getAttribute('orCondition'),
         renderHTML: attributes => {
           if (!attributes.orCondition) {
+            this.options.settingAttrs.orCondition = [];
             return {}
           }
           else {
             this.options.settingAttrs.orCondition = attributes.orCondition;
+            // console.log("OR옵션셋팅", this.options.settingAttrs.orCondition)
           }
           return {
             'orCondition': attributes.orCondition,
@@ -197,7 +201,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       if (typeof str === 'string') {
         return str.split(delimiter);
       } else {
-        console.error('Invalid string', str);
+        // console.log('Invalid string', str);
         return [];
       }
     }
@@ -208,8 +212,8 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
     const andConditions = stringToArray(this.options.settingAttrs.andCondition);
     const orConditions = stringToArray(this.options.settingAttrs.orCondition);
 
-    // console.log(andConditions)
-    // console.log(orConditions)
+    // console.log("AND",andConditions)
+    // console.log("OR",orConditions)
 
 
 
@@ -259,15 +263,16 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
     if (andConditions.length > 0) {
       const andArrs = [
         [
-          'div', { class: 'ml-10' }, 'AND조건,'
+          'div', { class: 'ml-8' }, 'AND조건'
         ],
       ];
 
       andArrs.push(...andConditions.map((item: string) => {
         return (
           [
-            'div', { class: 'and-condition ml-20' }, item
-            // 'div', { class: 'and-condition ml-20' }, 'testtest'
+            'div', { class: 'and-condition ml-20' }, 
+            ['span', { class: '-ml-6' }, '▶ '],
+            ['span', { class: '' }, `${item}`]
           ])
       }))
 
@@ -278,15 +283,17 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
     if (orConditions.length > 0) {
       const orArrs = [
         [
-          'div', { class: 'ml-10' }, 'OR조건,'
+          'div', { class: 'ml-8' }, 'OR조건'
         ],
       ];
 
       orArrs.push(...orConditions.map((item: string) => {
         return (
           [
-            'div', { class: 'or-condition ml-20' }, item
-            // 'div', { class: 'or-condition ml-20' }, 'testtest'
+            'div',
+            { class: 'or-condition ml-20' },
+            ['span', { class: '-ml-6' }, '▷ '],
+            ['span', { class: '' }, `${item}`]
           ])
       }))
 
