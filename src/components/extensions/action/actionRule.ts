@@ -39,14 +39,12 @@ export const ActionRule = Node.create<ActionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        // whelk: 'defaultWhelk',
-        whelk: localStorage.getItem('whelk'),
-
-        tag: localStorage.getItem('tag'),
-        temp: localStorage.getItem('temp'),
-        unit: localStorage.getItem('unit'),
-        range: localStorage.getItem('range'),
-        memo: localStorage.getItem('memo'),
+        whelk: '',
+        tag: '',
+        temp: '',
+        unit: '',
+        range: '',
+        memo: '',
 
       }
     }

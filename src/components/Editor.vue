@@ -164,65 +164,46 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
   // onUpdate : 편집기가 업데이트될 때마다 호출되는 콜백 함수
   onUpdate: (e) => {
     const selection = e.editor.state.selection;
-    // console.log(`테스트2 : ${JSON.stringify(selection)}`);
+
     // getPrevText 함수는 주어진 범위 내의 텍스트를 반환
     const lastTwo = getPrevText(e.editor, {
       chars: 4, // 범위 설정
     });
 
-    // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
-    if (lastTwo === " /조건" && !isLoading.value) {
-      // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
-      // 기존 값 삭제
-      localStorage.removeItem('change');
-      // 커서가 있는 줄을 찾기
-      const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
-      const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
+    // // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
+    // if (lastTwo === " /조건" && !isLoading.value) {
+    //   // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
+    //   // 기존 값 삭제
+    //   localStorage.removeItem('change');
+    //   // 커서가 있는 줄을 찾기
+    //   const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
+    //   const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
 
-      // 해당 범위에 있는 텍스트를 가져옴
-      let lineText = '';
-      e.editor.state.doc.nodesBetween(lineStart, lineEnd, node => {
-        if (node.isText) {
-          lineText += node.text
-        }
-        return true;
-      })
-      //      console.log(lineText.split('/'));
-      let changText = lineText.split(' '); // 공백 단위 쪼개기
-      let str = changText.pop(); // '/조건' 제거
+    //   // 해당 범위에 있는 텍스트를 가져옴
+    //   let lineText = '';
+    //   e.editor.state.doc.nodesBetween(lineStart, lineEnd, node => {
+    //     if (node.isText) {
+    //       lineText += node.text
+    //     }
+    //     return true;
+    //   })
 
-      let changText2 = changText[0] + " " + changText[1];
-      let changText3 = '';
-      if (changText.length == 4) {
-        changText3 = changText[2] + " " + changText[3];
-      } else {
-        changText3 = changText[2];
-      }
-      // 한글 제거
-      let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, "")];
-      //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-      //      console.log(`changText2 : ${changText2}`);
-      //      console.log(`changText3 : ${changText3}`);
-      // 로컬에 저장
-      useStorage('change', change);
-      // let titleData = localStorage.getItem("change");
-      // let titleData2;
+    //   let changText = lineText.split(' '); // 공백 단위 쪼개기
+    //   let str = changText.pop(); // '/조건' 제거
 
-      // console.log(`change : ${titleData}`);
-      // // 타입스크립트에서는 null 체크해야됨
-      // if(titleData !== null){
-      //   titleData2 = JSON.parse(titleData);
-      // }
-      // console.log(`titleData : ${titleData2}`);
-      // console.log(`whelk 확인 : ${titleData2[0]}`);
-      // console.log(`tag 확인 : ${titleData2[1]}`);
-      // // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
-      // localStorage.removeItem('whelk');
-      // localStorage.removeItem('tag');
-      // // 데이터 각각 whelk, tagd에 저장
-      // useStorage('whelk', titleData2[0]);
-      // useStorage('tag', titleData2[1]);
-    }
+    //   let changText2 = changText[0] + " " + changText[1];
+    //   let changText3 = '';
+    //   if (changText.length == 4) {
+    //     changText3 = changText[2] + " " + changText[3];
+    //   } else {
+    //     changText3 = changText[2];
+    //   }
+    //   // 한글 제거
+    //   let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, "")];
+
+    //   // 로컬에 저장
+    //   useStorage('change', change);
+    // }
 
 
 
@@ -472,10 +453,10 @@ onUpdated(() => {
 function handleClickConditionTail(event) {
 //   //클릭한 곳 데이터 가져오기
 
-  localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
-  localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
-  localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
-  localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
+  // localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
+  // localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
+  // localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
+  // localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
 
   modalStore.isCondition = true;
   openModal();
@@ -485,10 +466,10 @@ function handleClickConditionTail(event) {
 
 // 액션 꼬리표 클릭
 function handleClickActionTail(event) {
-  localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
-  localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
-  localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
-  localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
+  // localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
+  // localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
+  // localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
+  // localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
   modalStore.isAction = true;
   openModal();
 }
