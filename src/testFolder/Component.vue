@@ -8,6 +8,8 @@
         <!-- This is test button -->
       </button>
     </div>
+
+    <NodeViewContent class="nodeViewContent" />
   </NodeViewWrapper>
 </template>
 
@@ -37,7 +39,7 @@ export default {
 
 <script setup lang="ts">
 import { Editor } from '@tiptap/core';
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3';
+import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { PropType, ref } from 'vue';
 
 
@@ -134,5 +136,12 @@ export default {
 
 .btn {
   background-color: skyblue;
+}
+
+.nodeViewContent {
+  margin: 2.5rem 1rem 1rem;
+  padding: 0.5rem;
+  border: 2px dashed #0D0D0D20;
+  border-radius: 0.5rem;
 }
 </style>

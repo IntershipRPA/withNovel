@@ -6,9 +6,9 @@ import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import RecipeNodeVue from '../../node/recipe/RecipeNode.vue'
 
 export interface RecipeRuleOptions {
-  HTMLAttributes: Record<string, any>;
+  // HTMLAttributes: Record<string, any>;
   settingAttrs: {
-    count : number;
+    count: number;
     // recipeName: string,
     // action: string,
     // andCondition: string,
@@ -33,20 +33,19 @@ declare module '@tiptap/core' {
 export const RecipeRule = Node.create<RecipeRuleOptions>({
   name: 'recipeRule',
   group: 'block',
-  content: 'text*',
+  // content: 'text*',
   // content: 'block+',
-  marks: '_',
-  defining: true,
-  draggable: false,
+  // marks: '_',
+  // defining: true,
+  // draggable: false,
   // draggable: true,
-  atom: true,
-  addNodeView() {
-    return VueNodeViewRenderer(RecipeNodeVue)
-  },
+  // atom: true,
+  content: 'inline*',
+  // content: 'block*',
 
   addOptions() {
     return {
-      HTMLAttributes: {},
+      // HTMLAttributes: {},
       settingAttrs: {
         count: 0,
         // name: '',
@@ -196,12 +195,16 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
 
   parseHTML() {
     return [
-      { tag: 'vue-component' },
+      { tag: 'recipe-node' },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['vue-component', mergeAttributes(HTMLAttributes)]
+    return ['recipe-node', mergeAttributes(HTMLAttributes)]
+  },
+
+  addNodeView() {
+    return VueNodeViewRenderer(RecipeNodeVue)
   },
 
   // renderHTML({ HTMLAttributes }) {

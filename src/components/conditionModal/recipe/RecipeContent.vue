@@ -140,14 +140,15 @@ const getContent = () => {
 const savedContent = getContent();
 
 interface attrs {
-  recipeName: string,
-  action: string,
-  andCondition: string,
-  orCondition: string,
-  alarmMsg: string,
-  alarmMsgTo: string,
-  auto: boolean,
-  activated: boolean,
+  // recipeName: string,
+  // action: string,
+  // andCondition: string,
+  // orCondition: string,
+  // alarmMsg: string,
+  // alarmMsgTo: string,
+  // auto: boolean,
+  // activated: boolean,
+  count: number,
 }
 
 const savedAttrs: attrs = {
@@ -244,14 +245,15 @@ const changeToRecipeNode = () => {
   const editor = props.editor;
 
   const attrs: attrs = {
-    recipeName: localStorage.getItem("recipe_name"),
-    action: action.value,
-    andCondition: conditionsArrToString(conditions.value, 'AND'),
-    orCondition: conditionsArrToString(conditions.value, 'OR'),
-    alarmMsg: localStorage.getItem("recipe_alarmMsg"),
-    alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
-    auto: false,
-    activated: false,
+    // recipeName: localStorage.getItem("recipe_name"),
+    // action: action.value,
+    // andCondition: conditionsArrToString(conditions.value, 'AND'),
+    // orCondition: conditionsArrToString(conditions.value, 'OR'),
+    // alarmMsg: localStorage.getItem("recipe_alarmMsg"),
+    // alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
+    // auto: false,
+    // activated: false,
+    count: 0,
   }
 
   editor
@@ -261,7 +263,7 @@ const changeToRecipeNode = () => {
     // .deleteRange({ from: lineStart, to: lineEnd })
     .setRecipeRule(attrs)
 
-    .insertContent(`레시피 지정 완료`)
+    // .insertContent(`레시피 지정 완료`)
     .run();
 
   // // 로컬스토리지 키 삭제
