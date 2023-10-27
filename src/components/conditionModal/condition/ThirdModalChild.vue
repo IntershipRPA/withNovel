@@ -33,7 +33,7 @@
       <div class="absolute inset-y-0 right-16 flex ">
         <select id="unit" name="unit"
           class="h-full rounded-md border-0 bg-transparent py-0 pl-0 pr-2 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm lg:text-lg"
-          v-model="bar" @change='onBarSelected'>
+          v-model="unitValue" @change='onUnitSelected'>
           <option value="bar">bar</option>
         </select>
       </div>
@@ -52,22 +52,22 @@
 
     <!-- Status 테그 선택 했을 때 -->
     <div class="relative mt-2 rounded-md shadow-sm bottom-1" v-if="tagMsg === 'Status'">
-      <input type="text" name="status" id="status"
-        class="block w-full rounded-md border-0 py-1.5 pl-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 lg:text-lg" />
-      <div class="absolute inset-y-0 right-16 flex ">
+      <!-- <input type="text" name="status" id="status"
+        class="block w-full rounded-md border-0 py-1.5 pl-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 lg:text-lg" /> -->
+      <!-- <div class="absolute inset-y-0 right-16 flex "> -->
         <select id="unit" name="unit"
-          class="h-full rounded-md border-0 bg-transparent py-0 pl-0 pr-2 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm lg:text-lg"
-          v-model="started" @change='onStartedSelected'>
+          class="h-full rounded-md border-solid border-2 border-gray-200 bg-transparent py-1.5 pl-4 pr-2 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm lg:text-lg"
+          v-model="unitValue" @change='onUnitSelected'>
           <option value="started">started</option>
           <option value="init">init</option>
         </select>
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onUpdated, ref } from "vue";
 
 
 // console.log(tagMsg);
@@ -76,34 +76,47 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  temp: {
+    type: Number,
+    required: true,
+  },
+  unit: {
+    type: String,
+    required: true,
+  },
+  range: {
+    type: String,
+    required: true,
+  },
 })
 
-const tempValue = ref<number | null>(Number(localStorage.getItem('temp')));
-const unitValue = ref<string>(String(localStorage.getItem('unit')));
-const rangeValue = ref<string>(String(localStorage.getItem('range')));
-const bar = ref<string>("bar");
-const started = ref<string>("started");
+const tempValue = ref<number | null>(Number(props.temp));
+const unitValue = ref<string>(String(props.unit));
+const rangeValue = ref<string>(String(props.range));
+// const bar = ref<string>("bar");
+// const started = ref<string>("started");
 
 const emits = defineEmits(['tempSelected', 'unitSelected', 'rangeSelected', 'barSelected', 'startedSelected']);
 
 const onTempInput = () => {
-  emits('tempSelected', tempValue.value);
+  emits('tempSelected', Number(tempValue.value));
 };
 
 const onUnitSelected = () => {
   emits('unitSelected', unitValue.value);
+  // console.log(unitValue.value);
 };
 
 const onRangeSelected = () => {
   emits('rangeSelected', rangeValue.value);
 };
 
-const onBarSelected = () => {
-  emits('barSelected', bar.value);
-};
-const onStartedSelected = () => {
-  // console.log('startedSelected', started.value);
-  emits('startedSelected', started.value);
-};
+// const onBarSelected = () => {
+//   emits('barSelected', bar.value);
+// };
+// const onStartedSelected = () => {
+//   // console.log('startedSelected', started.value);
+//   emits('startedSelected', started.value);
+// };
 
 </script>

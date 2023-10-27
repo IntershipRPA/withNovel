@@ -23,9 +23,10 @@
     </div>
     <div class='mr-4'>를</div>
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
-      @rangeSelected='updateRangeValue' :tagMsg='tagMsg'/>
+      @rangeSelected='updateRangeValue' :tagMsg='tagMsg' :temp='temp' :unit='unit' :range='range' />
     <div class="min-w-full mb-20 px-14">
-      <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
+      <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'"
+        :savedContent='savedAttrs.memo' />
     </div>
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
@@ -33,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, ref } from "vue";
+import { PropType, computed, onUpdated, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
 import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
@@ -42,33 +43,15 @@ import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import { useStorage } from "@vueuse/core";
 
-const facMsg = ref<String>('설비');
-const tagMsg = ref<String>(localStorage.getItem('tag'));
+const facMsg = ref<String>('선택 설비 없음');
+const tagMsg = ref<String>('선택 태그 없음');
 //console.log(JSON.parse(JSON.stringify(tagMsg.value)))
-let unitValue = "";
-if(JSON.parse(JSON.stringify(tagMsg.value)) === "Press"){
-  unitValue = "bar";
-}else{
-  unitValue = "℃";
-}
-// 인풋에 입력한 값 불러오기
-const temp = ref<number | null>(Number(localStorage.getItem('temp'))); // 온도
-const unit = ref<string>(unitValue); // 단위
-  const range = ref<string>(String(localStorage.getItem('range'))); // 범위
-const updateTempValue = (value: number) => {
-  temp.value = value;
-};
-const updateUnitValue = (value: string) => {
-  unit.value = value;
-};
-const updateRangeValue = (value: string) => {
-  range.value = value;
-};
-
-// console.log(`unit 확인 : ${unit.value}`);
-// console.log(`unit 확인 : ${unitValue}`);
-
-
+// let unitValue = "";
+// if (JSON.parse(JSON.stringify(tagMsg.value)) === "Press") {
+//   unitValue = "bar";
+// } else {
+//   unitValue = "℃";
+// }
 
 const props = defineProps({
   editor: {
@@ -80,36 +63,98 @@ const props = defineProps({
 // "novel__content"에서 해당 노드 정보 불러오기
 const getContent = () => {
   const allData = props.editor.getJSON();
-  // console.log(allData);
   const location = props.editor.state.selection.$anchor; // 커서 위치 정보 가져오기
   const locationNum = location?.path[1];
   const contentObj = allData?.content[locationNum];
-  // console.log(contentObj)
   return contentObj;
 };
 
-const setDataFacilityTag = () => {
-  // console.log(getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'tagMark')).filter(item => item.marks?.some(mark => mark.type === 'tagMark')));
-  // console.log(getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'tagMark'))[0].marks[0].attrs?.tag);
-  facMsg.value = getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'facilityMark'))[0].marks[0].attrs?.facility;
-  tagMsg.value = getContent().content?.filter(item => item.marks?.some(mark => mark.type === 'tagMark'))[0].marks[0].attrs?.tag;
-  // console.log(tagMsg.value);
-}
 
 // 설비, 태그 데이터 초기 세팅
+const setDataFacilityTag = () => {
+  const content = getContent().content;
+
+  if (content) {
+    const facilityItem = content.find(item => item.marks?.some(mark => mark.type === 'facilityMark'));
+    if (facilityItem && facilityItem.marks[0].attrs) {
+      facMsg.value = facilityItem.marks[0].attrs.facility;
+    }
+
+    const tagItem = content.find(item => item.marks?.some(mark => mark.type === 'tagMark'));
+    if (tagItem && tagItem.marks[0].attrs) {
+      tagMsg.value = tagItem.marks[0].attrs.tag;
+    }
+  }
+}
 setDataFacilityTag();
+
+
+// 조건 노드로 설정되어있을 때 설정할 속성값
+interface attrs {
+  fac: string,
+  tag: string,
+  temp: string,
+  unit: string,
+  range: string,
+  memo: string
+}
+
+// "novel__content"에서 불러온 노드정보 저장
+const savedContent = getContent();
+
+// 조건 노드로 설정되어있을 때 "novel__content"에서 가져와서 값 저장.
+const savedAttrs: attrs = {
+  fac: savedContent?.attrs?.fac,
+  tag: savedContent?.attrs?.tag,
+  temp: savedContent?.attrs?.temp,
+  unit: savedContent?.attrs?.unit,
+  range: savedContent?.attrs?.range,
+  memo: savedContent?.attrs?.memo,
+}
+
+// savedAttrs의 속성 값이 undefined인지 확인하고 초기값 설정
+const initialTemp = Number(savedAttrs.temp !== undefined ? savedAttrs.temp : 0);
+const initialUnit =
+  savedAttrs.unit !== undefined
+    ? savedAttrs.unit
+    : tagMsg.value === "Press"
+    ? "bar"
+    : tagMsg.value === "Status"
+    ? "started"
+    : "℃";
+const initialRange = savedAttrs.range !== undefined ? savedAttrs.range : "이상";
+
+const temp = ref<number | null>(initialTemp); // 온도
+const unit = ref<string>(initialUnit); // 단위
+const range = ref<string>(initialRange); // 범위
+
+// ThirdModalChild.vue 인풋에 입력한 값 불러오기
+const updateTempValue = (value: number) => {
+  temp.value = value;
+};
+const updateUnitValue = (value: string) => {
+  unit.value = value; 
+  // console.log("updateUnitValue: " + value, unit.value);
+};
+const updateRangeValue = (value: string) => {
+  range.value = value;
+};
+
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const closeModal = () => {
+  // 로컬스토리지 키 삭제
+  localStorage.removeItem('modal__condition');
+
   modalStore.closeModal(); // 모달 닫기
 };
 
 // 완료 버튼 클릭
 const handleConfirm = () => {
-  closeModal();
   changeToConditionNode(); //conditionRule 노드변경 함수
+  closeModal();
 };
 
 // const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
@@ -128,7 +173,7 @@ const getRange = () => {
   const from = $cursor.before($cursor.depth) + 1; // 행의 시작
   const to = $cursor.after($cursor.depth) - 1;   // 행의 끝
 
-  return {from, to}
+  return { from, to }
 }
 
 // 조건 노드로 변경
@@ -138,21 +183,21 @@ const changeToConditionNode = () => {
   // Stauts 태그 선택시 값이 null인거 제외 시킴
   let str = "";
   if (tagMsg.value === "Status") {
-    str = `${range.value} ${modalContent}`;
+    str = `${unit.value} ${modalContent}`;
   } else {
     str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
   }
- 
-  let attrs = {
-    fac: facMsg,
-    tag: tagMsg,
+
+  const attrs: attrs = {
+    fac: facMsg.value,
+    tag: tagMsg.value,
     temp: String(temp.value),
     unit: unit.value,
     range: range.value,
     memo: modalContent
   };
-  
-  
+
+
   editor
     .chain()
     .focus()
@@ -162,7 +207,7 @@ const changeToConditionNode = () => {
     .insertContent(facMsg.value)
     .unsetFacility()
     .insertContent('의 ')
-    .setTag({tag: tagMsg.value})
+    .setTag({ tag: tagMsg.value })
     .insertContent(tagMsg.value)
     .unsetTag()
     .insertContent('를 ')
@@ -170,54 +215,8 @@ const changeToConditionNode = () => {
     // .insertContentAt({ from: editor.state.selection.$from.before(1), to: editor.state.selection.$from.after(1) }, str)
     .run();
 
-
-  // let konwhow = `"${facMsg.value}"의 "${tagMsg.value}"를 ${temp.value} ${unit.value} ${range.value} ${modalContent}`;
-  // //  console.log(JSON.stringify(konwhow));
-
-  // konwhowArr.value.push(konwhow);
-  // localStorage.setItem('konwhowArr', JSON.stringify(konwhowArr.value)); // 로컬에 저장
-  //  console.log(konwhowArr.value);
-
-  //객체로 저장
-  // let fac = facMsg.value;
-  // let tag = tagMsg.value;
-  // let tempValue = temp.value;
-  // let unitValue = unit.value;
-  // let rangeValue = range.value;
-  // let modalText = modalContent;
-  // let obj = {};
-  // if (tag === "Status") {
-  //   obj = { fac, tag, tempValue, unitValue, modalText };
-  // } else {
-  //   obj = { fac, tag, tempValue, unitValue, rangeValue, modalText };
-  // }
-  // //  console.log(JSON.stringify(obj));
-  // konwhowOBJ.value.push(obj); //배열에 추가
-  // localStorage.setItem('konwhowOBJ', JSON.stringify(konwhowOBJ.value)); //로컬에 저장
-  // // 데이터 가져오기
-  // let gatData = localStorage.getItem('konwhowOBJ')
-
-  // let gatData2;
-  // if (gatData !== null) {
-  //   gatData2 = JSON.parse(gatData);
-  // }
-  // console.log(`확인1 : ${JSON.stringify(gatData2[1])}`); //전체 가져올 때
-  // console.log(`확인2 : ${gatData2[1]?.whel}`); //값 하나만 가져올 때 JSON.stringify()쓰면 JSON문자열로 됨 "whel"
-  // console.log(`확인3 : ${gatData2[1]?.tag}`);
-  // console.log(`확인4 : ${gatData2[1]?.tempValue}`);
-
-  /*
-    localStorage는 무조건 문자열로 저장
-    JSON 데이터를 문자열로 변환하거나, 특수문자를 포함한 문자열을 안전하게 다루기 위해 이스케이프 처리
-  */
-  // const data = localStorage.getItem("konwhowArr");
-  // if(data !== null){
-  //   console.log(data.replace(/\\/g, '').replace(/"/g, ''));
-  // }
-
-
-  // localStorage.removeItem('konwhow');
-  // useStorage('konwhow', konwhow);//레시피
+  // // 로컬스토리지 키 삭제
+  // localStorage.removeItem('modal__condition');
 };
 
 const handleDelete = (e) => {

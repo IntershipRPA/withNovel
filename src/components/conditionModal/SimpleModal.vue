@@ -37,6 +37,13 @@ const isAction = computed(() => modalStore.isAction);
 const isRecipe = computed(() => modalStore.isRecipe);
 
 const closeModal = () => {
+  // 로컬스토리지 키 삭제
+  localStorage.removeItem('modal__condition');
+  localStorage.removeItem('modal__action');
+  localStorage.removeItem('recipe_name');
+  localStorage.removeItem('recipe_alarmMsg');
+  localStorage.removeItem('recipe_alarmMsgTo');
+
   modalStore.closeModal(); // 모달 닫기
 };
 
@@ -45,18 +52,7 @@ const props = defineProps({
     type: Object as PropType<Editor>,
     required: true,
   },
-  // isCondition: {
-  //   type: Boolean,
-  // }
 })
-
-// const emit = defineEmits(['close']);
-
-// const closeModal = () => {
-//   emit('close');
-// };
-
-
 
 const stopPropagation = (event) => {
   event.stopPropagation();
