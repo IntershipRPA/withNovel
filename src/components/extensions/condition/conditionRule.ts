@@ -41,14 +41,12 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        // fac: 'defaultWhelk',
-        // fac: localStorage.getItem('fac'),
-
-        // tag: localStorage.getItem('tag'),
-        // temp: localStorage.getItem('temp'),
-        // unit: localStorage.getItem('unit'),
-        // range: localStorage.getItem('range'),
-        // memo: localStorage.getItem('memo'),
+        fac: '',
+        tag: '',
+        temp: '',
+        unit: '',
+        range: '',
+        memo: '',
 
       }
     }

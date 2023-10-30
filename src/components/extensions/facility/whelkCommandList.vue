@@ -109,10 +109,10 @@ defineExpose({
 
 function selectItem(index: number) {
   const item = props.items[index];
-  localStorage.removeItem('whelk');  
-  console.log(`설비 : ${props.items[index].title}`);
-  // 로컬스토리지에 설비 선택한거 저장
-  useStorage('whelk', item.title);
+  // localStorage.removeItem('whelk');  
+  // console.log(`설비 : ${props.items[index].title}`);
+  // // 로컬스토리지에 설비 선택한거 저장
+  // useStorage('whelk', item.title);
 
   if (item) {
     if (item.title === "Continue writing") {
