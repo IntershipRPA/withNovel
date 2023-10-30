@@ -262,7 +262,6 @@ const changeToRecipeNode = () => {
 
     // .deleteRange({ from: lineStart, to: lineEnd })
     .setRecipeRule(attrs)
-
     // .insertContent(`레시피 지정 완료`)
     .run();
 
