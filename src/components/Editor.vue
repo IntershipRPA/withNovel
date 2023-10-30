@@ -382,9 +382,9 @@ const recipeBtnRun = ref<Element[]>([]);
 // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
 watchEffect(() => {
   if (checkHydrated.value === true) {
-    const conElements = document.querySelectorAll('.condition-tail') as Element[];
-    const actElements = document.querySelectorAll('.action-tail') as Element[];
-    const recElements = document.querySelectorAll('.recipe-tail') as Element[];
+    const conElements = document.querySelectorAll('.condition-btn-setting') as Element[];
+    const actElements = document.querySelectorAll('.action-btn-setting') as Element[];
+    const recElements = document.querySelectorAll('.recipe-btn-setting') as Element[];
 
     const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
     const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
@@ -450,9 +450,9 @@ watchEffect(() => {
 // 업데이트 감지
 onUpdated(() => {
   if (checkHydrated.value === true) {
-    const conElements = document.querySelectorAll('.condition-tail') as Element[];
-    const actElements = document.querySelectorAll('.action-tail') as Element[];
-    const recElements = document.querySelectorAll('.recipe-tail') as Element[];
+    const conElements = document.querySelectorAll('.condition-btn-setting') as Element[];
+    const actElements = document.querySelectorAll('.action-btn-setting') as Element[];
+    const recElements = document.querySelectorAll('.recipe-btn-setting') as Element[];
 
     const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
     const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];

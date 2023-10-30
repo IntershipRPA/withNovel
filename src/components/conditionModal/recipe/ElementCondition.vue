@@ -52,13 +52,13 @@ const handleSelectedValueChange = (condition) => {
   // console.log("변경됨", condition)
   if (condition.andOr === 'AND') {
     // console.log("Selected AND")
-    condition.group = 1;
+    condition.group = 'andGroup';
     emits('update:sharedData', condition.group); // 부모에게 변경을 알림
   }
 
   if (condition.andOr === 'OR') {
     // console.log("Selected OR")
-    condition.group = 2;
+    condition.group = 'orGroup';
     emits('update:sharedData', condition.group); // 부모에게 변경을 알림
   }
 };

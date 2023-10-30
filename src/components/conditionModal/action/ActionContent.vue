@@ -176,13 +176,13 @@ const changeToActionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
 
-  // Stauts 태그 선택시 값이 null인거 제외 시킴
-  let str = "";
-  if (tagMsg.value === "Status") {
-    str = `${unit.value} ${modalContent}`;
-  } else {
-    str = `${temp.value} ${unit.value} ${range.value} ${modalContent}`;
-  }
+  // // Stauts 태그 선택시 값이 null인거 제외 시킴
+  // let str = "";
+  // if (tagMsg.value === "Status") {
+  //   str = `${unit.value} ${modalContent}`;
+  // } else {
+  //   str = `${temp.value} ${unit.value} ${range.value} ${modalContent}`;
+  // }
 
 
   const attrs: attrs = {
@@ -199,20 +199,16 @@ const changeToActionNode = () => {
     .focus()
     .deleteRange(getRange())
     .setActionRule(attrs)
-    .setFacility({ facility: facMsg.value })
-    .insertContent(facMsg.value)
-    .unsetFacility()
-    .insertContent('의 ')
-    .setTag({ tag: tagMsg.value })
-    .insertContent(tagMsg.value)
-    .unsetTag()
-    .insertContent('를 ')
-    .insertContent(str)
+    // .setFacility({ facility: facMsg.value })
+    // .insertContent(facMsg.value)
+    // .unsetFacility()
+    // .insertContent('의 ')
+    // .setTag({ tag: tagMsg.value })
+    // .insertContent(tagMsg.value)
+    // .unsetTag()
+    // .insertContent('를 ')
+    // .insertContent(str)
     .run();
-
-  
-    // console.log("액션노드로 변경", attrs)
-
 };
 
 const handleDelete = () => {

@@ -12,20 +12,20 @@
     </div>
     <div>
       <!-- AND 조건-->
-      <div v-if="conditions.some(item => item.group === 1)" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
+      <div v-if="conditions.some(item => item.group === 'andGroup')" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
         <span>AND 조건</span>
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 1)" :key="index"
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'andGroup')" :key="index"
           :condition='condition' :num="index" />
       </div>
       <!-- OR 조건-->
-      <div v-if="conditions.some(item => item.group === 2)" class="rounded-lg p-5 border-2 border-rose-600">
+      <div v-if="conditions.some(item => item.group === 'orGroup')" class="rounded-lg p-5 border-2 border-rose-600">
         <span>OR 조건</span>
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 2)" :key="index"
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'orGroup')" :key="index"
           :condition='condition' :num="index" />
       </div>
       <!-- 초기 조건 목록 -->
       <div class="waitingCondition">
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 3)" :key="index"
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'notSelected')" :key="index"
           :condition='condition' :num="index" />
       </div>
     </div>
@@ -83,7 +83,7 @@ interface Condition {
   text: string,
   isChecked: boolean,
   andOr: string,
-  group: number,
+  group: string,
 }
 
 // 조건 가져오기
@@ -96,7 +96,7 @@ if (docs) {
       text: element.content?.map(item => item.text).join(''),
       isChecked: false,
       andOr: '조건선택',
-      group: 3
+      group: 'notSelected',
     }));
   } else {
     alert("조건이 지정되지 않았습니다.")
@@ -184,7 +184,7 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
         for (const obj of arr) {
           if (obj.text === text) {
             obj.andOr = 'AND';
-            obj.group = 1;
+            obj.group = 'andGroup';
           }
         }
       }
@@ -195,7 +195,7 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
         for (const obj of arr) {
           if (obj.text === text) {
             obj.andOr = 'OR';
-            obj.group = 2;
+            obj.group = 'orGroup';
           }
         }
       }
