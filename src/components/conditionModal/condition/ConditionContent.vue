@@ -157,9 +157,6 @@ const handleConfirm = () => {
   closeModal();
 };
 
-// const konwhowOBJ = useStorage<any[]>('konwhowOBJ', []); // 레시피 데이터 객채로 저장
-// const konwhowArr = useStorage<string[]>('konwhowArr', []); //레시피 저장 배열(상태관리? 배열 초기화 막아줌) / 빈배열을 인자로 가지고 있어 타입<string[]>을 지정해 줘야함
-
 // 현재 커서의 위치의 내용을 지울 범위 지정 함수
 const getRange = () => {
   // 기존의 Tiptap 에디터 상태와 노드 가져오기
@@ -181,12 +178,12 @@ const changeToConditionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__condition') ?? ''; // null이면 빈 문자열 반환
   // Stauts 태그 선택시 값이 null인거 제외 시킴
-  let str = "";
-  if (tagMsg.value === "Status") {
-    str = `${unit.value} ${modalContent}`;
-  } else {
-    str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
-  }
+  // let str = "";
+  // if (tagMsg.value === "Status") {
+  //   str = `${unit.value} ${modalContent}`;
+  // } else {
+  //   str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
+  // }
 
   const attrs: attrs = {
     fac: facMsg.value,
@@ -203,21 +200,17 @@ const changeToConditionNode = () => {
     .focus()
     .deleteRange(getRange())
     .setConditionRule(attrs)
-    .setFacility({ facility: facMsg.value })
-    .insertContent(facMsg.value)
-    .unsetFacility()
-    .insertContent('의 ')
-    .setTag({ tag: tagMsg.value })
-    .insertContent(tagMsg.value)
-    .unsetTag()
-    .insertContent('를 ')
-    .insertContent(str)
-    // .insertContentAt({ from: editor.state.selection.$from.before(1), to: editor.state.selection.$from.after(1) }, str)
+    // .setFacility({ facility: facMsg.value })
+    // .insertContent(facMsg.value)
+    // .unsetFacility()
+    // .insertContent('의 ')
+    // .setTag({ tag: tagMsg.value })
+    // .insertContent(tagMsg.value)
+    // .unsetTag()
+    // .insertContent('를 ')
+    // .insertContent(str)
     .run();
-
-  // // 로컬스토리지 키 삭제
-  // localStorage.removeItem('modal__condition');
-};
+  };
 
 const handleDelete = (e) => {
   deleteConditionNode(e);

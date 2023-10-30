@@ -12,20 +12,20 @@
     </div>
     <div>
       <!-- AND 조건-->
-      <div v-if="conditions.some(item => item.group === 1)" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
+      <div v-if="conditions.some(item => item.group === 'andGroup')" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
         <span>AND 조건</span>
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 1)" :key="index"
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'andGroup')" :key="index"
           :condition='condition' :num="index" />
       </div>
       <!-- OR 조건-->
-      <div v-if="conditions.some(item => item.group === 2)" class="rounded-lg p-5 border-2 border-rose-600">
+      <div v-if="conditions.some(item => item.group === 'orGroup')" class="rounded-lg p-5 border-2 border-rose-600">
         <span>OR 조건</span>
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 2)" :key="index"
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'orGroup')" :key="index"
           :condition='condition' :num="index" />
       </div>
       <!-- 초기 조건 목록 -->
       <div class="waitingCondition">
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 3)" :key="index"
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'notSelected')" :key="index"
           :condition='condition' :num="index" />
       </div>
     </div>
@@ -83,7 +83,7 @@ interface Condition {
   text: string,
   isChecked: boolean,
   andOr: string,
-  group: number,
+  group: string,
 }
 
 // 조건 가져오기
@@ -96,7 +96,7 @@ if (docs) {
       text: element.content?.map(item => item.text).join(''),
       isChecked: false,
       andOr: '조건선택',
-      group: 3
+      group: 'notSelected',
     }));
   } else {
     alert("조건이 지정되지 않았습니다.")
@@ -148,6 +148,7 @@ interface attrs {
   alarmMsgTo: string,
   auto: boolean,
   activated: boolean,
+  count: number,
 }
 
 const savedAttrs: attrs = {
@@ -159,6 +160,7 @@ const savedAttrs: attrs = {
   alarmMsgTo: savedContent?.attrs?.alarmMsgTo,
   auto: savedContent?.attrs?.auto,
   activated: savedContent?.attrs?.activated,
+  count: savedContent?.attrs?.count,
 }
 
 
@@ -183,7 +185,7 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
         for (const obj of arr) {
           if (obj.text === text) {
             obj.andOr = 'AND';
-            obj.group = 1;
+            obj.group = 'andGroup';
           }
         }
       }
@@ -194,14 +196,14 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
         for (const obj of arr) {
           if (obj.text === text) {
             obj.andOr = 'OR';
-            obj.group = 2;
+            obj.group = 'orGroup';
           }
         }
       }
     }
   }
 
-  // 실행하기
+  // and/or 세팅을 실행하기
   const andConditions = stringToArray(savedAttrs.andCondition)
   const orConditions = stringToArray(savedAttrs.orCondition)
 
@@ -233,11 +235,21 @@ const conditionsArrToString = (arr, andOr: string, delimiter = '$') => {
   }
 }
 
-// onUpdated(() => {
+// 현재 커서의 위치의 내용을 지울 범위 지정 함수
+const getRange = () => {
+  // 기존의 Tiptap 에디터 상태와 노드 가져오기
+  const editorState = props.editor.view.state;
+  const { selection } = editorState;
 
-//   console.log(conditionsArrToString(conditions.value, 'AND'));
-//   console.log(conditionsArrToString(conditions.value, 'OR'));
-// })
+  // 현재 커서의 위치 가져오기
+  const $cursor = selection?.$cursor;
+
+  // 현재 커서가 위치한 행의 시작과 끝 위치 찾기
+  const from = $cursor.before($cursor.depth) + 1; // 행의 시작
+  const to = $cursor.after($cursor.depth) - 1;   // 행의 끝
+
+  return { from, to }
+}
 
 // 레시피 노드 전환
 const changeToRecipeNode = () => {
@@ -252,16 +264,16 @@ const changeToRecipeNode = () => {
     alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
     auto: false,
     activated: false,
+    count: 0,
   }
 
   editor
     .chain()
     .focus()
 
-    // .deleteRange({ from: lineStart, to: lineEnd })
+    .deleteRange(getRange())
     .setRecipeRule(attrs)
-
-    .insertContent(`레시피 지정 완료`)
+    // .insertContent(`레시피 지정 완료`)
     .run();
 
   // // 로컬스토리지 키 삭제

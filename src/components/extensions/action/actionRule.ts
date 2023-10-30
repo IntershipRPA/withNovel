@@ -2,11 +2,13 @@ import {
   Node,
   mergeAttributes
 } from '@tiptap/core';
-import { selectParentNode } from '@tiptap/pm/commands';
+// import { selectParentNode } from '@tiptap/pm/commands';
+import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import ActionNodeVue from '../../node/action/ActionNode.vue'
 export interface ActionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {
-    whelk: string;
+    fac: string;
     tag: string;
     temp: string;
     unit: string;
@@ -18,7 +20,7 @@ export interface ActionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     actionRule: {
-      setActionRule: (attrs: { whelk: string; tag: string; temp: string; unit: string; range: string }) => ReturnType;
+      setActionRule: (attrs:  ActionRuleOptions["settingAttrs"] ) => ReturnType;
       toggleAction: () => ReturnType;
       unsetAction: () => ReturnType;
     };
@@ -28,7 +30,8 @@ declare module '@tiptap/core' {
 export const ActionRule = Node.create<ActionRuleOptions>({
   name: 'actionRule',
   group: 'block',
-  content: 'text*',
+  // content: 'text*',
+  content: 'inline*',
   // content: 'block+',
   marks: '_',
   defining: true,
@@ -39,12 +42,12 @@ export const ActionRule = Node.create<ActionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        whelk: '',
-        tag: '',
-        temp: '',
-        unit: '',
-        range: '',
-        memo: '',
+        // whelk: '',
+        // tag: '',
+        // temp: '',
+        // unit: '',
+        // range: '',
+        // memo: '',
 
       }
     }
@@ -56,13 +59,11 @@ export const ActionRule = Node.create<ActionRuleOptions>({
     //    console.log("here3", this.options.settingAttrs);
    
        return {
-         whelk: {
-           default: this.options.settingAttrs.whelk,
+         fac: {
+           default: this.options.settingAttrs.fac,
          },
-         tag: {
-   
-           default: this.options.settingAttrs.tag,
-   
+         tag: {   
+           default: this.options.settingAttrs.tag,   
          },
          temp: {
            default: this.options.settingAttrs.temp,
@@ -76,71 +77,59 @@ export const ActionRule = Node.create<ActionRuleOptions>({
          memo: {
            default: this.options.settingAttrs.memo,
          },
-         styleCustom: {
-           default: null,
-           renderHTML: attributes => {
-             return {
+        //  styleCustom: {
+        //    default: null,
+        //    renderHTML: attributes => {
+        //      return {
    
-               class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max`,
+        //        class: `condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max`,
    
-               contenteditable: "false"
-             }
-           },
-         },
+        //        contenteditable: "false"
+        //      }
+        //    },
+        //  },
        };
      },
 
   parseHTML() {
     return [
-      { tag: 'action' },
+      { tag: 'action-node' },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    // console.trace();
     return [
-      'action',
-      { class: 'block flex items-center	' },
-      // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-      ['p', {
-        class: `inline-block rounded-lg shadow-md bg-amber-100 hover:bg-amber-200 z-20 h-10 px-8 mb-2 mt-2 flex items-center `,
-        // contenteditable: "false"
-      }, 0],
-      ['span',
-        {
-          class: `action-tail cursor-pointer rounded-r-lg shadow-md bg-amber-400 hover:bg-amber-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center`,
-          contenteditable: "false"
-        },
-        // mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-        '액션',
-      ],
-    ]
+      'action-node', mergeAttributes(HTMLAttributes)]
   },
 
-  // 사용 예시
-  // renderHTML({ HTMLAttributes }) {
-  //   return [
-  //     'pre', 
-  //     ['code', HTMLAttributes, 'This is some content inside the code.'], 
-  //     'This is some content after the code.', 
-  //     ['p', 'This is a paragraph after the code.', 'More content between the paragraphs.'], 
-  //     ['div', 'This is a div after the paragraphs.']
-  //   ]
-  // },
+  addNodeView() {
+    return VueNodeViewRenderer(ActionNodeVue)
+  },
 
   addCommands() {
     return {
-      setActionRule: (attrs) => ({ commands }: { commands: any; }) => {
-        // attrs 객체로부터 필요한 속성 값을 추출
-        // const { whelk, tag, temp, unit, range } = attrs;
-        // console.log(attrs);
-        // toggleNode 메소드를 호출하여 새로운 노드를 생성
-        // 이 때 attrs 객체를 전달하여 새로운 노드의 초기 상태를 설정
-        
-        // console.log(this.name);
-        return commands.setNode(this.name, attrs);
-
-
+      setActionRule: (attrs) => ({ chain }: { chain: any; }) => {
+        let str = "";
+        if (attrs.tag === "Status") {
+          str = `${attrs.unit} ${attrs.memo}`;
+        } else {
+          str = `${attrs.temp}${attrs.unit} ${attrs.range} ${attrs.memo}`;
+        }
+      
+        return (
+        chain()
+          .setNode(this.name, attrs)
+          .setFacility({ facility: attrs.fac })
+          .insertContent(attrs.fac)
+          .unsetFacility()
+          .insertContent('의 ')
+          .setTag({ tag: attrs.tag })
+          .insertContent(attrs.tag )
+          .unsetTag()
+          .insertContent('를 ')
+          .insertContent(str)
+          // .run()
+        );
       },
       
       toggleAction: () => ({ commands }) => {
