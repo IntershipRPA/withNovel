@@ -19,7 +19,7 @@ export interface ConditionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     conditionRule: {
-      setConditionRule: (attrs: { fac: string; tag: string; temp: string; unit: string; range: string, memo: string }) => ReturnType;
+      setConditionRule: (attrs: ConditionRuleOptions["settingAttrs"]) => ReturnType;
       toggleCondition: () => ReturnType;
       unsetCondition: () => ReturnType;
     };
@@ -41,12 +41,12 @@ export const ConditionRule = Node.create<ConditionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        fac: '',
-        tag: '',
-        temp: '',
-        unit: '',
-        range: '',
-        memo: '',
+        // fac: '',
+        // tag: '',
+        // temp: '',
+        // unit: '',
+        // range: '',
+        // memo: '',
 
       }
     }

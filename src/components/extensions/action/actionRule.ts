@@ -20,7 +20,7 @@ export interface ActionRuleOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     actionRule: {
-      setActionRule: (attrs: { fac: string; tag: string; temp: string; unit: string; range: string, memo: string, }) => ReturnType;
+      setActionRule: (attrs:  ActionRuleOptions["settingAttrs"] ) => ReturnType;
       toggleAction: () => ReturnType;
       unsetAction: () => ReturnType;
     };
@@ -42,12 +42,12 @@ export const ActionRule = Node.create<ActionRuleOptions>({
     return {
       HTMLAttributes: {},
       settingAttrs: {
-        whelk: '',
-        tag: '',
-        temp: '',
-        unit: '',
-        range: '',
-        memo: '',
+        // whelk: '',
+        // tag: '',
+        // temp: '',
+        // unit: '',
+        // range: '',
+        // memo: '',
 
       }
     }

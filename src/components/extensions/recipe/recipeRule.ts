@@ -9,21 +9,21 @@ export interface RecipeRuleOptions {
   // HTMLAttributes: Record<string, any>;
   settingAttrs: {
     count: number;
-    // recipeName: string,
-    // action: string,
-    // andCondition: string,
-    // orCondition: string,
-    // alarmMsg: string,
-    // alarmMsgTo: string,
-    // auto: boolean,
-    // activated: boolean,
+    recipeName: string,
+    action: string,
+    andCondition: string,
+    orCondition: string,
+    alarmMsg: string,
+    alarmMsgTo: string,
+    auto: boolean,
+    activated: boolean,
   };
 }
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     recipeRule: {
-      setRecipeRule: (attrs) => ReturnType;
+      setRecipeRule: (attrs: RecipeRuleOptions["settingAttrs"]) => ReturnType;
       toggleRecipe: () => ReturnType;
       unsetRecipe: () => ReturnType;
     };
@@ -41,14 +41,14 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
   // draggable: true,
   // atom: true,
   content: 'inline*',
-  // content: 'block*',
+  // content: 'block+',
 
   addOptions() {
     return {
       // HTMLAttributes: {},
       settingAttrs: {
-        count: 0,
-        // name: '',
+        // count: 0,
+        // recipeName: '',
         // action: '',
         // andCondition: [],
         // orCondition: [],
@@ -65,6 +65,37 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       count: {
         default: 0,
       },
+      recipeName: {
+        default: this.options.settingAttrs.recipeName,
+      },
+      action: {
+        default: this.options.settingAttrs.action,
+      },
+      andCondition: {
+        default: this.options.settingAttrs.andCondition,
+      },
+      orCondition: {
+        default: this.options.settingAttrs.orCondition,
+      },
+      alarmMsg: {
+        default: this.options.settingAttrs.alarmMsg,
+      },
+      alarmMsgTo: {
+        default: this.options.settingAttrs.alarmMsgTo,
+      },
+      auto: {
+        default: this.options.settingAttrs.auto,
+      },
+      activated: {
+        default: this.options.settingAttrs.activated,
+      },
+
+
+
+
+
+
+
       // recipeName: {
       //   default: null,
       //   parseHTML: element => element.getAttribute('recipeName'),
@@ -414,8 +445,114 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
 
   addCommands() {
     return {
-      setRecipeRule: (attrs) => ({ commands }: { commands: any; }) => {
-        return commands.setNode(this.name, attrs);
+      setRecipeRule: (attrs) => ({ chain }: { chain: any }) => {
+        // console.log("here", attrs)
+
+        // or조건과 and조건의 string -> array
+        function stringToArray(str, delimiter = '$') {
+          if (typeof str === 'string' && str.length > 0) {
+            return str.split(delimiter);
+          } else {
+            // console.log('Invalid string', str);
+            return [];
+          }
+        }
+        // console.log("앤드조건",this.options.settingAttrs.andCondition)
+        // console.log("올조건",this.options.settingAttrs.orCondition)
+        // console.log("hehehehehe")
+
+        const andConditions = stringToArray(attrs.andCondition);
+        const orConditions = stringToArray(attrs.orCondition);
+
+        // console.log("AND",andConditions)
+        // console.log("OR",orConditions)
+
+        // 추가할 배열
+        const elementsToAdd = [];
+
+        // and조건 추가
+        if (andConditions.length > 0) {
+          const andArrs = [
+            { type: "hardBreak" },
+            { type: "hardBreak" },
+            {
+              type: 'text',
+              text: 'AND조건'
+            },
+          ];
+          andArrs.push(...andConditions.flatMap((item) => [
+            { type: "hardBreak" },
+            {
+              type: 'text',
+              text: `▶ ${item}`
+            }
+          ]));
+
+
+          elementsToAdd.push(...andArrs);
+        }
+
+        // or조건 추가
+        if (orConditions.length > 0) {
+          const orArrs = [
+            { type: "hardBreak" },
+            { type: "hardBreak" },
+            {
+              type: 'text',
+              text: 'OR조건'
+            },
+          ];
+
+          orArrs.push(...orConditions.flatMap((item: string) =>
+            [
+              { type: "hardBreak" },
+              {
+                type: 'text',
+                text: `▷ ${item}`
+              },
+            ]
+          ))
+
+          elementsToAdd.push(...orArrs);
+        }
+
+
+
+        // 추가할 배열을 삽입하고 customArray 변경하기
+
+        // customArray.splice(index, 0, ...elementsToAdd);
+
+        // console.log(elementsToAdd)
+
+
+
+
+
+
+
+        return (
+          chain()
+            .setNode(this.name, attrs)
+            // .insertContent(`<h1>${attrs.recipeName}</h1>`)
+            .insertContent(attrs.recipeName)
+            .insertContent({ type: "hardBreak" })
+            .insertContent(attrs.action)
+            .insertContent('액션을 실행하기 위해 아래 조건들이 충족되어야 한다.')
+
+            .insertContent(elementsToAdd)
+
+
+
+            .insertContent({ type: "hardBreak" })
+            .insertContent({ type: "hardBreak" })
+            .insertContent('조건 불일치시 알람 메세지로는 "')
+            .insertContent(attrs.alarmMsg)
+            .insertContent('"으로 설정하여')
+            .insertContent({ type: "hardBreak" })
+            .insertContent(attrs.alarmMsgTo)
+            .insertContent(' 담당자에게 알람을 전달한다.')
+
+        );
       },
       toggleRecipe: () => ({ commands }) => {
         return commands.toggleWrap(this.name)

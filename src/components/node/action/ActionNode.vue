@@ -5,7 +5,9 @@
         <!-- 텍스트 들어가는 컨텐츠 -->
         <NodeViewContent class="nodeTextContent" />
       </div>
-      <span class="action-btn-setting action-tail cursor-pointer rounded-r-lg shadow-md bg-amber-400 hover:bg-amber-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center">
+      <span class="action-btn-setting action-tail cursor-pointer rounded-r-lg shadow-md bg-amber-400 hover:bg-amber-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center"
+        @click="handleClickBtnSetting"
+      >
         액션
       </span>
     </div>
@@ -13,9 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
+import { PropType, ref, computed } from 'vue';
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
+import { useModalStore } from '../../../stores/modal';
 
 const props = defineProps({
   ...nodeViewProps,
@@ -25,6 +28,18 @@ const props = defineProps({
   },
 });
 
+// 모달 설정
+const modalStore = useModalStore(); // 스토어 인스턴스 생성
+const openModal = () => {
+  modalStore.openModal(); // 모달 열기
+};
+
+// 버튼 클릭
+const handleClickBtnSetting = () => {
+  modalStore.isAction = true;
+  openModal();
+};
+
 
 </script>
 
@@ -32,11 +47,11 @@ const props = defineProps({
 
 <style lang="scss">
 
-.nodeTextContent {
-  // margin: 2.5rem 1rem 1rem;
-  // padding: 0.5rem;
-  // border: 2px dashed #0D0D0D20;
-  // border-radius: 0.5rem;
-}
+// .nodeTextContent {
+//   // margin: 2.5rem 1rem 1rem;
+//   // padding: 0.5rem;
+//   // border: 2px dashed #0D0D0D20;
+//   // border-radius: 0.5rem;
+// }
 
 </style>

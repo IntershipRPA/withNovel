@@ -140,14 +140,14 @@ const getContent = () => {
 const savedContent = getContent();
 
 interface attrs {
-  // recipeName: string,
-  // action: string,
-  // andCondition: string,
-  // orCondition: string,
-  // alarmMsg: string,
-  // alarmMsgTo: string,
-  // auto: boolean,
-  // activated: boolean,
+  recipeName: string,
+  action: string,
+  andCondition: string,
+  orCondition: string,
+  alarmMsg: string,
+  alarmMsgTo: string,
+  auto: boolean,
+  activated: boolean,
   count: number,
 }
 
@@ -160,6 +160,7 @@ const savedAttrs: attrs = {
   alarmMsgTo: savedContent?.attrs?.alarmMsgTo,
   auto: savedContent?.attrs?.auto,
   activated: savedContent?.attrs?.activated,
+  count: savedContent?.attrs?.count,
 }
 
 
@@ -202,7 +203,7 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
     }
   }
 
-  // 실행하기
+  // and/or 세팅을 실행하기
   const andConditions = stringToArray(savedAttrs.andCondition)
   const orConditions = stringToArray(savedAttrs.orCondition)
 
@@ -234,25 +235,35 @@ const conditionsArrToString = (arr, andOr: string, delimiter = '$') => {
   }
 }
 
-// onUpdated(() => {
+// 현재 커서의 위치의 내용을 지울 범위 지정 함수
+const getRange = () => {
+  // 기존의 Tiptap 에디터 상태와 노드 가져오기
+  const editorState = props.editor.view.state;
+  const { selection } = editorState;
 
-//   console.log(conditionsArrToString(conditions.value, 'AND'));
-//   console.log(conditionsArrToString(conditions.value, 'OR'));
-// })
+  // 현재 커서의 위치 가져오기
+  const $cursor = selection?.$cursor;
+
+  // 현재 커서가 위치한 행의 시작과 끝 위치 찾기
+  const from = $cursor.before($cursor.depth) + 1; // 행의 시작
+  const to = $cursor.after($cursor.depth) - 1;   // 행의 끝
+
+  return { from, to }
+}
 
 // 레시피 노드 전환
 const changeToRecipeNode = () => {
   const editor = props.editor;
 
   const attrs: attrs = {
-    // recipeName: localStorage.getItem("recipe_name"),
-    // action: action.value,
-    // andCondition: conditionsArrToString(conditions.value, 'AND'),
-    // orCondition: conditionsArrToString(conditions.value, 'OR'),
-    // alarmMsg: localStorage.getItem("recipe_alarmMsg"),
-    // alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
-    // auto: false,
-    // activated: false,
+    recipeName: localStorage.getItem("recipe_name"),
+    action: action.value,
+    andCondition: conditionsArrToString(conditions.value, 'AND'),
+    orCondition: conditionsArrToString(conditions.value, 'OR'),
+    alarmMsg: localStorage.getItem("recipe_alarmMsg"),
+    alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
+    auto: false,
+    activated: false,
     count: 0,
   }
 
@@ -260,7 +271,7 @@ const changeToRecipeNode = () => {
     .chain()
     .focus()
 
-    // .deleteRange({ from: lineStart, to: lineEnd })
+    .deleteRange(getRange())
     .setRecipeRule(attrs)
     // .insertContent(`레시피 지정 완료`)
     .run();
