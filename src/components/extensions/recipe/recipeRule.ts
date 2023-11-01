@@ -8,7 +8,7 @@ import RecipeNodeVue from '../../node/recipe/RecipeNode.vue'
 export interface RecipeRuleOptions {
   // HTMLAttributes: Record<string, any>;
   settingAttrs: {
-    count: number;
+    // count: number;
     recipeName: string,
     action: string,
     andCondition: string,
@@ -40,8 +40,8 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
   // draggable: false,
   // draggable: true,
   // atom: true,
-  content: 'inline*',
-  // content: 'block+',
+  // content: 'inline*',
+  content: 'block*',
 
   addOptions() {
     return {
@@ -62,9 +62,9 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
 
   addAttributes() {
     return {
-      count: {
-        default: 0,
-      },
+      // count: {
+      //   default: 0,
+      // },
       recipeName: {
         default: this.options.settingAttrs.recipeName,
       },
@@ -445,6 +445,91 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
 
   addCommands() {
     return {
+      // setRecipeRule: (attrs) => ({ chain }: { chain: any }) => {
+      //   // console.log("here", attrs)
+
+      //   // or조건과 and조건의 string -> array
+      //   function stringToArray(str, delimiter = '$') {
+      //     if (typeof str === 'string' && str.length > 0) {
+      //       return str.split(delimiter);
+      //     } else {
+      //       // console.log('Invalid string', str);
+      //       return [];
+      //     }
+      //   }
+
+      //   const andConditions = stringToArray(attrs.andCondition);
+      //   const orConditions = stringToArray(attrs.orCondition);
+
+      //   // 추가할 배열
+      //   const elementsToAdd = [];
+
+      //   // and조건 추가
+      //   if (andConditions.length > 0) {
+      //     const andArrs = [
+      //       { type: "hardBreak" },
+      //       { type: "hardBreak" },
+      //       {
+      //         type: 'text',
+      //         text: 'AND조건'
+      //       },
+      //     ];
+      //     andArrs.push(...andConditions.flatMap((item) => [
+      //       { type: "hardBreak" },
+      //       {
+      //         type: 'text',
+      //         text: `▶ ${item}`
+      //       }
+      //     ]));
+      //     elementsToAdd.push(...andArrs);
+      //   }
+
+      //   // or조건 추가
+      //   if (orConditions.length > 0) {
+      //     const orArrs = [
+      //       { type: "hardBreak" },
+      //       { type: "hardBreak" },
+      //       {
+      //         type: 'text',
+      //         text: 'OR조건'
+      //       },
+      //     ];
+
+      //     orArrs.push(...orConditions.flatMap((item: string) =>
+      //       [
+      //         { type: "hardBreak" },
+      //         {
+      //           type: 'text',
+      //           text: `▷ ${item}`
+      //         },
+      //       ]
+      //     ))
+
+      //     elementsToAdd.push(...orArrs);
+      //   }
+
+      //   return (
+      //     chain()
+      //       .setNode( this.name, attrs)
+      //       // .toggleNode( 'paragraph', this.name, attrs)
+      //       // .toggleWrap(this.name, attrs)
+      //       // .insertContent(`<h1>${attrs.recipeName}</h1>`)
+      //       .insertContent(attrs.recipeName)
+      //       .insertContent({ type: "hardBreak" })
+      //       .insertContent(attrs.action)
+      //       .insertContent('액션을 실행하기 위해 아래 조건들이 충족되어야 한다.')
+      //       .insertContent(elementsToAdd)
+      //       .insertContent({ type: "hardBreak" })
+      //       .insertContent({ type: "hardBreak" })
+      //       .insertContent('조건 불일치시 알람 메세지로는 "')
+      //       .insertContent(attrs.alarmMsg)
+      //       .insertContent('"으로 설정하여')
+      //       .insertContent({ type: "hardBreak" })
+      //       .insertContent(attrs.alarmMsgTo)
+      //       .insertContent(' 담당자에게 알람을 전달한다.')
+      //   );
+      // },
+
       setRecipeRule: (attrs) => ({ chain }: { chain: any }) => {
         // console.log("here", attrs)
 
@@ -457,15 +542,9 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
             return [];
           }
         }
-        // console.log("앤드조건",this.options.settingAttrs.andCondition)
-        // console.log("올조건",this.options.settingAttrs.orCondition)
-        // console.log("hehehehehe")
 
         const andConditions = stringToArray(attrs.andCondition);
         const orConditions = stringToArray(attrs.orCondition);
-
-        // console.log("AND",andConditions)
-        // console.log("OR",orConditions)
 
         // 추가할 배열
         const elementsToAdd = [];
@@ -473,7 +552,6 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
         // and조건 추가
         if (andConditions.length > 0) {
           const andArrs = [
-            { type: "hardBreak" },
             { type: "hardBreak" },
             {
               type: 'text',
@@ -487,15 +565,13 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
               text: `▶ ${item}`
             }
           ]));
-
-
           elementsToAdd.push(...andArrs);
         }
 
         // or조건 추가
         if (orConditions.length > 0) {
           const orArrs = [
-            { type: "hardBreak" },
+            // { type: "hardBreak" },
             { type: "hardBreak" },
             {
               type: 'text',
@@ -516,44 +592,54 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
           elementsToAdd.push(...orArrs);
         }
 
-
-
-        // 추가할 배열을 삽입하고 customArray 변경하기
-
-        // customArray.splice(index, 0, ...elementsToAdd);
-
-        // console.log(elementsToAdd)
-
-
-
-
-
-
-
         return (
           chain()
-            .setNode(this.name, attrs)
-            // .insertContent(`<h1>${attrs.recipeName}</h1>`)
-            .insertContent(attrs.recipeName)
-            .insertContent({ type: "hardBreak" })
-            .insertContent(attrs.action)
-            .insertContent('액션을 실행하기 위해 아래 조건들이 충족되어야 한다.')
-
-            .insertContent(elementsToAdd)
-
-
-
-            .insertContent({ type: "hardBreak" })
-            .insertContent({ type: "hardBreak" })
-            .insertContent('조건 불일치시 알람 메세지로는 "')
-            .insertContent(attrs.alarmMsg)
-            .insertContent('"으로 설정하여')
-            .insertContent({ type: "hardBreak" })
-            .insertContent(attrs.alarmMsgTo)
-            .insertContent(' 담당자에게 알람을 전달한다.')
-
+            .toggleWrap(this.name, attrs)
+            .insertContent(
+              {
+                type: 'paragraph',
+                content: [
+                  {
+                    type: 'text',
+                    text: attrs.recipeName,
+                  },
+                ],
+              })
+            .insertContent(
+              {
+                type: 'paragraph',
+                content: [
+                  {
+                    type: 'text',
+                    text: `${attrs.action} 액션을 실행하기 위해 아래 조건들이 충족되어야 한다.`,
+                  },
+                ],
+              })
+            .insertContent(
+              {
+                type: 'paragraph',
+                content: elementsToAdd,
+              })
+            .insertContent(
+              {
+                type: 'paragraph',
+                content: [
+                  {
+                    type: 'text',
+                    text: `조건 불일치시 알람 메세지로는 "${attrs.alarmMsg}"으로 설정하여`,
+                  },
+                  {
+                    type: 'hardBreak'
+                  },
+                  {
+                    type: 'text',
+                    text: `담당자 ${attrs.alarmMsgTo}에게 알람을 전달한다.`,
+                  },
+                ],
+              })
         );
       },
+
       toggleRecipe: () => ({ commands }) => {
         return commands.toggleWrap(this.name)
       },

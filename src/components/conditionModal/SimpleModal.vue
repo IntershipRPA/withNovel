@@ -43,6 +43,7 @@ const closeModal = () => {
   localStorage.removeItem('recipe_name');
   localStorage.removeItem('recipe_alarmMsg');
   localStorage.removeItem('recipe_alarmMsgTo');
+  modalStore.nodeViewProps = {}; // 레시피 노드정보 삭제
 
   modalStore.closeModal(); // 모달 닫기
 };

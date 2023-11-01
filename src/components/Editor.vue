@@ -40,6 +40,7 @@ import { modalToggle } from "./extensions/condition/conditionExtension"
 
 import { useModalStore } from './../stores/modal';
 import { AlarmCheck } from 'lucide-vue-next';
+import { View } from 'lucide-vue-next';
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성

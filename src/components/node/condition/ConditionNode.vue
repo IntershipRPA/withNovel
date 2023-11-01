@@ -5,10 +5,11 @@
         <!-- 텍스트 들어가는 컨텐츠 -->
         <NodeViewContent class="nodeTextContent" />
       </div>
-      <span class="condition-btn-setting condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-6 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max"
+      <span class="condition-btn-setting condition-tail cursor-pointer rounded-r-lg shadow-md bg-gray-400 hover:bg-gray-500 z-10 h-10 px-4 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max"
         @click="handleClickBtnSetting"
       >
         조건
+        <Settings2 class="w-5 h-5 ml-2" />
       </span>
     </div>
   </NodeViewWrapper>
@@ -19,6 +20,8 @@ import { PropType, ref, computed } from 'vue';
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
 import { useModalStore } from './../../../stores/modal';
+import { Settings, Settings2, Cog } from 'lucide-vue-next';
+
 
 const props = defineProps({
   ...nodeViewProps,

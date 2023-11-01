@@ -25,8 +25,8 @@
       </div>
       <!-- 초기 조건 목록 -->
       <div class="waitingCondition">
-        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'notSelected')" :key="index"
-          :condition='condition' :num="index" />
+        <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'notSelected')"
+          :key="index" :condition='condition' :num="index" />
       </div>
     </div>
     <div class='my-3 flex items-center flex-wrap justify-center content-between'>
@@ -54,15 +54,12 @@
 <script setup lang="ts">
 import { PropType, computed, onUpdated, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
-import ThirdModalChild from './ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
 import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementCondition from './ElementCondition.vue';
 import RecipeNameVue from './RecipeName.vue';
-import ElementChecked from './ElementChecked.vue';
-import { timestamp } from '@vueuse/core';
 
 // onUpdated(() => {
 //   // console.log("선택완료", selectedAndOr.value)
@@ -114,30 +111,30 @@ if (docs) {
   }
 }
 
-
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
-
 const closeModal = () => {
   // 로컬스토리지 키 삭제
   localStorage.removeItem('recipe_name');
   localStorage.removeItem('recipe_alarmMsg');
   localStorage.removeItem('recipe_alarmMsgTo');
+  modalStore.nodeViewProps = {}; // 레시피 노드정보 삭제
 
   modalStore.closeModal(); // 모달 닫기
 };
 
 
-// "novel__content"에서 해당 노드 정보 불러오기
-const getContent = () => {
-  // const allData = props.editor.getJSON();
-  const location = props.editor.state.selection.$anchor; // 커서 위치 정보 가져오기
-  const locationNum = location?.path[1];
-  const contentObj = docs[locationNum];
-  return contentObj;
-};
+// // "novel__content"에서 해당 노드 정보 불러오기
+// const getContent = () => {
+//   // const allData = props.editor.getJSON();
+//   const location = props.editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+//   const locationNum = location?.path[1];
+//   const contentObj = docs[locationNum];
+//   return contentObj;
+// };
 
-const savedContent = getContent();
+// const savedContent = getContent();
+const savedContent = modalStore.nodeViewProps?.node;
 
 interface attrs {
   recipeName: string,
@@ -148,7 +145,7 @@ interface attrs {
   alarmMsgTo: string,
   auto: boolean,
   activated: boolean,
-  count: number,
+  // count: number,
 }
 
 const savedAttrs: attrs = {
@@ -160,9 +157,8 @@ const savedAttrs: attrs = {
   alarmMsgTo: savedContent?.attrs?.alarmMsgTo,
   auto: savedContent?.attrs?.auto,
   activated: savedContent?.attrs?.activated,
-  count: savedContent?.attrs?.count,
+  // count: savedContent?.attrs?.count,
 }
-
 
 
 // and조건과 or조건으로 이미 지정되어 있다면
@@ -230,7 +226,7 @@ const conditionsArrToString = (arr, andOr: string, delimiter = '$') => {
   if (conditionString.length > 0) {
     return conditionString.join(delimiter);
   } else {
-    console.log('레시피 내에', andOr, '조건 선택 없음');
+    // console.log('레시피 내에', andOr, '조건 선택 없음');
     return '';
   }
 }
@@ -243,13 +239,24 @@ const getRange = () => {
 
   // 현재 커서의 위치 가져오기
   const $cursor = selection?.$cursor;
-
-  // 현재 커서가 위치한 행의 시작과 끝 위치 찾기
   const from = $cursor.before($cursor.depth) + 1; // 행의 시작
   const to = $cursor.after($cursor.depth) - 1;   // 행의 끝
 
+  // console.log("$cursor", $cursor)
+  // console.log("from, to", from, to);
   return { from, to }
+
+
+
+
+  // 현재 커서가 위치한 행의 시작과 끝 위치 찾기
+  // const from = $cursor.before($cursor.depth) + 1; // 행의 시작
+  // const to = $cursor.after($cursor.depth) - 1;   // 행의 끝
+
+  // return { from, to }
 }
+
+
 
 // 레시피 노드 전환
 const changeToRecipeNode = () => {
@@ -264,22 +271,66 @@ const changeToRecipeNode = () => {
     alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
     auto: false,
     activated: false,
-    count: 0,
+    // count: 0,
   }
 
-  editor
-    .chain()
-    .focus()
+  // editor
+  //   .chain()
+  //   .focus()
+  //   .deleteRange(getRange())
+  //   .setRecipeRule(attrs)
+  //   .run();
 
-    .deleteRange(getRange())
-    .setRecipeRule(attrs)
-    // .insertContent(`레시피 지정 완료`)
-    .run();
 
-  // // 로컬스토리지 키 삭제
-  // localStorage.removeItem('recipe_name');
-  // localStorage.removeItem('recipe_alarmMsg');
-  // localStorage.removeItem('recipe_alarmMsgTo');
+
+  // 이미 레시피가 있는 상태로 모달창을 열었는지 확인하는 함수
+  function isEmptyObject(obj) {
+    return Object.keys(obj).length === 0;
+  }
+
+  if (isEmptyObject(modalStore.nodeViewProps)) {
+    // console.log("레시피 첫세팅")
+    editor
+      .chain()
+      .focus()
+      .deleteRange(getRange())
+      .setRecipeRule(attrs)
+      .run();
+  } else {
+    modalStore.nodeViewProps.deleteNode();
+    // console.log("레시피 수정")
+
+    editor
+      .chain()
+      .focus()
+      // .deleteRange({
+      //   from: modalStore.nodeViewProps.getPos(),
+      //   to: modalStore.nodeViewProps.getPos(),
+      // })
+      .setRecipeRule(attrs)
+      // .insertContentAt({
+      //   from: editor.state.selection.$from.after(2),
+      //   to: editor.state.selection.$from.after(2)
+      //   },
+      //   {
+      //     type: "paragraph",
+      //     content: [
+      //       // {
+      //       //   type: "text",
+      //       //   text: ''
+      //       // },
+      //       {
+      //         type: 'hardBreak'
+      //       },
+      //     ]
+      //   })
+      // .insertContentAt({
+      //   from: editor.state.selection.$from.before(1),
+      //   to: editor.state.selection.$from.before(1)
+      // }, ' ')
+      .run();
+  }
+
 };
 
 
@@ -291,25 +342,36 @@ const handleDelete = () => {
 };
 
 const deleteRecipeNode = () => {
-  const editor = props.editor;
+  // const editor = props.editor;
 
-  // 삭제 전 객체로 저장
-  const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
-  const locationNum = location?.path[1];
-  const json = editor.getJSON();
-  // 해당 노드의 정보를 담은 객체
-  const contentObj = json?.content[locationNum];
-  const contentText = contentObj?.content[0]?.text;
+  // // 삭제 전 객체로 저장
+  // const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
+  // const locationNum = location?.path[1];
+  // const json = editor.getJSON();
+  // // 해당 노드의 정보를 담은 객체
+  // const contentObj = json?.content[locationNum];
+  // const contentText = contentObj?.content[0]?.text;
 
   // console.log("here", contentText);
 
-  // 노드 삭제
-  if (contentObj.type == "recipeRule") {
-    editor.commands.unsetRecipe({
-      text: contentText,
-      editor: editor,
-    });
-  }
+  // 노드 삭제 원본
+  // if (contentObj.type == "recipeRule") {
+  //   editor.commands.unsetRecipe({
+  //     text: contentText,
+  //     editor: editor,
+  //   });
+  // }
+
+  modalStore.nodeViewProps.deleteNode()
+
+  // // 노드 삭제가 정상작동하기 전까지 대체할 코드
+  // if (contentObj.type == "recipeRule") {
+  //   editor.commands.unsetRecipe({
+  //     text: '',
+  //     editor: editor,
+  //   });
+  // }
+
 }
 
 </script>
