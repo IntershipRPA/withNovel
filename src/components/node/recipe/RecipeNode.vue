@@ -60,7 +60,7 @@ import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementChecked from './ElementChecked.vue';
-import { Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
+import { Download, Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
 import { MapResult } from '@tiptap/pm/transform';
 
 const props = defineProps({
