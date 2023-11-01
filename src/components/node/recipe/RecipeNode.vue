@@ -26,7 +26,7 @@
         class="recipe-btn-setting recipe-tail cursor-pointer rounded-r-lg shadow-md bg-green-400 hover:bg-green-500 z-10 h-10 px-4 pl-7 my-2 text-sm text-white -ml-4 flex items-center min-w-max"
         @click='handleClickBtnSetting'>
         레시피
-        <Settings2 class="w-5 h-5 ml-2" />
+        <Menu class="w-5 h-5 ml-2" />
       </span>
     </div>
     <div>
@@ -60,7 +60,7 @@ import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementChecked from './ElementChecked.vue';
-import { Settings, Settings2, Cog, Download } from 'lucide-vue-next';
+import { Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
 import { MapResult } from '@tiptap/pm/transform';
 
 const props = defineProps({

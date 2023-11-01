@@ -9,7 +9,7 @@
         @click="handleClickBtnSetting"
       >
         조건
-        <Settings2 class="w-5 h-5 ml-2" />
+        <Menu class="w-5 h-5 ml-2" />
       </span>
     </div>
   </NodeViewWrapper>
@@ -20,7 +20,8 @@ import { PropType, ref, computed } from 'vue';
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
 import { useModalStore } from './../../../stores/modal';
-import { Settings, Settings2, Cog } from 'lucide-vue-next';
+import { Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
+
 
 
 const props = defineProps({
