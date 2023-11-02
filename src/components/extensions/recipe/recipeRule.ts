@@ -597,7 +597,8 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
             .toggleWrap(this.name, attrs)
             .insertContent(
               {
-                type: 'paragraph',
+                type: 'heading',
+                attrs: { level: 2 },
                 content: [
                   {
                     type: 'text',
