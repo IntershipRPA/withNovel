@@ -3,7 +3,7 @@ import {
   mergeAttributes
 } from '@tiptap/core';
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import RecipeNodeVue from '../../node/recipe/RecipeNode.vue'
+import RecipeNodeVue from '../../nodeVue/recipe/RecipeNode.vue'
 
 export interface RecipeRuleOptions {
   // HTMLAttributes: Record<string, any>;
@@ -597,7 +597,8 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
             .toggleWrap(this.name, attrs)
             .insertContent(
               {
-                type: 'paragraph',
+                type: 'heading',
+                attrs: { level: 2 },
                 content: [
                   {
                     type: 'text',
