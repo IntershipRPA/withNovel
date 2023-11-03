@@ -39,8 +39,7 @@ export const defaultEditorContent2 = {
         "temp": "50",
         "unit": "℃",
         "range": "미만",
-        "memo": "모터 권선이 소손되지 않도록 주의",
-        "styleCustom": null
+        "memo": "모터 권선이 소손되지 않도록 주의"
       },
       "content": [
         {
@@ -87,8 +86,7 @@ export const defaultEditorContent2 = {
         "temp": "5",
         "unit": "℃",
         "range": "미만",
-        "memo": "",
-        "styleCustom": null
+        "memo": ""
       },
       "content": [
         {
@@ -135,8 +133,7 @@ export const defaultEditorContent2 = {
         "temp": "0",
         "unit": "℃",
         "range": "이상",
-        "memo": "",
-        "styleCustom": null
+        "memo": ""
       },
       "content": [
         {
@@ -178,13 +175,11 @@ export const defaultEditorContent2 = {
     {
       "type": "actionRule",
       "attrs": {
-        "whelk": "Comp Motor",
         "tag": "Status",
         "temp": "0",
         "unit": "℃",
         "range": "init",
-        "memo": "",
-        "styleCustom": null
+        "memo": ""
       },
       "content": [
         {
@@ -226,19 +221,85 @@ export const defaultEditorContent2 = {
     {
       "type": "recipeRule",
       "attrs": {
-        "recipeName": "에어컴프레셔 노하우 레시피",
+        "recipeName": "레시피 이름",
         "action": "Air Compressor의 Status를 init ",
-        "andCondition": "Comp Motor의 Winding Temp를 50℃ 미만 모터 권선이 소손되지 않도록 주의$Receiver Tank의 Press를 3.5℃ 미만 조건",
-        "orCondition": "After Cooler의 Status를 이상 ",
-        "alarmMsg": "Air Compressor 기동조건 불일치 - Comp Motor / Receiver Tank / After Cooler 상태 점검 요망",
+        "andCondition": "Comp Motor의 Winding Temp를 50℃ 미만 모터 권선이 소손되지 않도록 주의$Receiver Tank의 Press를 5℃ 미만 $After Cooler의 Status를 이상 ",
+        "orCondition": "",
+        "alarmMsg": "모터 확인 바랍니다.",
         "alarmMsgTo": "홍길동",
         "auto": false,
         "activated": false
       },
       "content": [
         {
-          "type": "text",
-          "text": "레시피 지정 완료"
+          "type": "heading",
+          "attrs": {
+            "level": 2
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "레시피 이름"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Air Compressor의 Status를 init  액션을 실행하기 위해 아래 조건들이 충족되어야 한다."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "AND조건"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "▶ Comp Motor의 Winding Temp를 50℃ 미만 모터 권선이 소손되지 않도록 주의"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "▶ Receiver Tank의 Press를 5℃ 미만 "
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "▶ After Cooler의 Status를 이상 "
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "조건 불일치시 알람 메세지로는 \"모터 확인 바랍니다.\"으로 설정하여"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "담당자 홍길동에게 알람을 전달한다."
+            }
+          ]
         }
       ]
     },

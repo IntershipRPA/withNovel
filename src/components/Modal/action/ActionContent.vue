@@ -25,8 +25,7 @@
     <ThirdModalChild class='third p-2.5 content-center' @tempSelected="updateTempValue" @unitSelected='updateUnitValue'
       @rangeSelected='updateRangeValue' :tagMsg='tagMsg' :temp='temp' :unit='unit' :range='range' />
     <div class="min-w-full mb-20 px-14">
-      <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'"
-        :savedContent='savedAttrs.memo' />
+      <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__action'" />
     </div>
   </div>
   <ConfirmBtn @click.stop="handleConfirm" />
@@ -36,7 +35,7 @@
 <script setup lang="ts">
 import { PropType, computed, onUpdated, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
-import ThirdModalChild from './ThirdModalChild.vue';
+import ThirdModalChild from '../ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
 import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';
@@ -45,7 +44,7 @@ import { useStorage } from "@vueuse/core";
 
 const facMsg = ref<String>('선택 설비 없음');
 const tagMsg = ref<String>('선택 태그 없음');
-//console.log(JSON.parse(JSON.stringify(tagMsg.value)))
+// console.log(JSON.parse(JSON.stringify(tagMsg.value)))
 // let unitValue = "";
 // if (JSON.parse(JSON.stringify(tagMsg.value)) === "Press") {
 //   unitValue = "bar";
@@ -69,7 +68,6 @@ const getContent = () => {
   return contentObj;
 };
 
-
 // 설비, 태그 데이터 초기 세팅
 const setDataFacilityTag = () => {
   const content = getContent().content;
@@ -89,7 +87,7 @@ const setDataFacilityTag = () => {
 setDataFacilityTag();
 
 
-// 조건 노드로 설정되어있을 때 설정할 속성값
+// 액션 노드로 설정되어있을 때 설정할 속성값
 interface attrs {
   fac: string,
   tag: string,
@@ -102,7 +100,7 @@ interface attrs {
 // "novel__content"에서 불러온 노드정보 저장
 const savedContent = getContent();
 
-// 조건 노드로 설정되어있을 때 "novel__content"에서 가져와서 값 저장.
+// 액션 노드로 설정되어있을 때 "novel__content"에서 가져와서 값 저장.
 const savedAttrs: attrs = {
   fac: savedContent?.attrs?.fac,
   tag: savedContent?.attrs?.tag,
@@ -146,14 +144,14 @@ const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const closeModal = () => {
   // 로컬스토리지 키 삭제
-  localStorage.removeItem('modal__condition');
+  localStorage.removeItem('modal__action');
 
   modalStore.closeModal(); // 모달 닫기
 };
 
 // 완료 버튼 클릭
 const handleConfirm = () => {
-  changeToConditionNode(); //conditionRule 노드변경 함수
+  changeToActionNode(); //actionRule 노드변경 함수
   closeModal();
 };
 
@@ -173,17 +171,19 @@ const getRange = () => {
   return { from, to }
 }
 
-// 조건 노드로 변경
-const changeToConditionNode = () => {
+// 액션 노드로 변경
+const changeToActionNode = () => {
   const editor = props.editor;
-  const modalContent = localStorage.getItem('modal__condition') ?? ''; // null이면 빈 문자열 반환
-  // Stauts 태그 선택시 값이 null인거 제외 시킴
+  const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
+
+  // // Stauts 태그 선택시 값이 null인거 제외 시킴
   // let str = "";
   // if (tagMsg.value === "Status") {
   //   str = `${unit.value} ${modalContent}`;
   // } else {
-  //   str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
+  //   str = `${temp.value} ${unit.value} ${range.value} ${modalContent}`;
   // }
+
 
   const attrs: attrs = {
     fac: facMsg.value,
@@ -194,12 +194,11 @@ const changeToConditionNode = () => {
     memo: modalContent
   };
 
-
   editor
     .chain()
     .focus()
     .deleteRange(getRange())
-    .setConditionRule(attrs)
+    .setActionRule(attrs)
     // .setFacility({ facility: facMsg.value })
     // .insertContent(facMsg.value)
     // .unsetFacility()
@@ -210,14 +209,14 @@ const changeToConditionNode = () => {
     // .insertContent('를 ')
     // .insertContent(str)
     .run();
-  };
+};
 
-const handleDelete = (e) => {
-  deleteConditionNode(e);
+const handleDelete = () => {
+  deleteActionNode();
   closeModal();
 };
 
-const deleteConditionNode = (e) => {
+const deleteActionNode = () => {
   const editor = props.editor;
 
   // 삭제 전 객체로 저장
@@ -231,13 +230,14 @@ const deleteConditionNode = (e) => {
   // console.log("here", contentText);
 
   // 노드 삭제
-  if (contentObj.type == "conditionRule") {
-    editor.commands.unsetCondition({
+  if (contentObj.type == "actionRule") {
+    editor.commands.unsetAction({
       text: contentText,
       editor: editor,
     });
   }
 }
+
 </script>
 
 <style scoped>

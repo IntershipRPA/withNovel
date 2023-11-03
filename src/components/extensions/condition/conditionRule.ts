@@ -3,7 +3,7 @@ import {
   mergeAttributes
 } from '@tiptap/core';
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import ConditionNodeVue from '../../node/condition/ConditionNode.vue'
+import ConditionNodeVue from '../../nodeVue/condition/ConditionNode.vue'
 export interface ConditionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {

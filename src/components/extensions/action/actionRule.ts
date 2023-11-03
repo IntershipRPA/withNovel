@@ -4,7 +4,7 @@ import {
 } from '@tiptap/core';
 // import { selectParentNode } from '@tiptap/pm/commands';
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import ActionNodeVue from '../../node/action/ActionNode.vue'
+import ActionNodeVue from '../../nodeVue/action/ActionNode.vue'
 export interface ActionRuleOptions {
   HTMLAttributes: Record<string, any>;
   settingAttrs: {

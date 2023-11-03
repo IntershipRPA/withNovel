@@ -28,7 +28,7 @@ import { defaultEditorProps } from "../lib/props";
 import { getPrevText } from "../lib/editor";
 import { defaultExtensions } from "../components/extensions";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
-import SimpleModal from "../components/conditionModal/SimpleModal.vue";
+import SimpleModal from "../components/Modal/SimpleModal.vue";
 import { modalToggle } from "./extensions/condition/conditionExtension"
 
 // 모달 설정
@@ -48,9 +48,9 @@ const modalStore = useModalStore(); // 스토어 인스턴스 생성
 const isModalOpen = computed(() => modalStore.isModalOpen);
 // const isCondition = computed(() => modalStore.isCondition);
 
-const openModal = () => {
-  modalStore.openModal(); // 모달 열기
-};
+// const openModal = () => {
+//   modalStore.openModal(); // 모달 열기
+// };
 
 // const closeModal = () => {
 //   modalStore.closeModal(); // 모달 닫기
