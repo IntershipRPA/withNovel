@@ -23,13 +23,13 @@ import { Editor as EditorClass } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
 import { useCompletion } from "ai/vue";
 
-import { defaultEditorContent2 } from "../lib/default-content2";
-import { defaultEditorProps } from "../lib/props";
-import { getPrevText } from "../lib/editor";
-import { defaultExtensions } from "../components/extensions";
-import BubbleMenu from "../components/BubbleMenu/index.vue";
-import SimpleModal from "../components/Modal/SimpleModal.vue";
-import { modalToggle } from "./extensions/condition/conditionExtension"
+import { defaultEditorContent2 } from "../../lib/default-content2";
+import { defaultEditorProps } from "../../lib/props";
+import { getPrevText } from "../../lib/editor";
+import { defaultExtensions } from "../../components/extensions";
+import BubbleMenu from "../BubbleMenu/index.vue";
+import SimpleModal from "../Modal/SimpleModal.vue";
+import { modalToggle } from "../extensions/condition/conditionExtension"
 
 // 모달 설정
 // const showModal = modalToggle;
@@ -38,7 +38,7 @@ import { modalToggle } from "./extensions/condition/conditionExtension"
 // };
 // const isCondition = ref(false);
 
-import { useModalStore } from './../stores/modal';
+import { useModalStore } from '../../stores/modal';
 import { AlarmCheck } from 'lucide-vue-next';
 import { View } from 'lucide-vue-next';
 
@@ -71,7 +71,7 @@ const props = defineProps({
   className: {
     type: String,
     default:
-      "relative min-h-[500px] w-full mx-auto max-w-screen-lg border-stone-200 bg-white p-12 px-8 sm:mb-[calc(5vh)] sm:rounded-lg sm:border sm:px-12 sm:shadow-lg",
+      "relative min-h-[500px] min-w-[700px] w-full mx-auto max-w-screen-lg border-stone-200 bg-white p-12 px-8 sm:mb-[calc(5vh)] sm:rounded-lg sm:border sm:px-12 sm:shadow-lg",
   },
 
   // 에디터기본 값으로, JSON 형식으로 저장
