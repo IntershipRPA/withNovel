@@ -5,10 +5,11 @@
 </template>
 
 <script setup lang='ts'>
-import axios from "axios";
 import { ref } from "vue";
 import { Editor } from '../../index';
-import { getContent, requestAi } from "./requestAiBtn"
+import { requestAi } from "./requestAiBtn"
+import { Recipe, Condition, Action } from '../lib/recipeData'
+
 
 const props = defineProps({
   className: {
@@ -20,11 +21,11 @@ const props = defineProps({
 
 const message = ref("");
 
-const handleOnClick = () => {
+const handleOnClick = async() => {
   console.log("AI요청 버튼 클릭");
 
-  // getContent();
-  requestAi()
+  const aiData : Recipe = await requestAi()
+  console.log("AiData: ", aiData)
 };
 
 
