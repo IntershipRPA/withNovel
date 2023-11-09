@@ -3,7 +3,12 @@
        chanin() 메서드 실행
        class="className"은 동적으로 클래스를 설정하기 위한 바인딩
        -> className 변수에 저장된 클래스 이름을 해당 요소의 클래스로 설정-->
+   
   <div @click="editor?.chain().focus().run()" :class="className">
+    <div>
+      <button @click="click">레시피추가</button>
+    
+    </div> 
     <BubbleMenu v-if="editor" :editor="editor" />
     <!-- 조건부 렌더링
         editor 객체가 존재하는 경우에만 해당 컴포넌트 렌더링 -->
@@ -29,8 +34,15 @@ import { getPrevText } from "../lib/editor";
 import { defaultExtensions } from "../components/extensions";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
 import SimpleModal from "../components/conditionModal/SimpleModal.vue";
+import RecipeModal from "../components/conditionModal/RecipeModal.vue";
 import { modalToggle } from "./extensions/condition/conditionExtension"
 
+
+//레시피 추가 모달창
+const click = () => {
+  console.log("레시피 추가");
+  openModal();
+};
 // 모달 설정
 // const showModal = modalToggle;
 // const closeModal = () => {
@@ -168,15 +180,10 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
     const lastTwo = getPrevText(e.editor, {
       chars: 4, // 범위 설정
     });
-
-    // if()문 안하면 함수가 계속 실행되 빈 값이 저장됨
-    if (lastTwo === " /조건" && !isLoading.value) {
-      // 설비, 태그 조건 바꿀 때 해당 목록 가져오기
-      // 기존 값 삭제
-      localStorage.removeItem('change');
-      // 커서가 있는 줄을 찾기
-      const lineStart = selection.$from.before(1) // 현재 블록(줄) 시작 위치
-      const lineEnd = selection.$from.after(1)   // 현재 블록(줄) 종료 위치
+    
+    // 커서가 있는 줄을 찾기
+    const lineStart = selection.$from.before(1); // 현재 블록(줄) 시작 위치
+    const lineEnd = selection.$from.after(1);   // 현재 블록(줄) 종료 위치
 
       // 해당 범위에 있는 텍스트를 가져옴
       let lineText = '';
@@ -186,42 +193,122 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
         }
         return true;
       })
-      //      console.log(lineText.split('/'));
-      let changText = lineText.split(' '); // 공백 단위 쪼개기
-      let str = changText.pop(); // '/조건' 제거
 
-      let changText2 = changText[0] + " " + changText[1];
-      let changText3 = '';
-      if (changText.length == 4) {
-        changText3 = changText[2] + " " + changText[3];
-      } else {
-        changText3 = changText[2];
+
+      let index = lineStart + 1;
+      // 태그    Winding Temp   Press   Status
+      let windingtempstr = lineText.match("Winding Temp");
+      let windingtempPosition = lineText.indexOf("Winding Temp");
+
+      let pressstr = lineText.match("Press");
+      let pressPosition = lineText.indexOf("Press");
+
+      let statusstr = lineText.match("Status");
+      let statusPosition = lineText.indexOf("Status");
+      // 설비 Comp Motor receivertank  aftercooler  aircompressor
+      let compMotorStr = lineText.match("Comp Motor");
+      let compMotorPosition = lineText.indexOf("Comp Motor");
+
+      let receivertankStr = lineText.match("Receiver Tank");
+      let receivertankPosition = lineText.indexOf("Receiver Tank");
+
+      let aftercoolerStr = lineText.match("After Cooler");
+      let aftercoolerPosition = lineText.indexOf("After Cooler");
+
+      let aircompressorStr = lineText.match("Air Compressor");
+      let aircompressorPosition = lineText.indexOf("Air Compressor");
+      
+
+      //특정 단어 마크업(처음에 한번만 되고 두번째 부터는 적용안됨)
+      const {anchor} = e.editor.state.selection;  // 커서의 현재 위치를 가져옴   이거 하니 드래그 된거 해제 됨
+
+      if(windingtempstr !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "Winding Temp"})
+          .setTextSelection({ from: index + windingtempPosition, to: index + windingtempPosition + windingtempstr[0].length })
+          .setMark("tagMark", { class: 'tag' })
+          .setTextSelection({from: index + windingtempPosition + windingtempstr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("tagMark") 
+          .setTextSelection({ from: anchor, to: anchor }) 
+          .unsetFacility()
+          .run();
+      }else if(pressstr !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "Press"})
+          .setTextSelection({ from: index + pressPosition, to: index + pressPosition + pressstr[0].length })
+          .setMark("tagMark", { class: 'tag' })
+          .setTextSelection({from: index + pressPosition + pressstr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("tagMark") 
+          .setTextSelection({ from: anchor, to: anchor }) 
+          .unsetFacility()
+          .run();
+      }else if(statusstr !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "Status"})
+          .setTextSelection({ from: index + statusPosition, to: index + statusPosition + statusstr[0].length })
+          .setMark("tagMark", { class: 'tag' })
+          .setTextSelection({from: index + statusPosition + statusstr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("tagMark") 
+          .setTextSelection({ from: anchor, to: anchor }) 
+          .unsetFacility()
+          .run();
+      }else if(compMotorStr !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "Comp Motor"})
+          .setTextSelection({ from: index + compMotorPosition, to: index + compMotorPosition + compMotorStr[0].length })
+          .setMark("facilityMark", { class: 'tag' })
+          .setTextSelection({from: index + compMotorPosition + compMotorStr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("facilityMark") 
+          .setTextSelection({ from: anchor, to: anchor }) 
+          .unsetFacility()
+          .run();
+      }else if(receivertankStr !== null){
+        console.log("dddd");
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "Receiver Tank"})
+          .setTextSelection({ from: index + receivertankPosition, to: index + receivertankPosition + receivertankStr[0].length })
+          .setMark("facilityMark", { class: 'tag' })
+          .setTextSelection({from: index + receivertankPosition + receivertankStr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("facilityMark") 
+          .setTextSelection({ from: anchor, to: anchor }) 
+          .unsetFacility()
+          .run();
+      }else if(aftercoolerStr !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "After Cooler"})
+          .setTextSelection({ from: index + aftercoolerPosition, to: index + aftercoolerPosition + aftercoolerStr[0].length })
+          .setMark("facilityMark", { class: 'tag' })
+          .setTextSelection({from: index + aftercoolerPosition + aftercoolerStr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("facilityMark") 
+          .setTextSelection({ from: anchor, to: anchor })
+          .unsetFacility()
+          .run();
+      }else if(aircompressorStr !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setFacility({facility: "After Cooler"})
+          .setTextSelection({ from: index + aircompressorPosition, to: index + aircompressorPosition + aircompressorStr[0].length })
+          .setMark("facilityMark", { class: 'tag' })
+          .setTextSelection({from: index + aircompressorPosition + aircompressorStr[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("facilityMark") 
+          .setTextSelection({ from: anchor, to: anchor })
+          .unsetFacility()
+          .run();
       }
-      // 한글 제거
-      let change = [changText2.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, ""), changText3.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "").replace(/["']/g, "")];
-      //      console.log(`changText : ${changText}`);  // changText : Comp,Motor,Press
-      //      console.log(`changText2 : ${changText2}`);
-      //      console.log(`changText3 : ${changText3}`);
-      // 로컬에 저장
-      useStorage('change', change);
-      // let titleData = localStorage.getItem("change");
-      // let titleData2;
 
-      // console.log(`change : ${titleData}`);
-      // // 타입스크립트에서는 null 체크해야됨
-      // if(titleData !== null){
-      //   titleData2 = JSON.parse(titleData);
-      // }
-      // console.log(`titleData : ${titleData2}`);
-      // console.log(`whelk 확인 : ${titleData2[0]}`);
-      // console.log(`tag 확인 : ${titleData2[1]}`);
-      // // 데이터 각각 whelk, tagd에 저장전에 기존에 있는 값 삭제
-      // localStorage.removeItem('whelk');
-      // localStorage.removeItem('tag');
-      // // 데이터 각각 whelk, tagd에 저장
-      // useStorage('whelk', titleData2[0]);
-      // useStorage('tag', titleData2[1]);
-    }
 
 
 

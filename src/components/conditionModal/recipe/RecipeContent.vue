@@ -1,29 +1,27 @@
 <template>
-  <div class="modal-family text-lg flex flex-col">
+  <!-- <div class="modal-family text-lg flex flex-col">
     <RecipeNameVue />
     <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
-      <!-- <span class="p-2.5">설비 Air Compressor</span>
-      <span class="p-2.5">태그 Status</span>
-      <span class="p-2.5">INIT: 일 때</span> -->
+      
       <span>액션 : </span>
       <span>
         {{ action }}
       </span>
     </div>
     <div>
-      <!-- AND 조건-->
+      
       <div v-if="conditions.some(item => item.group === 1)" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
         <span>AND 조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 1)" :key="index"
           :condition='condition' :num="index" />
       </div>
-      <!-- OR 조건-->
+      
       <div v-if="conditions.some(item => item.group === 2)" class="rounded-lg p-5 border-2 border-rose-600">
         <span>OR 조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 2)" :key="index"
           :condition='condition' :num="index" />
       </div>
-      <!-- 초기 조건 목록 -->
+     
       <div class="waitingCondition">
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 3)" :key="index"
           :condition='condition' :num="index" />
@@ -43,10 +41,9 @@
           :storageKey="'recipe_alarmMsgTo'" />
       </div>
     </div>
-    <!-- <div>
-      <ElementChecked />
-    </div> -->
-  </div>
+
+  </div> -->
+  <textarea placeholder="레시피 입력"/>
   <ConfirmBtn @click.stop="handleConfirm" />
   <DeleteBtn @click.stop="handleDelete" />
 </template>
@@ -89,30 +86,30 @@ interface Condition {
 // 조건 가져오기
 const docs = props.editor.getJSON()?.content;
 
-if (docs) {
-  const conditionElements = docs.filter((element) => element.type === "conditionRule");
-  if (conditionElements.length > 0) {
-    conditions.value = conditionElements.map((element) => ({
-      text: element.content?.map(item => item.text).join(''),
-      isChecked: false,
-      andOr: '조건선택',
-      group: 3
-    }));
-  } else {
-    alert("조건이 지정되지 않았습니다.")
-  }
-}
+// if (docs) {
+//   const conditionElements = docs.filter((element) => element.type === "conditionRule");
+//   if (conditionElements.length > 0) {
+//     conditions.value = conditionElements.map((element) => ({
+//       text: element.content?.map(item => item.text).join(''),
+//       isChecked: false,
+//       andOr: '조건선택',
+//       group: 3
+//     }));
+//   } else {
+//     alert("조건이 지정되지 않았습니다.")
+//   }
+// }
 
 // 액션 가져오기
-if (docs) {
-  const actionElements = docs.filter((element) => element.type === "actionRule");
-  if (actionElements.length > 0) {
-    action.value = actionElements[0].content?.map(item => item.text).join('');
-    // action.value = actionElements[0].content[0].text;
-  } else {
-    alert("액션이 지정되지 않았습니다.")
-  }
-}
+// if (docs) {
+//   const actionElements = docs.filter((element) => element.type === "actionRule");
+//   if (actionElements.length > 0) {
+//     action.value = actionElements[0].content?.map(item => item.text).join('');
+//     // action.value = actionElements[0].content[0].text;
+//   } else {
+//     alert("액션이 지정되지 않았습니다.")
+//   }
+// }
 
 
 

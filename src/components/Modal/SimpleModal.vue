@@ -17,9 +17,6 @@
       <ConditionContent v-if="isCondition" :editor="editor" />
       <ActionContent v-if="isAction" :editor="editor" />
       <RecipeContent v-if="isRecipe" :editor="editor" />
-      <textarea placeholder="레시피 입력"/>
-      <ConfirmBtn @click.stop="handleConfirm" />
-      <DeleteBtn @click.stop="handleDelete" />
     </div>
   </div>
 </template>
@@ -27,13 +24,11 @@
 <script setup lang="ts">
 import { PropType, Ref, computed, ref } from "vue";
 import { Editor, Range } from '@tiptap/core';
-import ConditionContent from './condition/ConditionContent.vue';
-import ActionContent from './action/ActionContent.vue';
-import RecipeContent from './recipe/RecipeContent.vue';
-import RecipeModal from "./RecipeModal.vue";
+import ConditionContent from './condition/ConditionContent.vue'
+import ActionContent from './action/ActionContent.vue'
+import RecipeContent from './recipe/RecipeContent.vue'
 import { useModalStore } from '../../stores/modal';
-import ConfirmBtn from './ConfirmBtn.vue';
-import DeleteBtn from './DeleteBtn.vue';
+
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
@@ -41,131 +36,31 @@ const isCondition = computed(() => modalStore.isCondition);
 const isAction = computed(() => modalStore.isAction);
 const isRecipe = computed(() => modalStore.isRecipe);
 
-
 const closeModal = () => {
+  // 로컬스토리지 키 삭제
+  localStorage.removeItem('modal__condition');
+  localStorage.removeItem('modal__action');
+  localStorage.removeItem('recipe_name');
+  localStorage.removeItem('recipe_alarmMsg');
+  localStorage.removeItem('recipe_alarmMsgTo');
+  modalStore.nodeViewProps = {}; // 레시피 노드정보 삭제
+
   modalStore.closeModal(); // 모달 닫기
 };
+
 const props = defineProps({
   editor: {
     type: Object as PropType<Editor>,
     required: true,
   },
- 
 })
+
 const stopPropagation = (event) => {
   event.stopPropagation();
 };
-
-
-
-
-// 완료 버튼
-const handleConfirm = () => {
-  closeModal();
-  changeToActionNode(); //actionRule 노드변경 함수
-};
-// 삭제 버튼
-const handleDelete = () => {
-  deleteActionNode();
-  closeModal();
-};
-const changeToActionNode = () => {
-  const editor = props.editor;
-  const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
-
-  // Stauts 태그 선택시 값이 null인거 제외 시킴
-  let str = "";
-  if (tagMsg.value === "Status") {
-    str = `${range.value} ${modalContent}`;
-  } else {
-    str = `${temp.value} ${unit.value} ${range.value} ${modalContent}`;
-  }
-
-
-  let attrs = {
-    fac: facMsg,
-    tag: tagMsg,
-    temp: String(temp.value),
-    unit: unit.value,
-    range: range.value,
-    memo: modalContent
-  };
-
-  editor
-    .chain()
-    .focus()
-    .deleteRange(getRange())
-    .setActionRule(attrs)
-    .setFacility({ facility: facMsg.value })
-    .insertContent(facMsg.value)
-    .unsetFacility()
-    .insertContent('의 ')
-    .setTag({ tag: tagMsg.value })
-    .insertContent(tagMsg.value)
-    .unsetTag()
-    .insertContent('를 ')
-    .insertContent(str)
-    .run();
-
-};
-
-const deleteActionNode = () => {
-  const editor = props.editor;
-
-  // 삭제 전 객체로 저장
-  const location = editor.state.selection.$anchor; // 커서 위치 정보 가져오기
-  const locationNum = location?.path[1];
-  const json = editor.getJSON();
-  // 해당 노드의 정보를 담은 객체
-  const contentObj = json?.content[locationNum];
-  const contentText = contentObj?.content[0]?.text;
-
-  // console.log("here", contentText);
-
-  // 노드 삭제
-  if (contentObj.type == "actionRule") {
-    editor.commands.unsetAction({
-      text: contentText,
-      editor: editor,
-    });
-  }
-}
-
-
-
-
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style scoped>
-
-textarea {
-      width: 100%;
-      height: 6.25em;
-      border: none;
-      resize: none;
-    }
 .modal {
   position: fixed;
   display: flex;
