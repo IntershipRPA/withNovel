@@ -61,13 +61,13 @@ const renderItems = () => {
   return {
     
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
-      localStorage.removeItem('temp');
-      localStorage.removeItem('memo');
-      localStorage.removeItem('range');
+      // localStorage.removeItem('temp');
+      // localStorage.removeItem('memo');
+      // localStorage.removeItem('range');
       
-      localStorage.setItem('memo', '');
-      localStorage.setItem('range', '이상');
-      localStorage.setItem('unit', '℃');
+      // localStorage.setItem('memo', '');
+      // localStorage.setItem('range', '이상');
+      // localStorage.setItem('unit', '℃');
       component = new VueRenderer(ConditionTooltip, {
         props,
         editor: props.editor,

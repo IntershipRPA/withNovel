@@ -103,7 +103,7 @@ export const defaultExtensions = [
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }
-      return "설비기기는 '@'를 누르고, 태그 입력은 '$'을 눌러 작성하세요. 조건은 '/조건'입력 후 엔터를 눌러 작성하세요.";
+      return "설비기기는 '@'를 누르고, 태그 입력은 '$'을 눌러 작성하세요. 조건은 '/조건', 액션은 '/액션', 레시피는 '/레시피' 입력 후 엔터를 눌러 작성하세요.";
     },
     includeChildren: true,
   }),

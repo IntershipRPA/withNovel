@@ -74,22 +74,7 @@ const changeToActionNode = () => {
   const modalContent = localStorage.getItem('modal__action') ?? ''; // null이면 빈 문자열 반환
 
   // Stauts 태그 선택시 값이 null인거 제외 시킴
-  let str = "";
-  if (tagMsg.value === "Status") {
-    str = `${range.value} ${modalContent}`;
-  } else {
-    str = `${temp.value} ${unit.value} ${range.value} ${modalContent}`;
-  }
 
-
-  let attrs = {
-    fac: facMsg,
-    tag: tagMsg,
-    temp: String(temp.value),
-    unit: unit.value,
-    range: range.value,
-    memo: modalContent
-  };
 
   editor
     .chain()

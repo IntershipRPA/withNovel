@@ -60,13 +60,13 @@ const renderItems = () => {
   // console.log("33", component?.ref.modalToggle);
   return {
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
-      localStorage.removeItem('temp');
-      localStorage.removeItem('memo');
-      localStorage.removeItem('range');
+      // localStorage.removeItem('temp');
+      // localStorage.removeItem('memo');
+      // localStorage.removeItem('range');
       
-      localStorage.setItem('memo', '');
-      localStorage.setItem('range', '이상');
-      localStorage.setItem('unit', '℃');
+      // localStorage.setItem('memo', '');
+      // localStorage.setItem('range', '이상');
+      // localStorage.setItem('unit', '℃');
       component = new VueRenderer(ActionTooltip, {
         props,
         editor: props.editor,

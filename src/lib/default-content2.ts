@@ -1,5 +1,6 @@
 export const defaultEditorContent2 = {
   type: "doc",
+
   content: [
     {
       "type": "heading",
@@ -31,18 +32,14 @@ export const defaultEditorContent2 = {
       ]
     },
     {
-      "type": "paragraph"
-    },
-    {
       "type": "conditionRule",
       "attrs": {
         "fac": "Comp Motor",
         "tag": "Winding Temp",
-        "temp": "0",
+        "temp": "50",
         "unit": "℃",
-        "range": "이상",
-        "memo": "동일하게 시행",
-        "styleCustom": null
+        "range": "미만",
+        "memo": "모터 권선이 소손되지 않도록 주의"
       },
       "content": [
         {
@@ -77,7 +74,7 @@ export const defaultEditorContent2 = {
         },
         {
           "type": "text",
-          "text": "를 0℃ 이상 동일하게 시행d"
+          "text": "를 50℃ 미만 모터 권선이 소손되지 않도록 주의"
         }
       ]
     },
@@ -88,9 +85,8 @@ export const defaultEditorContent2 = {
         "tag": "Press",
         "temp": "5",
         "unit": "℃",
-        "range": "이상",
-        "memo": "동일하게 시행",
-        "styleCustom": null
+        "range": "미만",
+        "memo": ""
       },
       "content": [
         {
@@ -125,12 +121,20 @@ export const defaultEditorContent2 = {
         },
         {
           "type": "text",
-          "text": "를 5℃ 이상 동일하게 시행"
+          "text": "를 5℃ 미만 "
         }
       ]
     },
     {
-      "type": "actionRule",
+      "type": "conditionRule",
+      "attrs": {
+        "fac": "After Cooler",
+        "tag": "Status",
+        "temp": "0",
+        "unit": "℃",
+        "range": "이상",
+        "memo": ""
+      },
       "content": [
         {
           "type": "text",
@@ -138,12 +142,12 @@ export const defaultEditorContent2 = {
             {
               "type": "facilityMark",
               "attrs": {
-                "facility": "Comp Motor",
+                "facility": "After Cooler",
                 "title": "설비"
               }
             }
           ],
-          "text": "Comp Motor"
+          "text": "After Cooler"
         },
         {
           "type": "text",
@@ -164,10 +168,144 @@ export const defaultEditorContent2 = {
         },
         {
           "type": "text",
-          "text": "를 이상ddddddddddd "
+          "text": "를 이상 "
         }
       ]
-    },    
+    },
+    {
+      "type": "actionRule",
+      "attrs": {
+        "tag": "Status",
+        "temp": "0",
+        "unit": "℃",
+        "range": "init",
+        "memo": ""
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "facilityMark",
+              "attrs": {
+                "facility": "Air Compressor",
+                "title": "설비"
+              }
+            }
+          ],
+          "text": "Air Compressor"
+        },
+        {
+          "type": "text",
+          "text": "의 "
+        },
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "tagMark",
+              "attrs": {
+                "tag": "Status",
+                "title": "태그"
+              }
+            }
+          ],
+          "text": "Status"
+        },
+        {
+          "type": "text",
+          "text": "를 init "
+        }
+      ]
+    },
+    {
+      "type": "recipeRule",
+      "attrs": {
+        "recipeName": "레시피 이름",
+        "action": "Air Compressor의 Status를 init ",
+        "andCondition": "Comp Motor의 Winding Temp를 50℃ 미만 모터 권선이 소손되지 않도록 주의$Receiver Tank의 Press를 5℃ 미만 $After Cooler의 Status를 이상 ",
+        "orCondition": "",
+        "alarmMsg": "모터 확인 바랍니다.",
+        "alarmMsgTo": "홍길동",
+        "auto": false,
+        "activated": false
+      },
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 2
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "레시피 이름"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Air Compressor의 Status를 init  액션을 실행하기 위해 아래 조건들이 충족되어야 한다."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "AND조건"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "▶ Comp Motor의 Winding Temp를 50℃ 미만 모터 권선이 소손되지 않도록 주의"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "▶ Receiver Tank의 Press를 5℃ 미만 "
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "▶ After Cooler의 Status를 이상 "
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "조건 불일치시 알람 메세지로는 \"모터 확인 바랍니다.\"으로 설정하여"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "담당자 홍길동에게 알람을 전달한다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph"
+    },
     {
       "type": "paragraph"
     },
@@ -391,7 +529,11 @@ export const defaultEditorContent2 = {
               }
             }
           ],
-          "text": "가 3.5bar 미만이고 "
+          "text": "가 3.5bar 미만"
+        },
+        {
+          "type": "text",
+          "text": "이고 "
         },
         {
           "type": "text",
@@ -548,8 +690,15 @@ export const defaultEditorContent2 = {
             }
           ],
           "text": " 를 가동한다."
+        },
+        {
+          "type": "text",
+          "text": "   "
         }
       ]
+    },
+    {
+      "type": "paragraph"
     },
     {
       "type": "paragraph"
