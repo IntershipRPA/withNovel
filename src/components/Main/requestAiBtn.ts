@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Recipe, Condition, Action } from '../../lib/recipeData'
 
 export const getContent = () => {
-  console.log("getContent() 호출")
+  // console.log("getContent() 호출")
   const json = JSON.parse(localStorage.getItem("novel__content"));
   const arr = json.content.map(item => item.content.map(content => content.text).join(' '))
   const combinedText = arr.join('\n');
@@ -18,7 +18,7 @@ export const requestAi = async () => {
   console.log("질문:", requestData.message);
   try {
     const response = await axios.post(url, requestData);
-    console.log("응답 데이터:", response.data);
+    console.log("서버응답 데이터:", response.data);
 
     if (response.data.message !== '서버 오류') {
       try {
@@ -28,7 +28,7 @@ export const requestAi = async () => {
 
         const jsonData = JSON.parse(jsonString);
 
-        console.log("JSON파싱:", jsonData)
+        // console.log("JSON파싱:", jsonData)
 
         return jsonData
 

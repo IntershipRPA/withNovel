@@ -1,6 +1,6 @@
 <template>
   <div class="group flex items-stretch my-2 border rounded-lg">
-    <div class="mr-2 bg-gray-200 hover:bg-gray-300 group-hover:bg-gray-300 rounded-lg p-2">
+    <div class="mr-2 bg-gray-200 hover:bg-gray-300 group-hover:bg-gray-300 rounded-lg p-2 justify-normal">
       조건{{ conditionID }}
     </div>
     <div class="grid grid-cols-4 gap-2 p-2">
@@ -59,7 +59,7 @@ const unit = ref(props.condition.unit)
 const range = ref(props.condition.range)
 const memo = ref(props.condition.memo)
 
-console.log(props.condition.conditionID, props.condition)
+// console.log(props.condition.conditionID, props.condition)
 
 </script>
 

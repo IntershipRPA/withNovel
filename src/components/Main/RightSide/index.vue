@@ -13,7 +13,7 @@ const rightSideStore = useRightSideStore(); // 스토어 인스턴스 생성
 const aiData = ref<Recipe>({});
 aiData.value = rightSideStore.getAiData();
 
-console.log("aiData:", aiData.value);
+// console.log("aiData:", aiData.value);
 </script>
 
 <style scoped>

@@ -22,7 +22,7 @@ const props = defineProps({
 })
 
 const handleOnClick = async () => {
-  console.log("AI요청 버튼 클릭");
+  // console.log("AI요청 버튼 클릭");
 
   //이전 aiData가 있으면 삭제
   rightSideStore.closeRightSide();
