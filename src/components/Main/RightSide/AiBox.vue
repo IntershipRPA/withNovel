@@ -5,8 +5,8 @@
     </div>
 
     <div class="h-[500px] overflow-y-auto pr-4">
-      <ConAct v-for="(group, index) in filteredActions" :key="index" :groupKey="group.groupNum" :conditions='group.conditions'
-        :actions='group.actions' class="mb-2"/>
+      <ConAct v-for="(group, index) in filteredConActs" :key="index" :groupKey="group.groupNum" :conditions='group.conditions'
+        :actions='group.actions' :aiData='aiData' @updateData='updateData' class="mb-2"/>
       <div
         class="border-4 border-amber-100 hover:border-amber-200 text-center py-4 rounded-lg flex justify-center cursor-pointer text-gray-500 ">
         <PackagePlus class="mr-2" />Or 조건, 액션 추가
@@ -30,8 +30,7 @@ import ConAct from './ConAct.vue';
 import { Recipe, Condition, Action } from '../../../lib/recipeData';
 import { FilePlus, PackagePlus } from "lucide-vue-next";
 
-const conditions = ref<Condition[]>([]);
-const actions = ref<Action[]>([]);
+
 
 const props = defineProps({
   aiData: {
@@ -41,8 +40,20 @@ const props = defineProps({
 })
 // console.log("props.aiData", props.aiData)
 // 부모로부터 받아온 props를 통해 conditions와 actions배열 생성
-conditions.value.push(...props.aiData.conditions)
-actions.value.push(...props.aiData.actions)
+
+const conditions = ref<Condition[]>([...props.aiData.conditions]);
+const actions = ref<Action[]>([...props.aiData.actions]);
+
+// conditions.value.push(...props.aiData.conditions)
+// actions.value.push(...props.aiData.actions)
+
+const computedConditions = computed(() => {
+  return [...props.aiData.conditions];
+});
+
+conditions.value = [...computedConditions.value]
+
+console.log("부모에게 받아온 aiData", props.aiData)
 
 // group화를 위해 계산
 const maxGroup = computed(() => Math.max(...actions.value.map((item: Action) => item.andGroup), ...conditions.value.map((item: Condition) => item.andGroup)));
@@ -51,8 +62,8 @@ const groupNums = Array.from({ length: maxGroup.value }, (_, index) => index + 1
 
 // const conActGroups = ref([]);
 
-const filteredActions = computed(() => {
-  // console.log("filteredActions() 계산 groupNums:", groupNums);
+const filteredConActs = computed(() => {
+  // console.log("filteredConActs() 계산 groupNums:", groupNums);
   return groupNums.map(groupNum => {
     console.log("groupNum", groupNum, typeof(groupNum))
     return {
@@ -63,9 +74,16 @@ const filteredActions = computed(() => {
   });
 });
 
-// conActGroups.value = filteredActions.value;
+// conActGroups.value = filteredConActs.value;
 
 // console.log(conActGroups.value);
+
+// 자식컴포넌트로부터 데이터가 업데이트 되면
+const emits = defineEmits();
+
+const updateData = (aiData : Recipe) => {
+  emits("update-data", aiData)
+}
 
 </script>
 

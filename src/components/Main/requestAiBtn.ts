@@ -2,12 +2,19 @@ import axios from 'axios';
 import { Recipe, Condition, Action } from '../../lib/recipeData'
 
 export const getContent = () => {
-  // console.log("getContent() 호출")
-  const json = JSON.parse(localStorage.getItem("novel__content"));
-  const arr = json.content.map(item => item.content.map(content => content.text).join(' '))
-  const combinedText = arr.join('\n');
-  // console.log(combinedText);
-  return combinedText;
+  try {
+    // console.log("getContent() 호출")
+    const json = JSON.parse(localStorage.getItem("novel__content"));
+    // console.log(json);
+    const arr = json.content.map(item => (item.content || []).map(content => (content.text || [])).join(' '))
+    // console.log(arr);
+    const combinedText = arr.join('\n');
+    // console.log(combinedText);
+    return combinedText;
+
+  } catch (error) {
+    console.log("getContent() 에러")
+  }
 }
 
 export const requestAi = async () => {
@@ -35,7 +42,7 @@ export const requestAi = async () => {
       } catch (error) {
         console.error("JSON 파싱 오류:", error);
       }
-    } else{
+    } else {
       // 서버 오류 발생시 실행
       throw new Error("서버가 요청데이터를 받아오지 못했습니다.");
     }

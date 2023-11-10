@@ -1,6 +1,7 @@
 <template>
   <div class="w-full flex justify-center">
     <button type="button" :class="className" @click='handleOnClick'>AI 요청</button>
+    <Spinner v-if="loading" />
   </div>
 </template>
 
@@ -10,6 +11,7 @@ import { Editor } from '../../../index';
 import { requestAi } from "./requestAiBtn"
 import { Recipe, Condition, Action } from '../../lib/recipeData'
 import { useRightSideStore } from '../../stores/rightSide';
+import Spinner from '../Spinner/Spinner.vue'
 
 const rightSideStore = useRightSideStore(); // 스토어 인스턴스 생성
 
@@ -21,14 +23,16 @@ const props = defineProps({
   },
 })
 
+const loading = ref(false);
+
 const handleOnClick = async () => {
   // console.log("AI요청 버튼 클릭");
 
   //이전 aiData가 있으면 삭제
   rightSideStore.closeRightSide();
 
-
   try {
+    loading.value = true; // Spinner를 표시
     const aiData: Recipe = await requestAi()
     console.log("AiData: ", aiData)
 
@@ -38,6 +42,8 @@ const handleOnClick = async () => {
     rightSideStore.openRightSide();
   } catch (error) {
     console.log("ai요청 실패")
+  } finally {
+    loading.value = false; // Spinner 감추기
   }
 };
 

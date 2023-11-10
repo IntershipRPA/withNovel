@@ -17,11 +17,12 @@ export const useRightSideStore = defineStore('rightSide', {
     setAiData(data: Recipe){
       this.aiData = data;
     },
-    getAiData(){
+    getAiData() {
       if(this.aiData && Object.keys(this.aiData).length > 0){
         return this.aiData
       }else {
         console.log("Ai요청을 먼저해주세요")
+        return undefined;
       }
     },
     discardAiData(){
