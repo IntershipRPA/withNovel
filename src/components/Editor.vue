@@ -4,8 +4,8 @@
        class="className"은 동적으로 클래스를 설정하기 위한 바인딩
        -> className 변수에 저장된 클래스 이름을 해당 요소의 클래스로 설정-->
     <div>
-      <button @click="click">레시피추가</button>
-    
+      <button>레시피추가</button>
+      <textarea placeholder="레시피 입력"></textarea>
     </div> 
   <div @click="editor?.chain().focus().run()" :class="className">
     <BubbleMenu v-if="editor" :editor="editor" />
@@ -35,12 +35,6 @@ import BubbleMenu from "../components/BubbleMenu/index.vue";
 import SimpleModal from "../components/Modal/SimpleModal.vue";
 import { modalToggle } from "./extensions/condition/conditionExtension"
 
-//레시피 추가 모달창
-const click = () => {
-  console.log("레시피 추가");
-  modalStore.openModal();
-};
-
 import { useModalStore } from './../stores/modal';
 import { AlarmCheck } from 'lucide-vue-next';
 import { View } from 'lucide-vue-next';
@@ -50,7 +44,11 @@ const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const isModalOpen = computed(() => modalStore.isModalOpen);
 
-
+//레시피 추가 모달창
+const click = () => {
+  console.log("레시피 추가");
+  modalStore.openModal();
+};
 
 
 
@@ -119,18 +117,6 @@ const props = defineProps({
 // defaultValue : 에디터기본 값으로, JSON 형식으로 저장
 const content = useStorage(props.storageKey, props.defaultValue);
 
-/* useDebounceFn hook을 사용하여 에디터의 업데이트를 디바운스
-   디바운싱은 주어진 시간 동안 발생하는 여러 이벤트를 하나로 그룹화하는 기술
-   ex)사용자가 입력 필드에 빠르게 문자를 입력할 때, 
-      각 문자 입력마다 이벤트 핸들러가 실행되지 않고 일정 시간 동안 대기한 후 
-      마지막 이벤트만 처리하도록 할 수 있습니다.
-*/
-/*
-  에디터가 업데이트될 때마다 해당 내용을 JSON으로 변환하고, 
-  부모 컴포넌트에 알리는 역할을 합니다. 
-  하지만 모든 업데이트에 대해 즉시 알리는 것이 아니라, 
-  지정된 딜레이(props.debounceDuration) 후에 한번만 알립니다.
-*/
 const debouncedUpdate = useDebounceFn(({ editor }) => {
   const json = editor.getJSON();
   content.value = json;
@@ -195,44 +181,147 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       let aircompressorPosition = lineText.indexOf("Air Compressor");
       
 
+      //범위
+      let rangStr = lineText.match("이상");
+      let rangPosition = lineText.indexOf("이상");
+
+      let rangStr2 = lineText.match("이하");
+      let rangPosition2 = lineText.indexOf("이하");
+
+      let rangStr3 = lineText.match("초과");
+      let rangPosition3 = lineText.indexOf("초과");
+
+      let rangStr4 = lineText.match("미만");
+      let rangPosition4 = lineText.indexOf("미만");
+
+      //단위
+      let unit = lineText.match("℃");
+      let unitPosition = lineText.indexOf("℃");
+
+      let unit2 = lineText.match("도");
+      let unitPosition2 = lineText.indexOf("도");
+
+      let unit3 = lineText.match("bar");
+      let unitPosition3 = lineText.indexOf("bar");
+
       //특정 단어 마크업(처음에 한번만 되고 두번째 부터는 적용안됨)
       const {anchor} = e.editor.state.selection;  // 커서의 현재 위치를 가져옴   이거 하니 드래그 된거 해제 됨
 
+//  범위 마크업 - 단어 입력하고 스페이스누르면 글자가 하나 더생겨서 코드 약간 바꿈(한글만 그런듯)
+      if(rangStr !== null){
+        e.editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: index + rangPosition, to: index + rangPosition + rangStr[0].length })
+        .setMark("rangeMark", { class: 'tag', range: "이상" }) // "이상"을 입력하고 rangeMark를 설정합니다.
+        .setTextSelection({from: index + rangPosition + rangStr[0].length, to: lineEnd}) // 마크업 끝난 곳
+        .unsetMark("rangeMark")
+        .setTextSelection({ from: anchor, to: anchor })
+        .run();
+      }else if(rangStr2 !== null){
+        e.editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: index + rangPosition2, to: index + rangPosition2 + rangStr2[0].length })
+        .setMark("rangeMark", { class: 'tag', range: "아하" }) // "이상"을 입력하고 rangeMark를 설정합니다.
+        .setTextSelection({from: index + rangPosition2 + rangStr2[0].length, to: lineEnd}) // 마크업 끝난 곳
+        .unsetMark("rangeMark")
+        .setTextSelection({ from: anchor, to: anchor })
+        .run();
+      }else if(rangStr3 !== null){
+        e.editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: index + rangPosition3, to: index + rangPosition3 + rangStr3[0].length })
+        .setMark("rangeMark", { class: 'tag', range: "초과" }) // "이상"을 입력하고 rangeMark를 설정합니다.
+        .setTextSelection({from: index + rangPosition3 + rangStr3[0].length, to: lineEnd}) // 마크업 끝난 곳
+        .unsetMark("rangeMark")
+        .setTextSelection({ from: anchor, to: anchor })
+        .run();
+      }else if(rangStr4 !== null){
+        e.editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: index + rangPosition4, to: index + rangPosition4 + rangStr4[0].length })
+        .setMark("rangeMark", { class: 'tag', range: "미만" }) // "이상"을 입력하고 rangeMark를 설정합니다.
+        .setTextSelection({from: index + rangPosition4 + rangStr4[0].length, to: lineEnd}) // 마크업 끝난 곳
+        .unsetMark("rangeMark")
+        .setTextSelection({ from: anchor, to: anchor })
+        .run();
+      }
+
+//단위 마크업
+      if(unit !== null){
+        e.editor
+          .chain()
+          .focus()
+          .setUnit({unit: "℃"})
+          .setTextSelection({ from: index + unitPosition, to: index + unitPosition + unit[0].length })
+          .setMark("unitMark", { class: 'tag' })
+          .setTextSelection({from: index + unitPosition + unit[0].length, to: lineEnd}) // 마크업 끝난 곳
+          .unsetMark("unitMark") 
+          .setTextSelection({ from: anchor, to: anchor }) 
+          .unsetUnit()
+          .run();
+      }else if(unit2 !== null){
+        e.editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: index + unitPosition2, to: index + unitPosition2 + unit2[0].length })
+        .setMark("unitMark", { class: 'tag', range: "도" }) // "이상"을 입력하고 rangeMark를 설정합니다.
+        .setTextSelection({from: index + unitPosition2 + unit2[0].length, to: lineEnd}) // 마크업 끝난 곳
+        .unsetMark("unitMark")
+        .setTextSelection({ from: anchor, to: anchor })
+        .run();
+      }else if(unit3 !== null){
+        e.editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: index + unitPosition3, to: index + unitPosition3 + unit3[0].length })
+        .setMark("unitMark", { class: 'tag', range: "bar" }) // "이상"을 입력하고 rangeMark를 설정합니다.
+        .setTextSelection({from: index + unitPosition3 + unit3[0].length, to: lineEnd}) // 마크업 끝난 곳
+        .unsetMark("unitMark")
+        .setTextSelection({ from: anchor, to: anchor })
+        .run();
+      }
+      
+
+// 태그, 설비 마크업
       if(windingtempstr !== null){
         e.editor
           .chain()
           .focus()
-          .setFacility({facility: "Winding Temp"})
+          .setTag({tag: "Winding Temp"})
           .setTextSelection({ from: index + windingtempPosition, to: index + windingtempPosition + windingtempstr[0].length })
           .setMark("tagMark", { class: 'tag' })
           .setTextSelection({from: index + windingtempPosition + windingtempstr[0].length, to: lineEnd}) // 마크업 끝난 곳
           .unsetMark("tagMark") 
           .setTextSelection({ from: anchor, to: anchor }) 
-          .unsetFacility()
+          .unsetTag()
           .run();
       }else if(pressstr !== null){
         e.editor
           .chain()
           .focus()
-          .setFacility({facility: "Press"})
+          .setTag({tag: "Press"})
           .setTextSelection({ from: index + pressPosition, to: index + pressPosition + pressstr[0].length })
           .setMark("tagMark", { class: 'tag' })
           .setTextSelection({from: index + pressPosition + pressstr[0].length, to: lineEnd}) // 마크업 끝난 곳
           .unsetMark("tagMark") 
           .setTextSelection({ from: anchor, to: anchor }) 
-          .unsetFacility()
+          .unsetTag()
           .run();
       }else if(statusstr !== null){
         e.editor
           .chain()
           .focus()
-          .setFacility({facility: "Status"})
+          .setTag({tag: "Status"})
           .setTextSelection({ from: index + statusPosition, to: index + statusPosition + statusstr[0].length })
           .setMark("tagMark", { class: 'tag' })
           .setTextSelection({from: index + statusPosition + statusstr[0].length, to: lineEnd}) // 마크업 끝난 곳
           .unsetMark("tagMark") 
           .setTextSelection({ from: anchor, to: anchor }) 
-          .unsetFacility()
+          .unsetTag()
           .run();
       }else if(compMotorStr !== null){
         e.editor
@@ -466,184 +555,14 @@ watchEffect(() => {
 
 
 
-// // 꼬리표 클릭이벤트
-// const conditionTailElement = ref<Element[]>([]);
-// const actionTailElement = ref<Element[]>([]);
-// const recipeTailElement = ref<Element[]>([]);
-
-// const recipeBtnActivated = ref<Element[]>([]);
-// const recipeBtnAuto = ref<Element[]>([]);
-// const recipeBtnRun = ref<Element[]>([]);
-
-// // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
-// watchEffect(() => {
-//   if (checkHydrated.value === true) {
-//     const conElements = document.querySelectorAll('.condition-btn-setting') as Element[];
-//     const actElements = document.querySelectorAll('.action-btn-setting') as Element[];
-//     const recElements = document.querySelectorAll('.recipe-btn-setting') as Element[];
-
-//     const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
-//     const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
-//     const recBtnRunElements = document.querySelectorAll('.recipe-btn-run') as Element[];
-
-//     conditionTailElement.value = conElements;
-//     actionTailElement.value = actElements;
-//     recipeTailElement.value = recElements;
-
-//     recipeBtnActivated.value = recBtnActElements;
-//     recipeBtnAuto.value = recBtnAutoElements;
-//     recipeBtnRun.value = recBtnRunElements;
-
-
-//     // 조건
-//     if (conditionTailElement.value.length !== 0) {
-//       // console.log("elements detected");
-//       conditionTailElement.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickConditionTail); // 클릭 이벤트 핸들러 연결
-//       });
-//     }
-
-//     // 액션
-//     if (actionTailElement.value.length !== 0) {
-//       actionTailElement.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickActionTail);
-//       });
-//     }
-
-//     // 레시피
-//     if (recipeTailElement.value.length !== 0) {
-//       recipeTailElement.value.forEach((element: Element) => {
-//         // // 이전에 연결된 이벤트 리스너를 제거하고 추가
-//         // element.removeEventListener("click", handleClickRecipeTail);
-//         element.addEventListener("click", handleClickRecipeTail);
-//       });
-//     }
-
-//     // 레시피 활성화 버튼
-//     if (recipeBtnActivated.value.length !== 0) {
-//       recipeBtnActivated.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickRecBtnAct);
-//       });
-//     }
-
-//     // 레시피 자동화 버튼
-//     if (recipeBtnAuto.value.length !== 0) {
-//       recipeBtnAuto.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickRecBtnAuto);
-//       });
-//     }
-
-//     // 레시피 실행 버튼
-//     if (recipeBtnRun.value.length !== 0) {
-//       recipeBtnRun.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickRecBtnRun);
-//       });
-//     }
-
-//   }
-// })
-
-// // 업데이트 감지
-// onUpdated(() => {
-//   if (checkHydrated.value === true) {
-//     const conElements = document.querySelectorAll('.condition-btn-setting') as Element[];
-//     const actElements = document.querySelectorAll('.action-btn-setting') as Element[];
-//     const recElements = document.querySelectorAll('.recipe-btn-setting') as Element[];
-
-//     const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
-//     const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
-//     const recBtnRunElements = document.querySelectorAll('.recipe-btn-run') as Element[];
-
-//     conditionTailElement.value = conElements;
-//     actionTailElement.value = actElements;
-//     recipeTailElement.value = recElements;
-
-//     recipeBtnActivated.value = recBtnActElements;
-//     recipeBtnAuto.value = recBtnAutoElements;
-//     recipeBtnRun.value = recBtnRunElements;
-//   }
-// })
-
-// // 조건 꼬리표 클릭
-// function handleClickConditionTail(event) {
-// //   //클릭한 곳 데이터 가져오기
-
-//   // localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
-//   // localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
-//   // localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
-//   // localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
-
-//   modalStore.isCondition = true;
-//   openModal();
-// }
-
-
-
-// // 액션 꼬리표 클릭
-// function handleClickActionTail(event) {
-//   // localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
-//   // localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
-//   // localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
-//   // localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
-//   modalStore.isAction = true;
-//   openModal();
-// }
-
-// // 레시피 꼬리표 클릭
-// function handleClickRecipeTail(event) {
-//   // console.log(getNovelContentFromClick())
-//   modalStore.isRecipe = true;
-//   openModal();
-// }
-
-// // 레시피 활성화 버튼 클릭
-// function handleClickRecBtnAct (event) {
-//   console.log("활성화 클릭", getNovelContentFromClick()?.attrs?.activated)
-//   const getAttrs = getNovelContentFromClick()?.attrs;
-//   getAttrs.activated = !getNovelContentFromClick()?.attrs?.activated;
-
-//   // editor?.value?.commands.setRecipeRule(getAttrs)
-// };
-
-// // 레시피 자동화 버튼 클릭
-// function handleClickRecBtnAuto (event) {
-//   console.log("자동화 클릭", getNovelContentFromClick()?.attrs?.auto)
-//   const getAttrs = getNovelContentFromClick()?.attrs;
-//   getAttrs.auto = !getNovelContentFromClick()?.attrs?.auto;
-
-// };
-
-// // 레시피 수동으로 실행 버튼 클릭
-// function handleClickRecBtnRun (event) {
-//   console.log("실행 클릭")
-//   alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
-// };
-
-
-
-
-// // local Storage에 "novel__content" 키로 저장된 값을 가져오는 함수
-// const getNovelContentFromClick = () => {
-//   // // click 이벤트의 e 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-//   // const clickedElement = e.target;
-//   // console.log(clickedElement);
-//   // const offset = calculateOffset(e, targetElement);
-//   // const position = editor.value?.view.posAtDOM(clickedElement, 0);
-
-//   const location = editor.value?.state.selection.$anchor; // 커서 위치 정보 가져오기
-//   // const node = position?.node; // 해당 위치의 노드 가져오기
-//   const locationNum = location?.path[1];
-//   // console.log("포지션", locationNum);
-//   const contentObj = content?.value?.content[locationNum];
-
-//   // console.log(contentObj.attrs);
-
-//   // console.log("노드",node);
-
-//   return contentObj;
-// }
-
 
 </script>
 
-<style scoped></style>
+<style scoped>
+  textarea {
+      width: 60%;
+      height: 6.25em;
+      border: none;
+      resize: none;
+    }
+</style>

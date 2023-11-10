@@ -21,6 +21,8 @@ import RecipeCommand from './recipe/recipeExtension';
 import { RecipeRule } from './recipe/recipeRule';
 import { FacilityMark } from './facility/facilityMark';
 import { TagMark } from './tag/tagMark';
+import { RangeMark } from './mark/rangeMark';
+import { UnitMark } from './mark/unitMark';
 import { MarkCondition } from './markCondition/markCondition';
 
 export const defaultExtensions = [
@@ -170,4 +172,6 @@ export const defaultExtensions = [
   MarkCondition,
   FacilityMark,
   TagMark,
+  RangeMark,
+  UnitMark,
 ];

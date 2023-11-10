@@ -7,7 +7,6 @@
       <button type="button" @click.stop="closeModal"
         class="close-btn bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
         <span class="sr-only">Close menu</span>
-        <!-- Heroicon name: outline/x -->
         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
           aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -17,7 +16,8 @@
       <ConditionContent v-if="isCondition" :editor="editor" />
       <ActionContent v-if="isAction" :editor="editor" />
       <RecipeContent v-if="isRecipe" :editor="editor" />
-      <textarea placeholder="레시피 입력"/>
+      <RecipeModal v-if="isRecipeModal" :editor="editor" />
+      <input placeholder="sd">
       <ConfirmBtn @click.stop="handleConfirm" />
       <DeleteBtn @click.stop="handleDelete" />
     </div>
@@ -40,7 +40,7 @@ const modalStore = useModalStore(); // 스토어 인스턴스 생성
 const isCondition = computed(() => modalStore.isCondition);
 const isAction = computed(() => modalStore.isAction);
 const isRecipe = computed(() => modalStore.isRecipe);
-
+const isRecipeModal = computed(() => modalStore.isRecipeModal);
 
 const closeModal = () => {
   modalStore.closeModal(); // 모달 닫기

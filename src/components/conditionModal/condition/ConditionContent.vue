@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-family text-lg">
+  <!-- <div class="modal-family text-lg">
     <div class="first p-2.5 content-center relative -top-2.5 ">
       <div>
         <p class="text-sm text-gray-400 mb-1 ">
@@ -27,7 +27,7 @@
     <div class="min-w-full mb-20 px-14">
       <MiniEditor class='p-2.5 content-center' :placeholder="'추가 메모를 작성하세요 …'" :storageKey="'modal__condition'" />
     </div>
-  </div>
+  </div> -->
   <ConfirmBtn @click.stop="handleConfirm" />
   <DeleteBtn @click.stop="handleDelete" />
 </template>
