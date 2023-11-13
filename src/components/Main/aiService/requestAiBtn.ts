@@ -4,7 +4,7 @@ import { Recipe, Condition, Action } from '../../lib/recipeData'
 export const getContent = () => {
   try {
     // console.log("getContent() 호출")
-    const json = JSON.parse(localStorage.getItem("novel__content"));
+    const json = JSON.parse(localStorage.getItem("aiService__content"));
     // console.log(json);
     const arr = json.content.map(item => (item.content || []).map(content => (content.text || [])).join(' '))
     // console.log(arr);
@@ -15,6 +15,40 @@ export const getContent = () => {
   } catch (error) {
     console.log("getContent() 에러")
   }
+}
+
+export const getFacs = () => {
+  console.log("getFacs()호출")
+  try {
+    // console.log("getContent() 호출")
+    const json = JSON.parse(localStorage.getItem("aiService__content"));
+    console.log(json);
+    const arr = json.content.map(item => (item.content || []).map(content => (content.text || [])).join(' '))
+    console.log(arr);
+    // const combinedText = arr.join('\n');
+    // console.log(combinedText);
+    return arr;
+
+  } catch (error) {
+    console.log("getFacs() 에러")
+  }
+}
+
+export const getTags = () => {
+  console.log("getTags()호출")
+  // try {
+  //   // console.log("getContent() 호출")
+  //   const json = JSON.parse(localStorage.getItem("aiService__content"));
+  //   // console.log(json);
+  //   const arr = json.content.map(item => (item.content || []).map(content => (content.text || [])).join(' '))
+  //   // console.log(arr);
+  //   const combinedText = arr.join('\n');
+  //   // console.log(combinedText);
+  //   return combinedText;
+
+  // } catch (error) {
+  //   console.log("getTags() 에러")
+  // }
 }
 
 export const requestAi = async () => {

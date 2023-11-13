@@ -23,13 +23,13 @@ import { Editor as EditorClass } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
 import { useCompletion } from "ai/vue";
 
-import { defaultEditorContent2 } from "../../lib/default-content2";
-import { defaultEditorProps } from "../../lib/props";
-import { getPrevText } from "../../lib/editor";
-import { defaultExtensions } from "../../components/extensions";
-import BubbleMenu from "../BubbleMenu/index.vue";
-import SimpleModal from "../Modal/SimpleModal.vue";
-import { modalToggle } from "../extensions/condition/conditionExtension"
+import { defaultEditorContent2 } from "../../../lib/default-content2";
+import { defaultEditorProps } from "../../../lib/props";
+import { getPrevText } from "../../../lib/editor";
+import { defaultExtensions } from "../../../components/extensions/formExtensions";
+import BubbleMenu from "../../BubbleMenu/index.vue";
+import SimpleModal from "../../Modal/SimpleModal.vue";
+import { modalToggle } from "../../extensions/condition/conditionExtension"
 
 // 모달 설정
 // const showModal = modalToggle;
@@ -38,7 +38,7 @@ import { modalToggle } from "../extensions/condition/conditionExtension"
 // };
 // const isCondition = ref(false);
 
-import { useModalStore } from '../../stores/modal';
+import { useModalStore } from '../../../stores/modal';
 import { AlarmCheck } from 'lucide-vue-next';
 import { View } from 'lucide-vue-next';
 
@@ -226,9 +226,8 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       debouncedUpdate(e);
     }
   },
-  autofocus: "end",
+  autofocus: "start",
 });
-
 /*
   useCompletion hook을 사용하여 텍스트 완성 기능을 설정
   - complete: 주어진 프롬프트에 대한 완성을 요청하는 함수
@@ -532,4 +531,4 @@ watchEffect(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>../../extensions/formExtensions

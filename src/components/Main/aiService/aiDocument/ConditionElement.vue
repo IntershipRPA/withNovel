@@ -79,7 +79,7 @@ const memo = ref(props.condition.memo)
 const emits = defineEmits();
 
 const handleClickDelete = () => {
-  console.log("handleClickDelete() 호출")
+  // console.log("handleClickDelete() 호출")
   emits("delete-condition", props.condition.conditionID)
 }
 

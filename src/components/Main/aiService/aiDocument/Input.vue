@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-model='localMessage' class="min-w-[245px] text-gray-400 focus:text-black"/>
+  <input type="text" v-model='localMessage' class="min-w-[245px] text-black "/>
 </template>
 
 <script setup lang='ts'>

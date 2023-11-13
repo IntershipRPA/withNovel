@@ -1,17 +1,17 @@
 import { defineStore } from 'pinia';
 import { Recipe, Condition, Action } from '../lib/recipeData';
 
-export const useRightSideStore = defineStore('rightSide', {
+export const useAiDocumentStore = defineStore('rightSide', {
   state: () => ({
-    isRightSideOpen: false,
+    isAiDocumentOpen: false,
     aiData: {}, // recipe으로 저장하기 전 aiData의 recipeID는 항상 0으로 설정
   }),  
   actions: {
-    openRightSide() {
-      this.isRightSideOpen = true;
+    openAiDocument() {
+      this.isAiDocumentOpen = true;
     },
-    closeRightSide() {
-      this.isRightSideOpen = false;
+    closeAiDocument() {
+      this.isAiDocumentOpen = false;
       this.aiData = {};
     },
     setAiData(data: Recipe){
