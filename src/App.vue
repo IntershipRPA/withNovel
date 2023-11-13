@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import Editor from "./components/Editor.vue";
-// import Editor from "./testFolder/index.vue";
+import LeftSide from "./components/LeftSide/index.vue";
+import Main from "./components/Main/index.vue";
 </script>
 
 <template>
-  <div class="mt-8">
-    <Editor completion-api="http://localhost:3000/api/generate" />
+  <div class="mt-8 flex items-stretch">
+    <LeftSide class='flex-grow-0' />
+    <Main class="flex-grow" />    
   </div>
 </template>
 
