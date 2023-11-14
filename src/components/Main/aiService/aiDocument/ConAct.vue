@@ -3,7 +3,7 @@
     <ConActGroupHeader :groupKey='$props.groupKey' />
     <!-- 조건 -->
     <ConditionElement v-for="condition in conditions" :key="condition.conditionID" :condition='condition'
-      @deleteCondition='deleteCondition' />
+      @deleteCondition='deleteCondition' @updateCondition='updateCondition' />
     <!-- 조건이 1개라도 없을 때 -->
     <AtLestOneWarning v-if='isAtLeastOneCondition' :message='"조건이 없습니다. 조건을 추가하세요."' />
     <!-- 조건 추가 버튼 -->
@@ -27,7 +27,7 @@
 <script setup lang='ts'>
 import ConditionElement from './ConditionElement.vue'
 import ActionElement from './ActionElement.vue'
-import { Recipe, Condition, Action } from '../../../lib/recipeData';
+import { AiData, Condition, Action } from '../../../lib/recipeData';
 import AtLestOneWarning from './AtLestOneWarning.vue';
 import ConActGroupHeader from './ConActGroupHeader.vue';
 import { PlusSquare, AlertTriangle } from "lucide-vue-next";
@@ -49,7 +49,7 @@ const props = defineProps({
   //   required: true,
   // },
   aiData: {
-    type: Object as () => Recipe,
+    type: Object as () => AiData,
   }
 })
 
@@ -65,7 +65,7 @@ const aiData = ref(props.aiData)
 // watch([() => props.conditions, () => props.actions, () => props.aiData], ([newConditions, newActions, newAiData], [oldConditions, oldActions, oldAiData]) => {
 watch([() => props.conditions, () => props.aiData], ([newConditions, newAiData], [oldConditions, oldAiData]) => {
   // // props.parentProp가 변경되면 호출되는 콜백 함수
-  console.log('Conditions 변경:', oldConditions, '->', newConditions);
+  // console.log('Conditions 변경:', oldConditions, '->', newConditions);
   // console.log('Actions 변경:', oldActions, '->', newActions);
 
   conditions.value = newConditions;
@@ -73,15 +73,13 @@ watch([() => props.conditions, () => props.aiData], ([newConditions, newAiData],
   aiData.value = newAiData;
 });
 
+// 자식컴포넌트로부터 데이터가 업데이트 되면
+const emits = defineEmits();
+
 const handleClickAddCondition = () => {
   console.log("조건 추가 버튼 clicked")
   addCondition();
 }
-
-// const handleClickAddAction = () => {
-//   // console.log("조건 추가 버튼 clicked")
-//   addAction();
-// }
 
 // 조건 추가
 const addCondition = () => {
@@ -108,34 +106,6 @@ const addCondition = () => {
   }
 }
 
-// 액션 추가
-// const addAction = () => {
-//   if (aiData && aiData.value) {
-//     const maxActionID: number = computed(() => Math.max(...actions.value.map((item: Action) => item.actionID))).value;
-
-//     const newAction: Action = {
-//       actionID: maxActionID + 1, // 부모로부터 가장 마지막 조건 ID 받아와야함
-//       andGroup: props.groupKey,
-//       fac: '',
-//       tag: '',
-//       value: '',
-//       unit: '',
-//       range: '',
-//       memo: '',
-//     }
-//     // actions.value = [...actions.value, newAction]
-//     aiData.value.actions.push(newAction); 
-
-//     // 데이터 업데이트를 부모에게 전달
-//     emits("update-data", aiData.value)
-//   } else {
-//     console.warn("aiData is undefined");
-//   }
-// }
-
-
-// 자식컴포넌트로부터 데이터가 업데이트 되면
-const emits = defineEmits();
 
 // 조건 삭제
 const deleteCondition = (targetID: number) => {
@@ -157,25 +127,22 @@ const deleteCondition = (targetID: number) => {
   }
 }
 
-// 액션 삭제
-// const deleteAction = (targetID: number) => {
-//   if (aiData && aiData.value) {
-//     // conditionID를 받아서 인덱스 추출
-//     const indexToRemove = aiData.value.actions.findIndex((action: Action) => action.actionID === targetID);
-//     // console.log(indexToRemove, "삭제")
-//     if (indexToRemove !== -1) {
-//       aiData.value.actions.splice(indexToRemove, 1);
-
-//       // 삭제 후 빈 자리를 채우기 위해 id 재조정
-//       for (let i = indexToRemove; i < aiData.value.actions.length; i++) {
-//         aiData.value.actions[i].actionID = i + 1;
-//       }
-//     }
-//     emits("update-data", aiData.value)
-//   } else {
-//     console.warn("aiData is undefined");
-//   }
-// }
+// 조건 업데이트
+const updateCondition = (targetID: number, updatedCondition:Condition) => {
+  // console.log("updateCondition호출")
+  if (aiData && aiData.value) {
+    // conditionID를 받아서 인덱스 추출
+    const indexToUpdate = aiData.value.conditions.findIndex((condition: Condition) => condition.conditionID === targetID);
+    // console.log(indexToUpdate, "업데이트")
+    // console.log(updatedCondition)
+    if (indexToUpdate !== -1) {
+      aiData.value.conditions[indexToUpdate] = updatedCondition
+    }
+    emits("update-data", aiData.value)
+  } else {
+    console.warn("aiData is undefined");
+  }
+}
 
 </script>
 

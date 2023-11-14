@@ -1,12 +1,12 @@
 <template>
   <label class="autoSaverSwitch relative inline-flex cursor-pointer select-none items-center">
-    <input type="checkbox" name="autoSaver" class="sr-only" :checked="props.modelValue" @change="handleCheckboxChange" />
+    <input type="checkbox" name="autoSaver" class="sr-only" :checked="props.toggle" @change="handleCheckboxChange" />
     <span class="px-2 mr-3 text-black rounded-lg bg-white" @click="setModelValue(true)">
       form입력
     </span>
     <span class="slider flex h-26 w-50 items-center rounded-full p-1 duration-200 bg-gray-700">
       <span class="dot h-18 w-18 rounded-full bg-white duration-200"
-        :class="props.modelValue ? 'translate-x-6' : ''"></span>
+        :class="props.toggle ? 'translate-x-6' : ''"></span>
     </span>
     <span class="px-2 ml-3 text-black rounded-lg bg-white" @click="setModelValue(false)">
       ai입력
@@ -18,18 +18,21 @@
 // import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-  modelValue: {
+  toggle: {
     type: Boolean,
     required: true,
   },
 });
+
+console.log(props.toggle)
+
 
 const setModelValue = (value: boolean) => {
   emit('update:modelValue', value);
 };
 
 const handleCheckboxChange = () => {
-  const updatedValue = !props.modelValue;
+  const updatedValue = !props.toggle;
   // 변경된 값을 부모 컴포넌트로 전달
   emit('update:modelValue', updatedValue);
 };

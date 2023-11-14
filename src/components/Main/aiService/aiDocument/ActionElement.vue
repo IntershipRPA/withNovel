@@ -23,27 +23,27 @@
       <div class="grid grid-cols-4 gap-2 p-2">
         <label :for="`fac-act`">설비</label>
         <div class="col-span-3">
-          <Input v-model="fac" :id="`fac-act`" />
+          <Input v-model="fac" :id="`fac-act`" @change="onFacUpdated" />
         </div>
         <label :for="`tag-act`">태그</label>
         <div class="col-span-3">
-          <Input v-model='tag' :id="`tag-act`" />
+          <Input v-model='tag' :id="`tag-act`" @change="onTagUpdated" />
         </div>
         <label :for="`val-act`">수치값</label>
         <div class="col-span-3">
-          <Input v-model='val' :id="`val-act`" />
+          <Input v-model='val' :id="`val-act`" @change="onValUpdated" />
         </div>
         <label :for="`unit-act`">단위값</label>
         <div class="col-span-3">
-          <Input v-model='unit' :id="`unit-act`" />
+          <Input v-model='unit' :id="`unit-act`" @change="onUnitUpdated" />
         </div>
         <label :for="`range-act`">범위값</label>
         <div class="col-span-3">
-          <Input v-model='range' :id="`range-act`" />
+          <Input v-model='range' :id="`range-act`" @change="onRangeUpdated" />
         </div>
         <label :for="`memo-act`">메모</label>
         <div class="col-span-3">
-          <Input v-model='memo' :id="`memo-act`" />
+          <Input v-model='memo' :id="`memo-act`" @change="onMemoUpdated" />
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@ import { ref } from 'vue';
 import { ClipboardType, ClipboardCopy, Copy, Trash2 } from "lucide-vue-next";
 
 import Input from './Input.vue'
-import { Recipe, Condition, Action } from '../../../lib/recipeData';
+import { AiData, Condition, Action } from '../../../lib/recipeData';
 
 const props = defineProps({
   action: {
@@ -71,7 +71,7 @@ const props = defineProps({
 // const range = ref('미만')
 // const memo = ref('모터 권선이 소손되지 않도록 주의')
 
-// const actionID = ref(props.action.actionID)
+const action = ref(props.action)
 const fac = ref(props.action.fac)
 const tag = ref(props.action.tag)
 const val = ref(props.action.value)
@@ -83,10 +83,35 @@ const memo = ref(props.action.memo)
 // console.log(props.action.actionID, props.action)
 const emits = defineEmits();
 
-const handleClickDelete = () => {
-  // console.log("handleClickDelete() 호출")
-  emits("delete-action", props.action.actionID)
-}
+// const handleClickDelete = () => {
+//   // console.log("handleClickDelete() 호출")
+//   emits("delete-action", props.action.actionID)
+// }
+
+const onFacUpdated = (e) => {
+  action.value.fac = e.target.value;
+  emits('update-action', action.value);
+};
+const onTagUpdated = (e) => {
+  action.value.tag = e.target.value;
+  emits('update-action', action.value);
+};
+const onValUpdated = (e) => {
+  action.value.val = e.target.value;
+  emits('update-action', action.value);
+};
+const onUnitUpdated = (e) => {
+  action.value.unit = e.target.value;
+  emits('update-action', action.value);
+};
+const onRangeUpdated = (e) => {
+  action.value.range = e.target.value;
+  emits('update-action', action.value);
+};
+const onMemoUpdated = (e) => {
+  action.value.memo = e.target.value;
+  emits('update-action', action.value);
+};
 
 </script>
 

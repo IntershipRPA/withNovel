@@ -121,6 +121,23 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Oil Separator",
+      searchTerms: ["오일","세퍼레이터", "기름"],
+      description: "유수 분리기",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Oil Separator"})
+          .insertContent("Oil Separator")
+          .unsetFacility()
+          .run();
+      },
+    },
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Recipe, Condition, Action } from '../lib/recipeData';
+import { AiData, Condition, Action } from '../lib/recipeData';
 
 export const useAiDocumentStore = defineStore('rightSide', {
   state: () => ({
@@ -14,7 +14,7 @@ export const useAiDocumentStore = defineStore('rightSide', {
       this.isAiDocumentOpen = false;
       this.aiData = {};
     },
-    setAiData(data: Recipe){
+    setAiData(data: AiData){
       this.aiData = data;
     },
     getAiData() {

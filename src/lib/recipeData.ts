@@ -18,9 +18,14 @@ export interface Action {
   range: string,
   memo: string,
 }
-export interface Recipe {
-  recipeID: number,
+export interface AiData {
+  // recipeID: number,
   // actions: Action[],
   action: Action,
   conditions: Condition[],
+}
+export interface Recipe {
+  recipeID: number,
+  recipeType: string,
+  content: object,
 }

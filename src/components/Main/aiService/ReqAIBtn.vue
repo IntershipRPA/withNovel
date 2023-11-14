@@ -8,7 +8,7 @@
 <script setup lang='ts'>
 import { ref } from "vue";
 // import { Editor } from '../../../../index';
-import { requestAi, getFacs } from "./requestAiBtn"
+import { requestAi, getFacs, getTags } from "./requestAiBtn"
 import { Recipe, Condition, Action } from '../../../lib/recipeData'
 import { useAiDocumentStore } from '../../../stores/aiDocument';
 import Spinner from '../../Spinner/Spinner.vue'
@@ -35,7 +35,8 @@ const handleOnClick = async () => {
     loading.value = true; // Spinner를 표시
 
     //테스트 용
-    getFacs();
+    // getFacs();
+    // getTags();
 
     const aiData: Recipe = await requestAi()
     console.log("AiData: ", aiData)

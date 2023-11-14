@@ -3,12 +3,16 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { onUpdated, ref } from 'vue';
 
 const props = defineProps(['modelValue']);
 const emit = defineEmits();
 
 const localMessage = ref(props.modelValue);
+
+// onUpdated(() => {
+//   console.log(localMessage.value)
+// })
 
 </script>
 
