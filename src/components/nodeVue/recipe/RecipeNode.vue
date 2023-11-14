@@ -62,7 +62,7 @@ import { useModalStore } from '../../../stores/modal';
 import ElementChecked from './ElementChecked.vue';
 import { Download, Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
 import { MapResult } from '@tiptap/pm/transform';
-
+import { useStorage } from "@vueuse/core";
 const props = defineProps({
   ...nodeViewProps,
   editor: {
@@ -113,7 +113,9 @@ const getJSONFromRecipe = () => {
 
 
 // Text 컨텐츠 만들기
+let recipeData = [];
 const getTextFromRecipe = () => {
+
   const arr = props.node.content.content.map(item => item.content.content);
   const textArr = arr.map(innerArray => {
     return innerArray.map(element => {
@@ -131,12 +133,25 @@ const getTextFromRecipe = () => {
         rowString += item + ' ';
       }
     }
-
+    
     return rowString.trim();
   }).join('\n');
+  // recipeData.push(result);
+  // useStorage("recipe",recipeData);
+
 
   return result;
 }
+// console.log("result : ", getTextFromRecipe()); //레시피 전체내용 출력됨
+//  recipeData.push(getTextFromRecipe());
+// console.log(recipeData)
+//  localStorage.setItem("recipe",recipeData);
+//  useStorage("recipe", recipeData);
+
+ 
+//  console.log(recipeData)
+   
+
 
 
 // 조건 일치시 실행할 액션
