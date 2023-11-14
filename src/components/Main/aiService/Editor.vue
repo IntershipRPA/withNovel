@@ -23,13 +23,13 @@ import { Editor as EditorClass } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
 import { useCompletion } from "ai/vue";
 
-import { defaultEditorContent2 } from "../../lib/default-content2";
-import { defaultEditorProps } from "../../lib/props";
-import { getPrevText } from "../../lib/editor";
-import { defaultExtensions } from "../../components/extensions";
-import BubbleMenu from "../BubbleMenu/index.vue";
-import SimpleModal from "../Modal/SimpleModal.vue";
-import { modalToggle } from "../extensions/condition/conditionExtension"
+import { defaultEditorContent2 } from "../../../lib/default-content2";
+import { defaultEditorProps } from "../../../lib/props";
+import { getPrevText } from "../../../lib/editor";
+import { defaultExtensions } from "../../../components/extensions/aiExtensions";
+import BubbleMenu from "../../BubbleMenu/index.vue";
+import SimpleModal from "../../Modal/SimpleModal.vue";
+import { modalToggle } from "../../extensions/condition/conditionExtension"
 
 // 모달 설정
 // const showModal = modalToggle;
@@ -38,18 +38,26 @@ import { modalToggle } from "../extensions/condition/conditionExtension"
 // };
 // const isCondition = ref(false);
 
-import { useModalStore } from '../../stores/modal';
+import { useModalStore } from '../../../stores/modal';
 import { AlarmCheck } from 'lucide-vue-next';
 import { View } from 'lucide-vue-next';
+import { useRecipeStore } from '../../../stores/recipes';
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
+
 const isModalOpen = computed(() => modalStore.isModalOpen);
+// const isCondition = computed(() => modalStore.isCondition);
 
 // const openModal = () => {
 //   modalStore.openModal(); // 모달 열기
 // };
+
+// const closeModal = () => {
+//   modalStore.closeModal(); // 모달 닫기
+// };
+
 
 
 
@@ -71,11 +79,14 @@ const props = defineProps({
   // 에디터기본 값으로, JSON 형식으로 저장
   defaultValue: {
     type: Object as PropType<JSONContent>,
- 
-    default: () => {
-      return defaultEditorContent2;
-
-    },
+    required: true,
+    // default: () => {
+    //   // 불러올 컨텐츠가 있는지 스토어에서 확인
+    //   const recipeStore = useRecipeStore(); // 스토어 인스턴스 생성
+    //   const isJsonContentEmpty = Object.keys(recipeStore.jsonContent).length === 0 && recipeStore.jsonContent.constructor === Object;
+    //   const defaultValue = isJsonContentEmpty ? defaultEditorContent2 : recipeStore.jsonContent
+    //   return defaultValue;
+    // },
   },
 
   // Tiptap 편집기에 추가할 확장 기능
@@ -111,7 +122,7 @@ const props = defineProps({
   // 로컬 스토리지에서 사용할 key값
   storageKey: {
     type: String,
-    default: "novel__content",
+    default: "aiService__content",
   },
 });
 
@@ -119,6 +130,18 @@ const props = defineProps({
 // defaultValue : 에디터기본 값으로, JSON 형식으로 저장
 const content = useStorage(props.storageKey, props.defaultValue);
 
+/* useDebounceFn hook을 사용하여 에디터의 업데이트를 디바운스
+   디바운싱은 주어진 시간 동안 발생하는 여러 이벤트를 하나로 그룹화하는 기술
+   ex)사용자가 입력 필드에 빠르게 문자를 입력할 때, 
+      각 문자 입력마다 이벤트 핸들러가 실행되지 않고 일정 시간 동안 대기한 후 
+      마지막 이벤트만 처리하도록 할 수 있습니다.
+*/
+/*
+  에디터가 업데이트될 때마다 해당 내용을 JSON으로 변환하고, 
+  부모 컴포넌트에 알리는 역할을 합니다. 
+  하지만 모든 업데이트에 대해 즉시 알리는 것이 아니라, 
+  지정된 딜레이(props.debounceDuration) 후에 한번만 알립니다.
+*/
 const debouncedUpdate = useDebounceFn(({ editor }) => {
   const json = editor.getJSON();
   content.value = json;
@@ -201,9 +224,8 @@ const editor = useEditor({ // useEditor : 전체 편집기와 관련된 메소�
       debouncedUpdate(e);
     }
   },
-  autofocus: "end",
+  autofocus: "start",
 });
-
 /*
   useCompletion hook을 사용하여 텍스트 완성 기능을 설정
   - complete: 주어진 프롬프트에 대한 완성을 요청하는 함수
@@ -324,186 +346,6 @@ watchEffect(() => {
     checkHydrated.value = true;
   }
 })
-
-
-
-// // 꼬리표 클릭이벤트
-// const conditionTailElement = ref<Element[]>([]);
-// const actionTailElement = ref<Element[]>([]);
-// const recipeTailElement = ref<Element[]>([]);
-
-// const recipeBtnActivated = ref<Element[]>([]);
-// const recipeBtnAuto = ref<Element[]>([]);
-// const recipeBtnRun = ref<Element[]>([]);
-
-// // 초기 렌더링에 두번째 마운트 이후를 감지 + 업데이트에 따른 함수 실행
-// watchEffect(() => {
-//   if (checkHydrated.value === true) {
-//     const conElements = document.querySelectorAll('.condition-btn-setting') as Element[];
-//     const actElements = document.querySelectorAll('.action-btn-setting') as Element[];
-//     const recElements = document.querySelectorAll('.recipe-btn-setting') as Element[];
-
-//     const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
-//     const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
-//     const recBtnRunElements = document.querySelectorAll('.recipe-btn-run') as Element[];
-
-//     conditionTailElement.value = conElements;
-//     actionTailElement.value = actElements;
-//     recipeTailElement.value = recElements;
-
-//     recipeBtnActivated.value = recBtnActElements;
-//     recipeBtnAuto.value = recBtnAutoElements;
-//     recipeBtnRun.value = recBtnRunElements;
-
-
-//     // 조건
-//     if (conditionTailElement.value.length !== 0) {
-//       // console.log("elements detected");
-//       conditionTailElement.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickConditionTail); // 클릭 이벤트 핸들러 연결
-//       });
-//     }
-
-//     // 액션
-//     if (actionTailElement.value.length !== 0) {
-//       actionTailElement.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickActionTail);
-//       });
-//     }
-
-//     // 레시피
-//     if (recipeTailElement.value.length !== 0) {
-//       recipeTailElement.value.forEach((element: Element) => {
-//         // // 이전에 연결된 이벤트 리스너를 제거하고 추가
-//         // element.removeEventListener("click", handleClickRecipeTail);
-//         element.addEventListener("click", handleClickRecipeTail);
-//       });
-//     }
-
-//     // 레시피 활성화 버튼
-//     if (recipeBtnActivated.value.length !== 0) {
-//       recipeBtnActivated.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickRecBtnAct);
-//       });
-//     }
-
-//     // 레시피 자동화 버튼
-//     if (recipeBtnAuto.value.length !== 0) {
-//       recipeBtnAuto.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickRecBtnAuto);
-//       });
-//     }
-
-//     // 레시피 실행 버튼
-//     if (recipeBtnRun.value.length !== 0) {
-//       recipeBtnRun.value.forEach((element: Element) => {
-//         element.addEventListener("click", handleClickRecBtnRun);
-//       });
-//     }
-
-//   }
-// })
-
-// // 업데이트 감지
-// onUpdated(() => {
-//   if (checkHydrated.value === true) {
-//     const conElements = document.querySelectorAll('.condition-btn-setting') as Element[];
-//     const actElements = document.querySelectorAll('.action-btn-setting') as Element[];
-//     const recElements = document.querySelectorAll('.recipe-btn-setting') as Element[];
-
-//     const recBtnActElements = document.querySelectorAll('.recipe-btn-activated') as Element[];
-//     const recBtnAutoElements = document.querySelectorAll('.recipe-btn-auto') as Element[];
-//     const recBtnRunElements = document.querySelectorAll('.recipe-btn-run') as Element[];
-
-//     conditionTailElement.value = conElements;
-//     actionTailElement.value = actElements;
-//     recipeTailElement.value = recElements;
-
-//     recipeBtnActivated.value = recBtnActElements;
-//     recipeBtnAuto.value = recBtnAutoElements;
-//     recipeBtnRun.value = recBtnRunElements;
-//   }
-// })
-
-// // 조건 꼬리표 클릭
-// function handleClickConditionTail(event) {
-// //   //클릭한 곳 데이터 가져오기
-
-//   // localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
-//   // localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
-//   // localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
-//   // localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
-
-//   modalStore.isCondition = true;
-//   openModal();
-// }
-
-
-
-// // 액션 꼬리표 클릭
-// function handleClickActionTail(event) {
-//   // localStorage.setItem('memo', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.memo)));
-//   // localStorage.setItem('temp', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.temp)));
-//   // localStorage.setItem('range', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.range)));
-//   // localStorage.setItem('unit', JSON.parse(JSON.stringify(getNovelContentFromClick().attrs.unit)));
-//   modalStore.isAction = true;
-//   openModal();
-// }
-
-// // 레시피 꼬리표 클릭
-// function handleClickRecipeTail(event) {
-//   // console.log(getNovelContentFromClick())
-//   modalStore.isRecipe = true;
-//   openModal();
-// }
-
-// // 레시피 활성화 버튼 클릭
-// function handleClickRecBtnAct (event) {
-//   console.log("활성화 클릭", getNovelContentFromClick()?.attrs?.activated)
-//   const getAttrs = getNovelContentFromClick()?.attrs;
-//   getAttrs.activated = !getNovelContentFromClick()?.attrs?.activated;
-
-//   // editor?.value?.commands.setRecipeRule(getAttrs)
-// };
-
-// // 레시피 자동화 버튼 클릭
-// function handleClickRecBtnAuto (event) {
-//   console.log("자동화 클릭", getNovelContentFromClick()?.attrs?.auto)
-//   const getAttrs = getNovelContentFromClick()?.attrs;
-//   getAttrs.auto = !getNovelContentFromClick()?.attrs?.auto;
-
-// };
-
-// // 레시피 수동으로 실행 버튼 클릭
-// function handleClickRecBtnRun (event) {
-//   console.log("실행 클릭")
-//   alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
-// };
-
-
-
-
-// // local Storage에 "novel__content" 키로 저장된 값을 가져오는 함수
-// const getNovelContentFromClick = () => {
-//   // // click 이벤트의 e 객체를 통해 클릭한 요소에 대한 정보에 접근할 수 있습니다.
-//   // const clickedElement = e.target;
-//   // console.log(clickedElement);
-//   // const offset = calculateOffset(e, targetElement);
-//   // const position = editor.value?.view.posAtDOM(clickedElement, 0);
-
-//   const location = editor.value?.state.selection.$anchor; // 커서 위치 정보 가져오기
-//   // const node = position?.node; // 해당 위치의 노드 가져오기
-//   const locationNum = location?.path[1];
-//   // console.log("포지션", locationNum);
-//   const contentObj = content?.value?.content[locationNum];
-
-//   // console.log(contentObj.attrs);
-
-//   // console.log("노드",node);
-
-//   return contentObj;
-// }
-
 
 </script>
 

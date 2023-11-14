@@ -9,8 +9,8 @@ export interface Condition {
   memo: string,
 }
 export interface Action {
-  actionID: number,
-  andGroup: number,
+  // actionID: number,
+  // andGroup: number,
   fac: string,
   tag: string,
   value: string,
@@ -18,8 +18,14 @@ export interface Action {
   range: string,
   memo: string,
 }
+export interface AiData {
+  // recipeID: number,
+  // actions: Action[],
+  action: Action,
+  conditions: Condition[],
+}
 export interface Recipe {
   recipeID: number,
-  actions: Action[],
-  conditions: Condition[],
+  recipeType: string,
+  content: object,
 }

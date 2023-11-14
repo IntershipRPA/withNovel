@@ -7,13 +7,13 @@
 
 <script setup lang='ts'>
 import { ref } from "vue";
-import { Editor } from '../../../index';
-import { requestAi } from "./requestAiBtn"
-import { Recipe, Condition, Action } from '../../lib/recipeData'
-import { useRightSideStore } from '../../stores/rightSide';
-import Spinner from '../Spinner/Spinner.vue'
+// import { Editor } from '../../../../index';
+import { requestAi, getFacs, getTags } from "./requestAiBtn"
+import { Recipe, Condition, Action } from '../../../lib/recipeData'
+import { useAiDocumentStore } from '../../../stores/aiDocument';
+import Spinner from '../../Spinner/Spinner.vue'
 
-const rightSideStore = useRightSideStore(); // 스토어 인스턴스 생성
+const aiDocumentStore = useAiDocumentStore(); // 스토어 인스턴스 생성
 
 const props = defineProps({
   className: {
@@ -29,17 +29,22 @@ const handleOnClick = async () => {
   // console.log("AI요청 버튼 클릭");
 
   //이전 aiData가 있으면 삭제
-  rightSideStore.closeRightSide();
+  aiDocumentStore.closeAiDocument();
 
   try {
     loading.value = true; // Spinner를 표시
+
+    //테스트 용
+    // getFacs();
+    // getTags();
+
     const aiData: Recipe = await requestAi()
     console.log("AiData: ", aiData)
 
     // 스토어에 aiData 저장
-    rightSideStore.setAiData(aiData);
-    // rightSide 열기
-    rightSideStore.openRightSide();
+    aiDocumentStore.setAiData(aiData);
+    // aiDocument 열기
+    aiDocumentStore.openAiDocument();
   } catch (error) {
     console.log("ai요청 실패")
   } finally {

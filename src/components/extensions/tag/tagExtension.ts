@@ -103,6 +103,24 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Air",
+      searchTerms: ["에어"],
+      description: "공기",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Air`})
+          .insertContent(`Air`)
+          .unsetTag()
+          .run();
+      },
+    },
+
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();

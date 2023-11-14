@@ -3,7 +3,7 @@ import { Recipe, Condition, Action } from '../lib/recipeData';
 
 export const useRecipeStore = defineStore('recipes', {
   state: () => ({    
-    // recipes: [],
+    jsonContent: {},
   }),  
   actions: {
     // setRecipe(recipe : Recipe) {
