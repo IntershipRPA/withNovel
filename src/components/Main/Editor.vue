@@ -46,16 +46,10 @@ import { View } from 'lucide-vue-next';
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
 
 const isModalOpen = computed(() => modalStore.isModalOpen);
-// const isCondition = computed(() => modalStore.isCondition);
 
 // const openModal = () => {
 //   modalStore.openModal(); // 모달 열기
 // };
-
-// const closeModal = () => {
-//   modalStore.closeModal(); // 모달 닫기
-// };
-
 
 
 
@@ -77,17 +71,10 @@ const props = defineProps({
   // 에디터기본 값으로, JSON 형식으로 저장
   defaultValue: {
     type: Object as PropType<JSONContent>,
-    // default: {
-    //   type: "doc",
-    //   content: [
-    //     {
-    //       type: "heading",
-    //       attrs: { level: 2 },
-    //       content: [{ type: "text", text: "Novel을 소개합니다" }],
-    //     },]
-    // }
+ 
     default: () => {
       return defaultEditorContent2;
+
     },
   },
 
@@ -132,18 +119,6 @@ const props = defineProps({
 // defaultValue : 에디터기본 값으로, JSON 형식으로 저장
 const content = useStorage(props.storageKey, props.defaultValue);
 
-/* useDebounceFn hook을 사용하여 에디터의 업데이트를 디바운스
-   디바운싱은 주어진 시간 동안 발생하는 여러 이벤트를 하나로 그룹화하는 기술
-   ex)사용자가 입력 필드에 빠르게 문자를 입력할 때, 
-      각 문자 입력마다 이벤트 핸들러가 실행되지 않고 일정 시간 동안 대기한 후 
-      마지막 이벤트만 처리하도록 할 수 있습니다.
-*/
-/*
-  에디터가 업데이트될 때마다 해당 내용을 JSON으로 변환하고, 
-  부모 컴포넌트에 알리는 역할을 합니다. 
-  하지만 모든 업데이트에 대해 즉시 알리는 것이 아니라, 
-  지정된 딜레이(props.debounceDuration) 후에 한번만 알립니다.
-*/
 const debouncedUpdate = useDebounceFn(({ editor }) => {
   const json = editor.getJSON();
   content.value = json;

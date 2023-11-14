@@ -55,14 +55,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, onMounted } from 'vue';
+import { PropType, ref } from 'vue';
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementChecked from './ElementChecked.vue';
-import { Download, Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
+import { Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
 import { MapResult } from '@tiptap/pm/transform';
-import { useStorage } from "@vueuse/core";
+
 const props = defineProps({
   ...nodeViewProps,
   editor: {
@@ -79,6 +79,10 @@ const props = defineProps({
 //   console.log("btn클릭")
 // }
 
+// 조건 일치시 실행할 액션
+const runAction = () => {
+  alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
+}
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
@@ -107,15 +111,13 @@ const getJSONFromRecipe = () => {
   // console.log(docs[locationNum])
 
   const result = JSON.stringify(docs[locationNum], null, 2);
-
+  
   return result;
 }
 
 
 // Text 컨텐츠 만들기
-let recipeData = [];
 const getTextFromRecipe = () => {
-
   const arr = props.node.content.content.map(item => item.content.content);
   const textArr = arr.map(innerArray => {
     return innerArray.map(element => {
@@ -133,64 +135,12 @@ const getTextFromRecipe = () => {
         rowString += item + ' ';
       }
     }
-    
+
     return rowString.trim();
   }).join('\n');
-  // recipeData.push(result);
-  // useStorage("recipe",recipeData);
-
 
   return result;
 }
-// console.log("result : ", getTextFromRecipe()); //레시피 전체내용 출력됨
-//  recipeData.push(getTextFromRecipe());
-// console.log(recipeData)
-//  localStorage.setItem("recipe",recipeData);
-//  useStorage("recipe", recipeData);
-
- 
-//  console.log(recipeData)
-   
-
-
-
-// 조건 일치시 실행할 액션
-const runAction = () => {
-  alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
-}
-
-// 자동화를 위한 n초간격 함수를 저장하는 변수
-let intervalId;
-
-// 10초 간격으로 알람을 발생시키는 함수
-const startAlarm = () => {
-  if (!props.node.attrs.auto) {
-    // 바로 알람 발생
-    setTimeout(() => {
-      runAction(); // 1초 딜레이 후 알람 발생
-      setAlarmInterval(10000);
-    }, 1000); // 1초 딜레이 설정runAction();
-  }
-};
-
-// 알람을 중지하는 함수
-const stopAlarm = () => {
-  clearInterval(intervalId);
-};
-
-const setAlarmInterval = (sec: number) => {
-  clearInterval(intervalId); // 이전 타이머 중지
-  intervalId = setInterval(() => {
-    if (props.node.attrs.auto) {
-      runAction();
-    }
-  }, sec); // 10초 간격
-};
-
-// 컴포넌트가 처음 렌더링될 때 실행  
-onMounted(() => {
-  setAlarmInterval(10000);
-});
 
 
 // 세팅 버튼 클릭
@@ -224,12 +174,6 @@ const handleUpdateAuto = (value: boolean) => {
   props.updateAttributes({
     auto: value,
   });
-
-  if (value === true) {
-    startAlarm();
-  } else {
-    stopAlarm();
-  }
 }
 
 // 수동으로 실행 버튼 클릭

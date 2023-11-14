@@ -17,6 +17,7 @@ export const useModalStore = defineStore('modal', {
       this.isCondition = false;
       this.isAction = false;
       this.isRecipe = false;
+      this.isRecipeModal = false;
     },
   },
 });
