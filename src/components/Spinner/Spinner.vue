@@ -2,6 +2,7 @@
   <div class="spinner">
     <div class="spinner-wrapper" >
     </div>
+    <span class="text-white">ai 요청 진행중입니다.</span>
     <LoadingCircle :dimensions='"w-12 h-12"' />
   </div>
 </template>
