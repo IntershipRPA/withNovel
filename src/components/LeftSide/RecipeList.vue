@@ -3,7 +3,7 @@
     <div class="mb-4 pb-1 pl-2 border-b-2 border-b-gray-200 text-sm">
       레시피 리스트
     </div>
-    <RecipeElement v-for="(recipe, index) in recipeLists" :key='index' :recipeKey='recipe.recipeID'
+    <RecipeElement v-for="(recipe, index) in recipeLists" :key='index' :recipeKey='recipe.recipeName'
       :class="{ 'selected': selectedRecipe === index }" @click="handleClickRecipe(index)"
       @discardRecipeKey='discardRecipeKey' />
   </div>

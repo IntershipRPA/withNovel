@@ -23,7 +23,7 @@ import { ClipboardX, X, Trash2 } from 'lucide-vue-next';
 
 const props = defineProps({
   recipeKey: {
-    type: Number,
+    type: String,
     required: true,
   }
 })

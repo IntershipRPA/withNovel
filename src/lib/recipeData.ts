@@ -28,4 +28,5 @@ export interface Recipe {
   recipeID: number,
   recipeType: string,
   content: object,
+  recipeName: string
 }

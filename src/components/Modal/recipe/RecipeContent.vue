@@ -61,6 +61,8 @@ import { useModalStore } from '../../../stores/modal';
 import ElementCondition from './ElementCondition.vue';
 import RecipeNameVue from './RecipeName.vue';
 import { useStorage } from "@vueuse/core";
+import { Recipe } from "../../../lib/recipeData";
+import { useRecipeStore } from "../../../stores/recipes";
 
 // onUpdated(() => {
 //   // console.log("선택완료", selectedAndOr.value)
@@ -218,34 +220,72 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
 
 
 // novel__content 에서 레시피 가져와서 recipe에 저장
-const getRecipe = () => {
-  // const content = getContent().content;
-  const content = props.editor.getJSON();
-//  console.log(content);
-  let data = JSON.parse(localStorage.getItem('recipe'));
-  // console.log(data)
-  if (content) {
-  let data2 = [];
-    if(data === null){
-      console.log("ddd")
-      data2 = [content]
-      // localStorage.setItem(`recipe`, JSON.stringify(data2));
-    }else{
-      console.log("1423")
-      data2 = [...data, content]
-      // localStorage.setItem(`recipe`, JSON.stringify(data2));
-    }
-     localStorage.setItem(`recipe`, JSON.stringify(data2));
-  }
+// const getRecipe = () => {
+//   // const content = getContent().content;
+//   const content = props.editor.getJSON();
+// //  console.log(content);
+//   let data = JSON.parse(localStorage.getItem('recipes'));
+//   // console.log(data)
+//   if (content) {
+//   let data2 = [];
+//     if(data === null){
+//       console.log("ddd")
+//       data2 = [content]
+//       // localStorage.setItem(`recipe`, JSON.stringify(data2));
+//     }else{
+//       console.log("1423")
+//       data2 = [...data, content]
+//       // localStorage.setItem(`recipe`, JSON.stringify(data2));
+//     }
+//      localStorage.setItem(`recipe`, JSON.stringify(data2));
+//   }
   
+// }
+
+const recipeStore = useRecipeStore();
+// 레시피 저장
+const saveRecipe = () => {
+  const json = props.editor.getJSON();
+  const getRecipes = (JSON.parse(localStorage.getItem("recipes")) || []) as Recipe[];
+
+  // recipeID 계산하기
+  const newRecipeID = getRecipes.length + 1;
+  // 레시피 제목
+  let recipeName = "";
+
+  for(let item of json.content) {
+    if(item.type === "recipeRule") {
+        recipeName = item.attrs.recipeName;
+        break;
+    }
+  }
+  console.log(recipeName)
+
+
+  const recipeData = {
+    "recipeName": recipeName,
+    "recipeID": newRecipeID,
+    "recipeType": "recipeService",
+    "content": {
+      "text": json,
+    }
+  }
+
+  getRecipes.push(recipeData)
+  localStorage.setItem("recipes", JSON.stringify(getRecipes));
+
+  recipeStore.forceReloadLeftSideComponent() // LeftSide화면 강제 리로드
 }
+
+
 
 
 // 완료버튼 클릭
 const handleConfirm = () => {
   changeToRecipeNode(); //recipeRule 노드변경 함수
   closeModal();
-  getRecipe();
+  // getRecipe();
+  saveRecipe();
 };
 
 // 조건 문자열 변환
@@ -321,12 +361,16 @@ const changeToRecipeNode = () => {
       .run();
   
   } else {
-    modalStore.nodeViewProps.deleteNode();
-    // console.log("레시피 수정")
+      //  modalStore.nodeViewProps.deleteNode();  // 삭제말고 초기화 해야 커서 위로 안올라감
+      // savedContent.exitCode();
+      // editor.commands.exitCode()
+      // modalStore.nodeViewProps.resetNode();
+     console.log("레시피 수정")
 
     editor
       .chain()
       .focus()
+      .deleteNode('recipeRule')
       .setRecipeRule(attrs)
       .run();
   }
