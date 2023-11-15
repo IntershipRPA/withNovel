@@ -120,6 +120,74 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Current Check",
+      searchTerms: ["커런트"],
+      description: "현재상태",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Current Check`})
+          .insertContent(`Current Check`)
+          .unsetTag()
+          .run();
+      },
+    },    
+    {
+      title: "Operate",
+      searchTerms: ["오퍼레이션"],
+      description: "운전",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Operate`})
+          .insertContent(`Operate`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "Rotate",
+      searchTerms: ["로테이트"],
+      description: "회전",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Rotate`})
+          .insertContent(`Rotate`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "Binding",
+      searchTerms: ["조임"],
+      description: "바인딩",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Binding`})
+          .insertContent(`Binding`)
+          .unsetTag()
+          .run();
+      },
+    },
 
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {

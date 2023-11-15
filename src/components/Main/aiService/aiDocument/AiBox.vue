@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col mx-auto max-w-screen-lg py-12 pl-12 pr-4 min-w-[534px] sm:rounded-lg sm:border sm:shadow-lg">
+  <div class="flex-col -mt-11 mx-auto max-w-screen-lg py-12 pl-12 pr-4 min-w-[534px] bg-white sm:rounded-lg sm:border sm:shadow-lg">
     <div class='text-xl mb-2'>
       AI 응답 요청 결과
     </div>
@@ -22,7 +22,7 @@
         레시피 저장
       </button>
     </div>
-    <!-- <TestBard /> -->
+    <AlarmWindow v-if='isAlertVisible' :msg='alertMessage' />
   </div>
 </template>
 
@@ -34,8 +34,13 @@ import ConAct from './ConAct.vue';
 import ActionElement from './ActionElement.vue'
 import { Recipe, AiData, Condition, Action } from '../../../lib/recipeData';
 import { useAiDocumentStore } from '../../../../stores/aiDocument';
+import AlarmWindow from './AlarmWindow.vue';
+import { useRecipeStore } from '../../../../stores/recipes'; 
 
-// const aiDocumentStore = useAiDocumentStore(); // 스토어 인스턴스 생성
+const recipeStore = useRecipeStore(); // 스토어 인스턴스 생성
+
+const isAlertVisible = ref(false);
+const alertMessage = ref('');
 
 const props = defineProps({
   aiData: {
@@ -118,16 +123,6 @@ const addGroup = () => {
       memo: '',
     }
 
-    // const newAction: Action = {
-    //   actionID: maxActionID + 1, // 부모로부터 가장 마지막 조건 ID 받아와야함
-    //   andGroup: maxGroup.value + 1,
-    //   fac: '',
-    //   tag: '',
-    //   value: '',
-    //   unit: '',
-    //   range: '',
-    //   memo: '',
-    // }    
     aiData.value.conditions.push(newCondition);
     // aiData.value.actions.push(newAction); 
 
@@ -141,6 +136,7 @@ const addGroup = () => {
 const handleClickSaveRecipe = () => {
   // console.log("handleClickSaveRecipe() 클릭")
   saveRecipe();
+  alertSaved();
 }
 
 // 레시피 저장
@@ -164,8 +160,20 @@ const saveRecipe = () => {
 
   getRecipes.push(recipeData)
   localStorage.setItem("recipes", JSON.stringify(getRecipes));
+
+  recipeStore.forceReloadLeftSideComponent() // LeftSide화면 강제 리로드
 }
 
+// 레시피가 저장되었습니다. 알람
+const alertSaved = () => {
+  console.log("alertSaved호출")
+  alertMessage.value = '레시피가 저장되었습니다.';
+  isAlertVisible.value = true;
+
+  setTimeout(() => {
+    isAlertVisible.value = false;
+  }, 5000);
+}
 
 // 자식컴포넌트로부터 데이터가 업데이트 되면
 const emits = defineEmits();

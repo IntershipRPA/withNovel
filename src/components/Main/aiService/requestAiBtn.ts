@@ -52,7 +52,6 @@ export const getTags = () => {
       .flat() // 다차원 배열을 펼침
       .filter(item => item.type === 'text' && item.marks && item.marks.some(mark => mark.type === 'tagMark'))
       .map(item => item.marks.filter(mark => mark.type === 'tagMark')[0]);
-    // console.log(tagMarks);
 
     if (tagMarks) {
       const tags = tagMarks.map(item => item.attrs?.tag)

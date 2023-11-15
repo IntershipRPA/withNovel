@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex items-stretch my-4">
-    <span class="absolute flex justify-center -mt-2 px-6 bg-white mx-auto border-x-4 border-x-gray-600">해당 조건을 모두 만족시 액션 실행할 그룹{{ props.groupKey }}</span>
+    <span class="absolute flex justify-center -mt-2 px-6 bg-white mx-auto border-x-4 border-x-gray-600">액션을 실행시키기 위한 조건 그룹{{ props.groupKey }}</span>
     <div class="w-full border-b-4 border-b-gray-600"></div>
   </div>
 </template>
