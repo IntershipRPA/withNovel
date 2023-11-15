@@ -1,5 +1,5 @@
 <template>
-  <div class="group flex items-stretch my-2 border rounded-lg">
+  <div class="group flex items-stretch my-2 border rounded-lg bg-white">
     <div class="mr-2 bg-gray-200 hover:bg-gray-300 group-hover:bg-gray-300 rounded-lg p-2 justify-normal">
       조건{{ props.condition.conditionID }}
     </div>

@@ -97,7 +97,7 @@ const addCondition = () => {
       memo: '',
     }
     // conditions.value = [...conditions.value, newCondition]
-    aiData.value.conditions.push(newCondition); 
+    aiData.value.conditions.push(newCondition);
 
     // 데이터 업데이트를 부모에게 전달
     emits("update-data", aiData.value)
@@ -128,7 +128,7 @@ const deleteCondition = (targetID: number) => {
 }
 
 // 조건 업데이트
-const updateCondition = (targetID: number, updatedCondition:Condition) => {
+const updateCondition = (targetID: number, updatedCondition: Condition) => {
   // console.log("updateCondition호출")
   if (aiData && aiData.value) {
     // conditionID를 받아서 인덱스 추출

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex relative justify-start p-2 mb-2 hover:bg-gray-200 border-stone-200 bg-white sm:rounded-lg sm:border text-sm"
+    class="flex relative justify-start p-2 mb-2 hover:bg-white border-stone-200 bg-gray-200 sm:rounded-lg sm:border text-sm"
     @mouseover="showCloseButton = true" @mouseleave="showCloseButton = false">
     <span>레시피 {{ props.recipeKey }}</span>
     <span v-if="showCloseButton" @click='handleClick'

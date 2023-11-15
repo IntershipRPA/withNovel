@@ -3,7 +3,7 @@
        chanin() 메서드 실행
        class="className"은 동적으로 클래스를 설정하기 위한 바인딩
        -> className 변수에 저장된 클래스 이름을 해당 요소의 클래스로 설정-->
-  <div @click="editor?.chain().focus().run()" :class="className">
+  <div ref="childDiv" @click="editor?.chain().focus().run()" :class="className">
     <BubbleMenu v-if="editor" :editor="editor" />
     <!-- 조건부 렌더링
         editor 객체가 존재하는 경우에만 해당 컴포넌트 렌더링 -->

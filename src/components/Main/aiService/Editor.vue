@@ -3,7 +3,7 @@
        chanin() 메서드 실행
        class="className"은 동적으로 클래스를 설정하기 위한 바인딩
        -> className 변수에 저장된 클래스 이름을 해당 요소의 클래스로 설정-->
-  <div @click="editor?.chain().focus().run()" :class="className">
+  <div ref="childDiv" @click="editor?.chain().focus().run()" :class="className">
     <BubbleMenu v-if="editor" :editor="editor" />
     <!-- 조건부 렌더링
         editor 객체가 존재하는 경우에만 해당 컴포넌트 렌더링 -->
@@ -29,37 +29,13 @@ import { getPrevText } from "../../../lib/editor";
 import { defaultExtensions } from "../../../components/extensions/aiExtensions";
 import BubbleMenu from "../../BubbleMenu/index.vue";
 import SimpleModal from "../../Modal/SimpleModal.vue";
-import { modalToggle } from "../../extensions/condition/conditionExtension"
-
-// 모달 설정
-// const showModal = modalToggle;
-// const closeModal = () => {
-//   showModal.value = false;
-// };
-// const isCondition = ref(false);
-
 import { useModalStore } from '../../../stores/modal';
-import { AlarmCheck } from 'lucide-vue-next';
-import { View } from 'lucide-vue-next';
-import { useRecipeStore } from '../../../stores/recipes';
+
+const childDiv = ref<HTMLElement | null>(null);
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
-
-
 const isModalOpen = computed(() => modalStore.isModalOpen);
-// const isCondition = computed(() => modalStore.isCondition);
-
-// const openModal = () => {
-//   modalStore.openModal(); // 모달 열기
-// };
-
-// const closeModal = () => {
-//   modalStore.closeModal(); // 모달 닫기
-// };
-
-
-
 
 const props = defineProps({
 

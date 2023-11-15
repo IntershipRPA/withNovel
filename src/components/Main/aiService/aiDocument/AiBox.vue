@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col -mt-11 mx-auto max-w-screen-lg py-12 pl-12 pr-4 min-w-[534px] bg-white sm:rounded-lg sm:border sm:shadow-lg">
+  <div class="flex-col -mt-11 mx-auto ml-2 max-w-screen-lg py-8 pl-12 pr-4 min-w-[534px] bg-white sm:rounded-lg sm:border sm:shadow-lg">
     <div class='text-xl mb-2'>
       AI 응답 요청 결과
     </div>
@@ -141,7 +141,7 @@ const handleClickSaveRecipe = () => {
 
 // 레시피 저장
 const saveRecipe = () => {
-  console.log("레시피 저장 객체:", aiData.value)
+  // console.log("레시피 저장 객체:", aiData.value)
   const json = JSON.parse(localStorage.getItem("aiService__content"));
 
   const getRecipes = (JSON.parse(localStorage.getItem("recipes")) || []) as Recipe[];
@@ -166,7 +166,7 @@ const saveRecipe = () => {
 
 // 레시피가 저장되었습니다. 알람
 const alertSaved = () => {
-  console.log("alertSaved호출")
+  // console.log("alertSaved호출")
   alertMessage.value = '레시피가 저장되었습니다.';
   isAlertVisible.value = true;
 

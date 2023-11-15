@@ -2,7 +2,7 @@
   <div class="spinner">
     <div class="spinner-wrapper" >
     </div>
-    <span class="text-white">ai 요청 진행중입니다.</span>
+    <div class="text-white z-120">ai 요청 진행중입니다.</div>
     <LoadingCircle :dimensions='"w-12 h-12"' />
   </div>
 </template>
@@ -31,18 +31,5 @@ import LoadingCircle from '../icons/loadingCircle.vue';
   background: rgba(0, 0, 0, 0.3);
   height: 100%;
   width: 100%;
-}
-
-.modal-content {
-  z-index: 1;
-  position: relative;
-  min-width: 820px;
-  max-width: 1080px;
-  min-height: 280px;
-  max-height: 630px;
-  background-color: white;
-  border-radius: 10px;
-  /* background: rgba(255, 255, 255, 0.3); */
-  backdrop-filter: blur(240px);
 }
 </style>
