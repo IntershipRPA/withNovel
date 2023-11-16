@@ -28,5 +28,15 @@ export interface Recipe {
   recipeID: number,
   recipeType: string,
   content: object,
-  recipeName: string
+  recipeName: string,
+}
+export interface RecipeData {
+  action: Action,
+  conditions: Condition[],
+  fac: string,
+  tag: string,
+  value: string,
+  unit: string,
+  range: string,
+  memo: string,
 }
