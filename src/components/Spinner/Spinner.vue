@@ -1,9 +1,9 @@
 <template>
-  <div class="spinner">
-    <div class="spinner-wrapper" >
+  <div class="spinner flex-col">
+    <div class="spinner-wrapper z-10" >
     </div>
-    <div class="text-white z-120">ai 요청 진행중입니다.</div>
-    <LoadingCircle :dimensions='"w-12 h-12"' />
+    <div class="text-white text-lg font-extrabold z-20 mb-6">ai 요청 진행중입니다.</div>
+    <LoadingCircle :dimensions='"w-12 h-12"' class='z-20'/>
   </div>
 </template>
 

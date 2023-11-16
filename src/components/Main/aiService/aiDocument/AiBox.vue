@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-col -mt-11 mx-auto ml-2 max-w-screen-lg py-8 pl-12 pr-4 min-w-[534px] bg-white sm:rounded-lg sm:border sm:shadow-lg">
-    <div class='text-xl mb-2'>
+  <div class="flex-col -mt-10 mx-auto ml-2 max-w-screen-lg py-8 pl-12 pr-4 min-w-[534px] bg-white sm:rounded-lg sm:border sm:shadow-lg">
+    <div class='text-sm mb-2 font-semibold text-gray-500'>
       AI 응답 요청 결과
     </div>
 
@@ -18,7 +18,7 @@
 
     <div class="flex items-stretch">
       <button type="button" @click='handleClickSaveRecipe'
-        class='border-stone-200 bg-white mt-4 mx-auto p-4 px-8 sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:px-8 sm:shadow-lg text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
+        class='border-stone-200 bg-white mt-4 mx-auto p-4 px-8 font-semibold sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:px-8 sm:shadow-lg text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
         레시피 저장
       </button>
     </div>
@@ -179,7 +179,8 @@ const alertSaved = () => {
 const emits = defineEmits();
 
 const updateAction = (updatedAction: Action) => {
-  // console.log("updateAction호출")
+  console.log("updateAction호출")
+  console.log(updatedAction)
   if (aiData && aiData.value) {
     // console.log(updatedAction)
     aiData.value.action = updatedAction

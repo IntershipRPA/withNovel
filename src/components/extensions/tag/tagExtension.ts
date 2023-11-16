@@ -188,6 +188,57 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Control Valve",
+      searchTerms: ["벨브"],
+      description: "컨트롤벨브",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Control Valve`})
+          .insertContent(`Control Valve`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "PT-31",
+      searchTerms: [""],
+      description: "PT-31",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `PT-31`})
+          .insertContent(`PT-31`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "MCCB",
+      searchTerms: ["MCCB"],
+      description: "MCCB",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `MCCB`})
+          .insertContent(`MCCB`)
+          .unsetTag()
+          .run();
+      },
+    },
 
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {

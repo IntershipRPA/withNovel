@@ -1,6 +1,6 @@
 <template>
   <div :key="componentKey" class="min-w-[210px] flex flex-col items-stretch">
-    <div class="mb-2 pb-1 pl-2 border-b border-b-gray-400 text-sm">
+    <div class="mb-2 pb-1 pl-1 border-b border-b-gray-400 text-xs font-semibold text-gray-600">
       레시피 리스트
     </div>
     <RecipeElement v-for="(recipe, index) in recipeLists" :key='index' :recipeKey='recipe.recipeID'

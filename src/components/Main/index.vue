@@ -1,8 +1,8 @@
 <template>
   <div :key="componentKey" class="flex flex-col justify-items-center">
     <div ref="resizingElement" :style="{ width: dynamicWidth }"
-      class="p-2 px-12 bg-gray-400 min-w-[700px] w-full max-w-screen-lg border-stone-200 sm:rounded-lg">
-      <span class="mr-8">입력 모드를 선택하세요.</span>
+      class="p-1 px-12 bg-gray-400 min-w-[700px] w-full max-w-screen-lg border-stone-200 sm:rounded-lg flex justify-center">
+      <!-- <span class="mr-8">입력 모드를 선택하세요.</span> -->
       <ElementChecked :toggle='toggleValue' @update:modelValue="handleUpdateIsAi" />
     </div>
     <AiService v-if='toggleValue' @updateAiEditorWidth='updateAiEditorWidth' />

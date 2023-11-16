@@ -5,6 +5,7 @@ export const useAiDocumentStore = defineStore('rightSide', {
   state: () => ({
     isAiDocumentOpen: false,
     aiData: {}, // recipe으로 저장하기 전 aiData의 recipeID는 항상 0으로 설정
+    element: {}
   }),  
   actions: {
     openAiDocument() {

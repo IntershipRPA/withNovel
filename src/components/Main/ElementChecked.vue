@@ -1,16 +1,21 @@
 <template>
   <label class="autoSaverSwitch relative inline-flex cursor-pointer select-none items-center">
     <input type="checkbox" name="autoSaver" class="sr-only" :checked="props.toggle" @change="handleCheckboxChange" />
-    <span class="px-2 mr-3 text-black rounded-lg bg-white" @click="setModelValue(true)">
-      form입력
+    <!-- <span class="px-3 h-6 flex items-center justify-center mr-3 text-sm font-semibold rounded-full " 
+    :class="props.toggle ? 'text-black' : 'bg-gray-700'" @click="setModelValue(true)">
+      form 입력
+    </span> -->
+    <span class="slider flex items-center rounded-full p-1 duration-200 bg-gray-700">
+      <span class="text-sm z-10 font-semibold absolute left-4 text-gray-200">form입력</span>
+      <!-- <span class="dot h-18 w-18 rounded-full bg-white duration-200" -->
+      <span class="dot z-20 absolute rounded-full bg-white duration-200 text-black text-sm font-semibold flex items-center justify-center"
+        :class="props.toggle ? 'translate-x-24' : ''">{{ props.toggle ? 'ai입력' : 'form입력' }}</span>
+      <span class="text-sm z-10 font-semibold absolute right-8 text-gray-200">ai입력</span>
     </span>
-    <span class="slider flex h-26 w-50 items-center rounded-full p-1 duration-200 bg-gray-700">
-      <span class="dot h-18 w-18 rounded-full bg-white duration-200"
-        :class="props.toggle ? 'translate-x-6' : ''"></span>
-    </span>
-    <span class="px-2 ml-3 text-black rounded-lg bg-white" @click="setModelValue(false)">
-      ai입력
-    </span>
+    <!-- <span class="px-3 h-6 flex items-center justify-center ml-3 text-sm font-semibold rounded-full " 
+    :class="props.toggle ? 'bg-gray-700' : 'text-black'" @click="setModelValue(false)">
+      ai 입력
+    </span> -->
   </label>
 </template>
 
@@ -44,12 +49,14 @@ const emit = defineEmits<{
 
 <style scoped>
 .slider {
-  height: 26px;
-  width: 50px;
+  height: 32px;
+  /* width: 50px; */
+  width: 193px;
 }
 
 .dot {
-  height: 18px;
-  width: 18px;
+  height: 24px;
+  /* width: 18px; */
+  width: 88px;
 }
 </style>

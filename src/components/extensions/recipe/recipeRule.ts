@@ -137,7 +137,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
             { type: "hardBreak" },
             {
               type: 'text',
-              text: 'AND조건'
+              text: '필수 충족 조건'
             },
           ];
           andArrs.push(...andConditions.flatMap((item) => [
@@ -157,7 +157,7 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
             { type: "hardBreak" },
             {
               type: 'text',
-              text: 'OR조건'
+              text: '선택 조건'
             },
           ];
 

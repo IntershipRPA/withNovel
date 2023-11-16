@@ -257,6 +257,41 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Air Pre-heater",
+      searchTerms: ["공기"],
+      description: "에어 프리히터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Air Pre-heater"})
+          .insertContent("Air Pre-heater")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Conveying Pressure Transmitter",
+      searchTerms: [""],
+      description: "압력 트랜스미터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Conveying Pressure Transmitter"})
+          .insertContent("Conveying Pressure Transmitter")
+          .unsetFacility()
+          .run();
+      },
+    },
+
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();

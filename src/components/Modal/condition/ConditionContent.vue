@@ -113,7 +113,14 @@ const savedAttrs: attrs = {
 }
 
 // savedAttrs의 속성 값이 undefined인지 확인하고 초기값 설정
-const initialTemp = Number(savedAttrs.temp !== undefined ? savedAttrs.temp : 0);
+const initialTemp = 
+  savedAttrs.temp !== undefined 
+    ? savedAttrs.temp 
+    : tagMsg.value === "Press"
+    ? 0
+    : tagMsg.value === "Winding Temp"
+    ? 0
+    : "";
 const initialUnit =
   savedAttrs.unit !== undefined
     ? savedAttrs.unit
@@ -121,8 +128,17 @@ const initialUnit =
     ? "bar"
     : tagMsg.value === "Status"
     ? "started"
-    : "℃";
-const initialRange = savedAttrs.range !== undefined ? savedAttrs.range : "이상";
+    : tagMsg.value === "Winding Temp"
+    ? "℃"
+    : "";
+const initialRange = 
+  savedAttrs.range !== undefined 
+    ? savedAttrs.range
+    : tagMsg.value === "Press"
+    ? "이상"
+    : tagMsg.value === "Winding Temp"
+    ? "이상"
+    : "";
 
 const temp = ref<number | null>(initialTemp); // 온도
 const unit = ref<string>(initialUnit); // 단위

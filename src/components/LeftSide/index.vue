@@ -23,6 +23,7 @@ const recipeListToggle = ref(true);
 const handleClickToggle = () => {
   console.log("레시피 추가");
   localStorage.removeItem('novel__content');
+  localStorage.removeItem('aiService__content');
   window.location.reload();
 }
 
