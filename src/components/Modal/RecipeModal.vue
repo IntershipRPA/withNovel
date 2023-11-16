@@ -3,7 +3,7 @@
     <div>
       <textarea placeholder="레시피 입력"></textarea>
     </div>
-    <ConfirmBtn @click.stop="handleConfirm" />
+    <ConfirmBtn @click.stop="handleConfirm"/>
     <DeleteBtn @click.stop="handleDelete" />
   </template>
   
@@ -43,6 +43,12 @@ const handleConfirm = () => {
   changeToActionNode(); //actionRule 노드변경 함수
 };
 
+
+
+
+
+
+
 const deleteActionNode = () => {
   const editor = props.editor;
 
@@ -79,19 +85,6 @@ const getRange = () => {
 
   return { from, to }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const changeToActionNode = () => {
