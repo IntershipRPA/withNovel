@@ -3,7 +3,7 @@ export interface Condition {
   andGroup: number,
   fac: string,
   tag: string,
-  value: string,
+  val: string,
   unit: string,
   range: string,
   memo: string,

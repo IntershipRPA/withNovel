@@ -13,13 +13,13 @@
     <div>
       <!-- AND 조건-->
       <div v-if="conditions.some(item => item.group === 'andGroup')" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
-        <span>AND 조건</span>
+        <span>필수 충족 조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'andGroup')" :key="index"
           :condition='condition' :num="index" />
       </div>
       <!-- OR 조건-->
       <div v-if="conditions.some(item => item.group === 'orGroup')" class="rounded-lg p-5 border-2 border-rose-600">
-        <span>OR 조건</span>
+        <span>선택 조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'orGroup')" :key="index"
           :condition='condition' :num="index" />
       </div>

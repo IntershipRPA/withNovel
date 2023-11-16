@@ -31,7 +31,7 @@ import { AiData, Condition, Action } from '../../../lib/recipeData';
 import AtLestOneWarning from './AtLestOneWarning.vue';
 import ConActGroupHeader from './ConActGroupHeader.vue';
 import { PlusSquare, AlertTriangle } from "lucide-vue-next";
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, reactive } from 'vue';
 
 // console.log("ConAct.vue is mounted")
 
@@ -61,6 +61,7 @@ const isAtLeastOneCondition = ref(props.conditions.length === 0)
 const conditions = ref(props.conditions)
 // const actions = ref(props.actions)
 const aiData = ref(props.aiData)
+// const aiData = reactive(props.aiData);
 
 // watch([() => props.conditions, () => props.actions, () => props.aiData], ([newConditions, newActions, newAiData], [oldConditions, oldActions, oldAiData]) => {
 watch([() => props.conditions, () => props.aiData], ([newConditions, newAiData], [oldConditions, oldAiData]) => {
@@ -97,7 +98,7 @@ const addCondition = () => {
       memo: '',
     }
     // conditions.value = [...conditions.value, newCondition]
-    aiData.value.conditions.push(newCondition); 
+    aiData.value.conditions.push(newCondition);
 
     // 데이터 업데이트를 부모에게 전달
     emits("update-data", aiData.value)
@@ -128,14 +129,15 @@ const deleteCondition = (targetID: number) => {
 }
 
 // 조건 업데이트
-const updateCondition = (targetID: number, updatedCondition:Condition) => {
-  // console.log("updateCondition호출")
+const updateCondition = (targetID: number, updatedCondition: Condition) => {
+  console.log("updateCondition호출")
   if (aiData && aiData.value) {
     // conditionID를 받아서 인덱스 추출
     const indexToUpdate = aiData.value.conditions.findIndex((condition: Condition) => condition.conditionID === targetID);
     // console.log(indexToUpdate, "업데이트")
     // console.log(updatedCondition)
     if (indexToUpdate !== -1) {
+      // aiData.value = { ...aiData.value, conditions: [...aiData.value.conditions] };
       aiData.value.conditions[indexToUpdate] = updatedCondition
     }
     emits("update-data", aiData.value)
