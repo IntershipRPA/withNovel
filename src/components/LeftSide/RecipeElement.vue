@@ -2,7 +2,7 @@
   <div
     class="flex relative justify-start p-2 mb-2 hover:bg-white border-stone-200 bg-gray-200 sm:rounded-lg sm:border text-sm cursor-pointer"
     @mouseover="showCloseButton = true" @mouseleave="showCloseButton = false">
-    <span>레시피 {{ props.recipeKey }}</span>
+    <span>레시피 {{ props.recipeKey }} {{ props.recipeName }}</span>
     <span v-if="showCloseButton" @click='handleClick'
     class="fixed absolute right-4 cursor-pointer rounded-full bg-transparent p-1 -mt-1 group hover:bg-red-500 ">
       <!-- <span class="rounded-full bg-transparent hover:bg-red-500"> -->
@@ -26,6 +26,10 @@ import { ClipboardX, X, Trash2 } from 'lucide-vue-next';
 const props = defineProps({
   recipeKey: {
     type: Number,
+    required: true,
+  },
+  recipeName: {
+    type: String,
     required: true,
   }
 })

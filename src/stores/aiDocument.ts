@@ -1,15 +1,20 @@
 import { defineStore } from 'pinia';
-import { AiData, Condition, Action } from '../lib/recipeData';
+import { AiData, Condition, Action, RecipeData } from '../lib/recipeData';
 
 export const useAiDocumentStore = defineStore('rightSide', {
   state: () => ({
     isAiDocumentOpen: false,
+    isFormDocumentOpen: false,
     aiData: {}, // recipe으로 저장하기 전 aiData의 recipeID는 항상 0으로 설정
-    element: {}
+    element: {},
+    recipeData: {}
   }),  
   actions: {
     openAiDocument() {
       this.isAiDocumentOpen = true;
+    },
+    openFormDocument() {
+      this.isFormDocumentOpen = true;
     },
     closeAiDocument() {
       this.isAiDocumentOpen = false;
@@ -17,6 +22,9 @@ export const useAiDocumentStore = defineStore('rightSide', {
     },
     setAiData(data: AiData){
       this.aiData = data;
+    },
+    setFormData(data: RecipeData){
+      this.recipeData = data;
     },
     getAiData() {
       if(this.aiData && Object.keys(this.aiData).length > 0){

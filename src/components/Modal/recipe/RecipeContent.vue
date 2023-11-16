@@ -61,6 +61,8 @@ import { useModalStore } from '../../../stores/modal';
 import ElementCondition from './ElementCondition.vue';
 import RecipeNameVue from './RecipeName.vue';
 import { useStorage } from "@vueuse/core";
+import { RecipeData } from "../../../lib/recipeData";
+import { useRecipeStore } from "../../../stores/recipes";
 
 // onUpdated(() => {
 //   // console.log("선택완료", selectedAndOr.value)
@@ -75,8 +77,13 @@ const props = defineProps({
     type: Object as PropType<Editor>,
     required: true,
   },
+  formData: {
+    type: Object as () => RecipeData,
+    required: true,
+  },
 })
-
+const formData = ref(props.formData)
+console.log(props.formData)
 interface Condition {
   text: string,
   isChecked: boolean,
@@ -216,36 +223,51 @@ if (savedAttrs.andCondition || savedAttrs.orCondition) {
 }
 
 
+const recipeStore = useRecipeStore();
+// 레시피 저장
+const saveRecipe = () => {
+  const json = props.editor.getJSON();
+  const getRecipes = (JSON.parse(localStorage.getItem("recipes")) || []) as Recipe[];
 
-// novel__content 에서 레시피 가져와서 recipe에 저장
-const getRecipe = () => {
-  // const content = getContent().content;
-  const content = props.editor.getJSON();
-//  console.log(content);
-  let data = JSON.parse(localStorage.getItem('recipe'));
-  // console.log(data)
-  if (content) {
-  let data2 = [];
-    if(data === null){
-      console.log("ddd")
-      data2 = [content]
-      // localStorage.setItem(`recipe`, JSON.stringify(data2));
-    }else{
-      console.log("1423")
-      data2 = [...data, content]
-      // localStorage.setItem(`recipe`, JSON.stringify(data2));
+  // recipeID 계산하기
+  const newRecipeID = getRecipes.length + 1;
+  // 레시피 제목
+  let recipeName = "";
+
+  for(let item of json.content) {
+    if(item.type === "recipeRule") {
+        recipeName = item.attrs.recipeName;
+        break;
     }
-     localStorage.setItem(`recipe`, JSON.stringify(data2));
   }
-  
+  console.log(recipeName)
+
+
+  const recipeData = {
+    "recipeName": recipeName,
+    "recipeID": newRecipeID,
+    "recipeType": "formService",
+    "content": {
+      "text": json,
+      "formDocument": formData.value
+    }
+  }
+
+  getRecipes.push(recipeData)
+  localStorage.setItem("recipes", JSON.stringify(getRecipes));
+
+  recipeStore.forceReloadLeftSideComponent() // LeftSide화면 강제 리로드
 }
+
+
 
 
 // 완료버튼 클릭
 const handleConfirm = () => {
   changeToRecipeNode(); //recipeRule 노드변경 함수
   closeModal();
-  getRecipe();
+  // getRecipe();
+  saveRecipe();
 };
 
 // 조건 문자열 변환
@@ -287,8 +309,19 @@ const getRange = () => {
 
   return { from, to }
 }
+// 레시피 수정시 위로 올라가는거
+const recipeChange = () => {
+  // 기존의 Tiptap 에디터 상태와 노드 가져오기
+  const editorState = props.editor.view.state;
+  const { selection } = editorState;
 
+  // 현재 커서의 위치 가져오기
+  const $cursor = selection?.$cursor;
+  const from = $cursor.before($cursor.depth) + 1; // 행의 시작 레시피제목 시작점
+  const to = $cursor.after($cursor.depth) - 1;   // 행의 끝
 
+  return { from, to }
+}
 
 // 레시피 노드 전환
 const changeToRecipeNode = () => {
@@ -321,12 +354,17 @@ const changeToRecipeNode = () => {
       .run();
   
   } else {
-    modalStore.nodeViewProps.deleteNode();
-    // console.log("레시피 수정")
-
+     //   modalStore.nodeViewProps.deleteNode(); 
+      // savedContent.exitCode();
+      // editor.commands.exitCode()
+      // modalStore.nodeViewProps.resetNode();
+     console.log("레시피 수정")
+// .deleteRange(getRange()) 범위지정 삭제
     editor
       .chain()
       .focus()
+      .createParagraphNear()
+      .deleteRange(recipeChange())
       .setRecipeRule(attrs)
       .run();
   }

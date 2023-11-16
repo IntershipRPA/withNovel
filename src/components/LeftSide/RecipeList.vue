@@ -3,7 +3,7 @@
     <div class="mb-2 pb-1 pl-1 border-b border-b-gray-400 text-xs font-semibold text-gray-600">
       레시피 리스트
     </div>
-    <RecipeElement v-for="(recipe, index) in recipeLists" :key='index' :recipeKey='recipe.recipeID'
+    <RecipeElement v-for="(recipe, index) in recipeLists" :key='index' :recipeKey='recipe.recipeID' :recipeName='recipe.recipeName'
       :class="{ 'selected': selectedRecipe === index }" @click="handleClickRecipe(index)"
       @discardRecipeKey='discardRecipeKey' />
   </div>
@@ -70,6 +70,7 @@ const handleClickRecipe = (index: number) => {
   const recipeType = recipeLists.value[index].recipeType;
   const recipeContent = recipeLists.value[index].content;
   showRecipe(recipeType, recipeContent);
+  // console.log(recipeContent)
 }
 
 const showRecipe = (recipeType: string, recipeContent) => {
@@ -91,8 +92,16 @@ const showRecipe = (recipeType: string, recipeContent) => {
     aiDocumentStore.openAiDocument();
   }
 
+  // formService 해당 레시피 화면처리
   if (recipeType === "formService") {
-    // formService 화면처리하기위한 셋팅을 아래에 작성
+    localStorage.removeItem('novel__content');
+    // 에디터에 텍스트 출력
+    recipeStore.jsonContent = recipeContent?.text;
+    // console.log(recipeStore.jsonContent)
+    
+    // 스토어에 formData 저장
+    aiDocumentStore.setFormData(recipeContent?.formDocument);
+    aiDocumentStore.openFormDocument();
   }
 
   recipeStore.forceReloadMainComponent() // Main화면 강제 리로드

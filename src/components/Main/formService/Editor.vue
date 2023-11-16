@@ -76,19 +76,12 @@ const props = defineProps({
 
   // 에디터기본 값으로, JSON 형식으로 저장
   defaultValue: {
+    // type: Object as PropType<JSONContent>,
+    // default: () => {
+    //   return defaultEditorContent2;
+    // },
     type: Object as PropType<JSONContent>,
-    // default: {
-    //   type: "doc",
-    //   content: [
-    //     {
-    //       type: "heading",
-    //       attrs: { level: 2 },
-    //       content: [{ type: "text", text: "Novel을 소개합니다" }],
-    //     },]
-    // }
-    default: () => {
-      return defaultEditorContent2;
-    },
+    required: true,
   },
 
   // Tiptap 편집기에 추가할 확장 기능
