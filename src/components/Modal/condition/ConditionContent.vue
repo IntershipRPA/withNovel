@@ -5,7 +5,7 @@
         <p class="text-sm text-gray-400 mb-1 ">
           선택한 설비
         </p>
-        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+        <p class='rounded shadow-sm border-2 ring-gray-300 px-4 py-1'>
           {{ facMsg }}
         </p>
       </div>
@@ -16,7 +16,7 @@
         <p class="text-sm text-gray-400 mb-1 ">
           선택한 태그
         </p>
-        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+        <p class='rounded shadow-sm border-2 ring-gray-300 px-4 py-1'>
           {{ tagMsg }}
         </p>
       </div>
@@ -45,13 +45,6 @@ import { useStorage } from "@vueuse/core";
 
 const facMsg = ref<String>('선택 설비 없음');
 const tagMsg = ref<String>('선택 태그 없음');
-//console.log(JSON.parse(JSON.stringify(tagMsg.value)))
-// let unitValue = "";
-// if (JSON.parse(JSON.stringify(tagMsg.value)) === "Press") {
-//   unitValue = "bar";
-// } else {
-//   unitValue = "℃";
-// }
 
 const props = defineProps({
   editor: {
@@ -150,12 +143,10 @@ const updateTempValue = (value: number) => {
 };
 const updateUnitValue = (value: string) => {
   unit.value = value; 
-  // console.log("updateUnitValue: " + value, unit.value);
 };
 const updateRangeValue = (value: string) => {
   range.value = value;
 };
-
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
@@ -193,14 +184,6 @@ const getRange = () => {
 const changeToConditionNode = () => {
   const editor = props.editor;
   const modalContent = localStorage.getItem('modal__condition') ?? ''; // null이면 빈 문자열 반환
-  // Stauts 태그 선택시 값이 null인거 제외 시킴
-  // let str = "";
-  // if (tagMsg.value === "Status") {
-  //   str = `${unit.value} ${modalContent}`;
-  // } else {
-  //   str = `${temp.value}${unit.value} ${range.value} ${modalContent}`;
-  // }
-
   const attrs: attrs = {
     fac: facMsg.value,
     tag: tagMsg.value,
@@ -210,21 +193,11 @@ const changeToConditionNode = () => {
     memo: modalContent
   };
 
-
   editor
     .chain()
     .focus()
     .deleteRange(getRange())
     .setConditionRule(attrs)
-    // .setFacility({ facility: facMsg.value })
-    // .insertContent(facMsg.value)
-    // .unsetFacility()
-    // .insertContent('의 ')
-    // .setTag({ tag: tagMsg.value })
-    // .insertContent(tagMsg.value)
-    // .unsetTag()
-    // .insertContent('를 ')
-    // .insertContent(str)
     .run();
   };
 

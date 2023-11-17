@@ -8,7 +8,7 @@
     <AtLestOneWarning v-if='isAtLeastOneCondition' :message='"조건이 없습니다. 조건을 추가하세요."' />
     <!-- 조건 추가 버튼 -->
     <div @click='handleClickAddCondition'
-      class="bg-gray-100 hover:bg-gray-300 text-center py-2 mb-8 rounded-lg flex justify-center cursor-pointer text-gray-600 ">
+      class="bg-gray-100 hover:bg-gray-300 text-center py-2 mb-8 rounded flex justify-center cursor-pointer text-gray-600 ">
       <PlusSquare class="mr-2 " />조건 추가
     </div>
     <!-- 액션 -->
@@ -18,7 +18,7 @@
     <!-- <AtLestOneWarning v-if='isAtLeastOneAction' :message='"액션이 없습니다. 액션을 추가하세요."' /> -->
     <!-- 액션 추가 버튼 -->
     <!-- <div @click='handleClickAddAction'
-      class="bg-amber-100 hover:bg-amber-300 text-center py-2 mb-8 rounded-lg flex justify-center cursor-pointer text-gray-600 ">
+      class="bg-amber-100 hover:bg-amber-300 text-center py-2 mb-8 rounded flex justify-center cursor-pointer text-gray-600 ">
       <PlusSquare class="mr-2" />액션 추가
     </div> -->
   </div>

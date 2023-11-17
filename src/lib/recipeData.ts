@@ -23,6 +23,7 @@ export interface AiData {
   // actions: Action[],
   action: Action,
   conditions: Condition[],
+  recipeName: string,
 }
 export interface Recipe {
   recipeID: number,

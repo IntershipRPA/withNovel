@@ -1,7 +1,7 @@
 <template>
   <div class="modal-family text-lg flex flex-col">
     <RecipeNameVue :savedName='savedAttrs.recipeName' />
-    <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8 p-5'>
+    <div class='mb-5 content-center bg-amber-100 flex items-center rounded shadow-md h-10 px-8 p-5'>
       <!-- <span class="p-2.5">설비 Air Compressor</span>
       <span class="p-2.5">태그 Status</span>
       <span class="p-2.5">INIT: 일 때</span> -->
@@ -12,32 +12,47 @@
     </div>
     <div>
       <!-- AND 조건-->
-      <div v-if="conditions.some(item => item.group === 'andGroup')" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
-        <span>필수 충족 조건</span>
+      <div v-if="conditions.some(item => item.group === 'andGroup')" class="rounded p-5 border-2 border-teal-400 mb-3">
+        <span>and조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'andGroup')" :key="index"
-          :condition='condition' :num="index" />
+          :condition='condition' :num="index" :groups='groups' @update-group='updateGroup' @add-group='addGroup' />
       </div>
       <!-- OR 조건-->
-      <div v-if="conditions.some(item => item.group === 'orGroup')" class="rounded-lg p-5 border-2 border-rose-600">
-        <span>선택 조건</span>
+      <div v-if="conditions.some(item => item.group === 'orGroup')" class="rounded p-5 border-2 border-rose-600">
+        <span>or조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'orGroup')" :key="index"
-          :condition='condition' :num="index" />
+          :condition='condition' :num="index" :groups='groups' @update-group='updateGroup' @add-group='addGroup' />
       </div>
+
+
+      <template v-for="group in groups">
+        <div v-if="conditions.some(item => item.group === group)" :key="group"
+          class="rounded p-5 border-2 border-teal-400 mb-3">
+          <span>액션을 실행시키기 위한 조건 {{ group }}</span>
+          <template v-for="(condition, index) in conditions.filter(item => item.group === group)" :key="index">
+            <ElementCondition :condition='condition' :num="index" :groups='groups' @update-group='updateGroup'
+              @add-group='addGroup' />
+          </template>
+        </div>
+      </template>
+
+
       <!-- 초기 조건 목록 -->
       <div class="waitingCondition">
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 'notSelected')"
-          :key="index" :condition='condition' :num="index" />
+          :key="index" :condition='condition' :num="index" :groups='groups' @update-group='updateGroup'
+          @add-group='addGroup' />
       </div>
     </div>
     <div class='my-3 flex items-center flex-wrap justify-center content-between'>
-      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center my-2">
+      <div class="rounded px-5 py-2 border-2 mx-2 flex items-center my-2">
         <span class="text-gray-500">
           조건 불일치 알람 발생 :
         </span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'알람 내용을 작성하세요 …'"
           :storageKey="'recipe_alarmMsg'" :savedContent='savedAttrs.alarmMsg' />
       </div>
-      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center my-2">
+      <div class="rounded px-5 py-2 border-2 mx-2 flex items-center my-2">
         <span class="text-gray-500">전달 담당자 :</span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'이름을 입력하세요.'"
           :storageKey="'recipe_alarmMsgTo'" :savedContent='savedAttrs.alarmMsgTo' />
@@ -63,6 +78,7 @@ import RecipeNameVue from './RecipeName.vue';
 import { useStorage } from "@vueuse/core";
 import { RecipeData } from "../../../lib/recipeData";
 import { useRecipeStore } from "../../../stores/recipes";
+import { MenuItem } from '@headlessui/vue';
 
 // onUpdated(() => {
 //   // console.log("선택완료", selectedAndOr.value)
@@ -70,6 +86,7 @@ import { useRecipeStore } from "../../../stores/recipes";
 
 
 const conditions = ref<Condition[]>([]);
+const groups = ref<String[]>([]);
 const action = ref('DEFAULT ACTION TEXT');
 
 const props = defineProps({
@@ -91,6 +108,27 @@ interface Condition {
   group: string,
 }
 
+// 그룹화된 배열 만들기
+const buildGroups = (arr: { group: string }[]): string[] => {
+  const pattern = /^그룹\d+$/; // 그룹과 숫자로 이루어진 패턴
+  const uniqueGroups: Set<string> = new Set();
+
+  arr.forEach(item => {
+    const group = item.group.trim();
+    if (pattern.test(group)) {
+      uniqueGroups.add(group);
+    }
+  });
+
+  // '그룹1' 초기세팅 (지정되어있는 그룹이 하나도 없는 경우)
+  if (uniqueGroups.size === 0) {
+    uniqueGroups.add('그룹1');
+  }
+  const sortedGroups = [...uniqueGroups].sort(); // Set을 배열로 변환하고 오름차순으로 정렬
+  return sortedGroups;
+};
+
+
 // 조건 가져오기
 const docs = props.editor.getJSON()?.content;
 
@@ -103,6 +141,10 @@ if (docs) {
       andOr: '조건선택',
       group: 'notSelected',
     }));
+
+    // 그룹화된 배열 만들기
+    groups.value = buildGroups(conditions.value);
+    // console.log("here", groups.value)
   } else {
     alert("조건이 지정되지 않았습니다.")
   }
@@ -117,6 +159,22 @@ if (docs) {
   } else {
     alert("액션이 지정되지 않았습니다.")
   }
+}
+
+// 그룹 추가
+const addGroup = (value) => {
+  console.log("addGroup()호출", value)
+  // 어떤 그룹의 요소가 하나도 남아있지 않다면 해당 그룹 삭제 후, 이후 그룹을 하나씩 위로 이동하기
+  groups.value = buildGroups(conditions.value);
+
+  // groups.value.push(value);
+}
+
+// 그룹 업데이트
+const updateGroup = (value) => {
+  console.log("updateGroup()호출", value)
+  // 어떤 그룹의 요소가 하나도 남아있지 않다면 해당 그룹 삭제 후, 이후 그룹을 하나씩 위로 이동하기
+  groups.value = buildGroups(conditions.value);
 }
 
 // 모달 설정
@@ -174,7 +232,7 @@ const savedAttrs: attrs = {
 if (savedAttrs.andCondition || savedAttrs.orCondition) {
   // string을 '$'로 구분하여 -> Array 로 바꾸는 함수
   function stringToArray(str, delimiter = '$') {
-   
+
     if (typeof str === 'string') {
       return str.split(delimiter);
     } else {
@@ -234,10 +292,10 @@ const saveRecipe = () => {
   // 레시피 제목
   let recipeName = "";
 
-  for(let item of json.content) {
-    if(item.type === "recipeRule") {
-        recipeName = item.attrs.recipeName;
-        break;
+  for (let item of json.content) {
+    if (item.type === "recipeRule") {
+      recipeName = item.attrs.recipeName;
+      break;
     }
   }
   console.log(recipeName)
@@ -273,8 +331,8 @@ const handleConfirm = () => {
 // 조건 문자열 변환
 
 const conditionsArrToString = (arr, andOr: string, delimiter = '$') => {
-//  console.log("arr : ", arr); //레시피 등록할 때
- 
+  //  console.log("arr : ", arr); //레시피 등록할 때
+
   const conditionString = arr.filter(item => item?.andOr === andOr).map(item => item?.text);
   let str1 = "";
   let str2 = "";
@@ -293,7 +351,7 @@ const conditionsArrToString = (arr, andOr: string, delimiter = '$') => {
     // console.log('레시피 내에', andOr, '조건 선택 없음');
     return '';
   }
-  
+
 }
 
 // 현재 커서의 위치의 내용을 지울 범위 지정 함수
@@ -336,7 +394,18 @@ const changeToRecipeNode = () => {
     alarmMsgTo: localStorage.getItem("recipe_alarmMsgTo"),
     auto: false,
     activated: false,
-    // count: 0,
+    conditions: conditions.value,
+
+    // conditions : [
+    //   {
+    //     text: 'dd1',
+    //     group: '그룹1'
+    //   },
+    //   {
+    //     text: 'dd2',
+    //     group: '그룹2'
+    //   }
+    // ]
   }
   // console.log(attrs)
   // 이미 레시피가 있는 상태로 모달창을 열었는지 확인하는 함수
@@ -352,14 +421,14 @@ const changeToRecipeNode = () => {
       .deleteRange(getRange())
       .setRecipeRule(attrs)
       .run();
-  
+
   } else {
-     //   modalStore.nodeViewProps.deleteNode(); 
-      // savedContent.exitCode();
-      // editor.commands.exitCode()
-      // modalStore.nodeViewProps.resetNode();
-     console.log("레시피 수정")
-// .deleteRange(getRange()) 범위지정 삭제
+    //   modalStore.nodeViewProps.deleteNode(); 
+    // savedContent.exitCode();
+    // editor.commands.exitCode()
+    // modalStore.nodeViewProps.resetNode();
+    console.log("레시피 수정")
+    // .deleteRange(getRange()) 범위지정 삭제
     editor
       .chain()
       .focus()

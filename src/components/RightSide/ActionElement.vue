@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-stretch my-4 border border-amber-200 rounded-lg">
-    <div class="mr-4 bg-amber-200 hover:bg-amber-300 rounded-lg p-2">
+  <div class="flex items-stretch my-4 border border-amber-200 rounded">
+    <div class="mr-4 bg-amber-200 hover:bg-amber-300 rounded p-2">
       액션1
     </div>
     <div class="grid grid-cols-4 gap-2 p-2">

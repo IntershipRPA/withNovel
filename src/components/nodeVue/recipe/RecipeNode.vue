@@ -1,7 +1,7 @@
 <template>
   <NodeViewWrapper>
     <div class="block flex items-end">
-      <div class="relative rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 px-8 mb-2 mt-2 py-5 items-center">
+      <div class="relative rounded shadow-md bg-green-100 hover:bg-green-200 z-20 px-8 mb-2 mt-2 py-5 items-center">
         <div class="sample-label right-10 bg-teal-700" contenteditable="false">
           <span class='pr-3' @click='handleClickBtnJSON'>
             JSON
@@ -32,19 +32,19 @@
     <div>
       <div class='block flex -mt-4 pl-6'>
         <button contenteditable="false"
-          class="recipe-btn-activated cursor-pointer rounded-lg shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white flex items-center min-w-max"
+          class="recipe-btn-activated cursor-pointer rounded shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white flex items-center min-w-max"
           :class="isActivated ? 'bg-green-400 hover:bg-green-500' : 'bg-gray-400 hover:bg-gray-500'">
           <ElementChecked v-model='isActivated' :checked-string='"레시피 활성ㅤ"' :un-checked-string='"레시피 비활성"'
             @update:modelValue="handleUpdateActivated" />
         </button>
         <button contenteditable="false"
-          class="recipe-btn-auto cursor-pointer rounded-lg shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max"
+          class="recipe-btn-auto cursor-pointer rounded shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max"
           :disabled='!isActivated ? true : false'
           :class="isAuto ? 'bg-green-400 hover:bg-green-500' : 'bg-gray-400 hover:bg-gray-500'">
           <ElementChecked v-model='isAuto' :checked-string='"ㅤ자동 ㅤ"' :un-checked-string='"자동 꺼짐"'
             @update:modelValue="handleUpdateAuto" />
         </button>
-        <button contenteditable="false" class="recipe-btn-run rounded-lg shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max
+        <button contenteditable="false" class="recipe-btn-run rounded shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max
           bg-gray-300 disabled:cursor-not-allowed enabled:bg-red-400 enabled:hover:bg-red-500"
           :disabled='!isActivated || isAuto ? true : false' @click='handleClickBtnRun'>
           수동으로 실행하기

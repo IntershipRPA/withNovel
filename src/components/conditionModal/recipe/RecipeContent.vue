@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="modal-family text-lg flex flex-col">
     <RecipeNameVue />
-    <div class='mb-5 content-center bg-amber-100 flex items-center rounded-lg shadow-md h-10 px-8'>
+    <div class='mb-5 content-center bg-amber-100 flex items-center rounded shadow-md h-10 px-8'>
       
       <span>액션 : </span>
       <span>
@@ -10,13 +10,13 @@
     </div>
     <div>
       
-      <div v-if="conditions.some(item => item.group === 1)" class="rounded-lg p-5 border-2 border-teal-400 mb-3">
+      <div v-if="conditions.some(item => item.group === 1)" class="rounded p-5 border-2 border-teal-400 mb-3">
         <span>AND 조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 1)" :key="index"
           :condition='condition' :num="index" />
       </div>
       
-      <div v-if="conditions.some(item => item.group === 2)" class="rounded-lg p-5 border-2 border-rose-600">
+      <div v-if="conditions.some(item => item.group === 2)" class="rounded p-5 border-2 border-rose-600">
         <span>OR 조건</span>
         <ElementCondition v-for="(condition, index) in conditions.filter(item => item.group === 2)" :key="index"
           :condition='condition' :num="index" />
@@ -28,14 +28,14 @@
       </div>
     </div>
     <div class='my-5 flex items-center'>
-      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
+      <div class="rounded px-5 py-2 border-2 mx-2 flex items-center">
         <span class="text-gray-500">
           조건 불일치 알람 발생 :
         </span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'알람 내용을 작성하세요 …'"
           :storageKey="'recipe_alarmMsg'" />
       </div>
-      <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center">
+      <div class="rounded px-5 py-2 border-2 mx-2 flex items-center">
         <span class="text-gray-500">전달 담당자 :</span>
         <MiniEditor class='inline-block min-w-min max-w-xl ml-4' :placeholder="'이름을 입력하세요.'"
           :storageKey="'recipe_alarmMsgTo'" />

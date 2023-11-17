@@ -1,6 +1,6 @@
 <template>
-  <div class="group flex items-stretch my-2 border rounded-lg bg-white">
-    <div class="mr-2 bg-gray-200 hover:bg-gray-300 group-hover:bg-gray-300 rounded-lg p-2 justify-normal">
+  <div class="group flex items-stretch my-2 border rounded bg-white">
+    <div class="mr-2 bg-gray-200 hover:bg-gray-300 group-hover:bg-gray-300 rounded p-2 justify-normal">
       조건{{ props.condition.conditionID }}
     </div>
     <div>
@@ -127,13 +127,13 @@ function initTippy() {
   if (copyBtn.value) {
     tippy(copyBtn.value, {
       // content: "복사",
-      content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-stone-800 text-white'>복사</span>",
+      content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-stone-800 text-white'>복사</span>",
       allowHTML: true
     });
 
     tippy(copyBtn.value, {
       // content: 'Global content',
-      content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-stone-800 text-white'>복사 완료!</span>",
+      content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-stone-800 text-white'>복사 완료!</span>",
       arrow: true,
       trigger: 'click',
       hideOnClick: false,
@@ -146,12 +146,12 @@ function initTippy() {
     });
 
     tippy(pasteBtn.value, {
-      content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-stone-800 text-white'>붙여넣기</span>",
+      content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-stone-800 text-white'>붙여넣기</span>",
       allowHTML: true,
     });
 
     tippy(pasteBtn.value, {
-      content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-stone-800 text-white'>붙여넣기 완료!</span>",
+      content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-stone-800 text-white'>붙여넣기 완료!</span>",
       allowHTML: true,
       arrow: true,
       trigger: 'click',
@@ -164,7 +164,7 @@ function initTippy() {
     });
 
     tippy(deleteBtn.value, {
-      content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-stone-800 text-white'>삭제</span>",
+      content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-stone-800 text-white'>삭제</span>",
       allowHTML: true,
     });
   }
@@ -173,13 +173,13 @@ function initTippy() {
 // onMounted(() => {
 //   tippy('.copy-btn', {
 //     // content: "복사",
-//     content: "<span class='text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white'>복사</span>",
+//     content: "<span class='text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white'>복사</span>",
 //     allowHTML: true
 //   });
 
 //   tippy('.copy-btn', {
 //     // content: 'Global content',
-//     content: "<span class='text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white'>복사 완료!</span>",
+//     content: "<span class='text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white'>복사 완료!</span>",
 //     arrow: true,
 //     trigger: 'click',
 //     hideOnClick: false,
@@ -192,12 +192,12 @@ function initTippy() {
 //   });
 
 //   tippy('.paste-btn', {
-//     content: "<span class='text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white'>붙여넣기</span>",
+//     content: "<span class='text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white'>붙여넣기</span>",
 //     allowHTML: true,
 //   });
 
 //   tippy('.paste-btn', {
-//     content: "<span class='text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white'>붙여넣기 완료!</span>",
+//     content: "<span class='text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white'>붙여넣기 완료!</span>",
 //     allowHTML: true,
 //     arrow: true,
 //     trigger: 'click',

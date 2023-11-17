@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-lg px-5 py-2 border-2 mx-2 flex items-center my-5">
+  <div class="rounded px-5 py-2 border-2 mx-2 flex items-center my-5">
     <div class="text-gray-500">
       레시피 이름 :
     </div>

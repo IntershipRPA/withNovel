@@ -1,7 +1,7 @@
 <template>
   <NodeViewWrapper>
     <div class="block flex items-end">
-      <div class="inline-block rounded-lg shadow-md bg-zinc-100 hover:bg-zinc-200 z-20 py-1 px-8 mb-2 mt-2 flex items-center">
+      <div class="inline-block rounded shadow-md bg-zinc-100 hover:bg-zinc-200 z-20 py-1 px-8 mb-2 mt-2 flex items-center">
         <!-- 텍스트 들어가는 컨텐츠 -->
         <NodeViewContent class="nodeTextContent" />
       </div>

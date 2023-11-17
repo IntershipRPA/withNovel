@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col -mt-10 mx-auto ml-2 max-w-screen-lg py-8 pl-12 pr-4 min-w-[534px] bg-white sm:rounded-lg sm:border sm:shadow-lg">
+  <div class="flex-col -mt-10 mx-auto ml-2 max-w-screen-lg py-8 pl-12 pr-4 min-w-[534px] bg-white sm:rounded sm:border sm:shadow-lg">
     <div class='text-sm mb-2 font-semibold text-gray-500'>
       AI 응답 요청 결과
     </div>
@@ -11,14 +11,14 @@
       <!-- <ConAct v-for="(group, index) in filteredConActs" :key="index" :groupKey="group.groupNum"
         :conditions='group.conditions' :actions='group.actions' :aiData='aiData' @updateData='updateData' class="mb-2" /> -->
       <div @click='handleClickAddGroup'
-        class="border-4 border-gray-200 hover:border-gray-300 text-center py-4 rounded-lg flex justify-center cursor-pointer text-gray-500 ">
+        class="border-4 border-gray-200 hover:border-gray-300 text-center py-4 rounded flex justify-center cursor-pointer text-gray-500 ">
         <PackagePlus class="mr-2" />Or 조건 추가
       </div>
     </div>
 
     <div class="flex items-stretch">
       <button type="button" @click='handleClickSaveRecipe'
-        class='border-stone-200 bg-white mt-4 mx-auto p-4 px-8 font-semibold sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:px-8 sm:shadow-lg text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
+        class='border-stone-200 bg-white mt-4 mx-auto p-4 px-8 font-semibold sm:mb-[calc(20vh)] sm:rounded sm:border sm:px-8 sm:shadow-lg text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
         레시피 저장
       </button>
     </div>
@@ -34,7 +34,7 @@ import ConAct from './ConAct.vue';
 import ActionElement from './ActionElement.vue'
 import { Recipe, AiData, Condition, Action } from '../../../lib/recipeData';
 import { useAiDocumentStore } from '../../../../stores/aiDocument';
-import AlarmWindow from './AlarmWindow.vue';
+import AlarmWindow from '../../../Alert/AlarmWindow.vue';
 import { useRecipeStore } from '../../../../stores/recipes'; 
 
 const recipeStore = useRecipeStore(); // 스토어 인스턴스 생성
@@ -55,25 +55,6 @@ const props = defineProps({
 const { conditions, action } = toRefs(props.aiData);
 const aiData = ref(props.aiData)
 
-// watch([props.aiData], ([newAiData], [oldAiData]) => {
-//   console.log('AiData 변경:', oldAiData, '->', newAiData);
-//   // aiData.conditions.splice(0, aiData.value.conditions.length, ...newAiData.conditions);
-// });
-
-// watch(() => props.aiData, (newAiData, oldAiData) => {
-//   console.log('AiData 변경:', oldAiData, '->', newAiData);
-//   aiData.value = { ...newAiData };
-// }, { deep: true });
-
-// watch(() => props.aiData, (newAiData, oldAiData) => {
-//   console.log('AiData 변경:', oldAiData, '->', newAiData);
-//   // 디버깅을 위한 추가 로그
-//   console.log('conditions 변경:', oldAiData.conditions, '->', newAiData.conditions);
-//   console.log('actions 변경:', oldAiData.actions, '->', newAiData.actions);
-//   // ...
-//   aiData.value = { ...newAiData };
-// }, { deep: true });
-
 // 초기 값 설정
 // let maxGroup = computed(() => Math.max(...actions.value.map((item: Action) => item.andGroup), ...conditions.value.map((item: Condition) => item.andGroup)));
 let maxGroup = computed(() => Math.max(...conditions.value.map((item: Condition) => item.andGroup)));
@@ -89,14 +70,10 @@ watch([() => props.aiData.conditions], ([newConditions], [oldConditions]) => {
 });
 
 const filteredConActs = computed(() => {
-  // console.log("filteredConActs() 계산 groupNums:", groupNums);
-  // console.log("filteredConActs() 계산 actions:", actions);
-  // console.log("filteredConActs() 계산 conditions:", conditions);
   return groupNums.map(groupNum => {
     // console.log("groupNum", groupNum, typeof (groupNum))
     return {
       groupNum,
-      // actions: [...actions.value.filter((item: Action) => item.andGroup === groupNum)],
       conditions: [...conditions.value.filter((item: Condition) => item.andGroup === groupNum)],
     };
   });
@@ -152,6 +129,7 @@ const saveRecipe = () => {
   const recipeData = {
     "recipeID": newRecipeID,
     "recipeType": "aiService",
+    "recipeName": aiData.value.recipeName,
     "content": {
       "text": json,
       "aiDocument": aiData.value

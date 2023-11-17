@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-stretch my-4 border rounded-lg">
-    <div class="mr-4 bg-gray-200 hover:bg-gray-300 rounded-lg p-2">
+  <div class="flex items-stretch my-4 border rounded">
+    <div class="mr-4 bg-gray-200 hover:bg-gray-300 rounded p-2">
       조건1
     </div>
     <div class="grid grid-cols-4 gap-2 p-2">
