@@ -11,8 +11,8 @@ export interface RecipeRuleOptions {
     // count: number;
     recipeName: string,
     action: string,
-    andCondition: string,
-    orCondition: string,
+    // andCondition: string,
+    // orCondition: string,
     alarmMsg: string,
     alarmMsgTo: string,
     auto: boolean,
@@ -72,12 +72,12 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       action: {
         default: this.options.settingAttrs.action,
       },
-      andCondition: {
-        default: this.options.settingAttrs.andCondition,
-      },
-      orCondition: {
-        default: this.options.settingAttrs.orCondition,
-      },
+      // andCondition: {
+      //   default: this.options.settingAttrs.andCondition,
+      // },
+      // orCondition: {
+      //   default: this.options.settingAttrs.orCondition,
+      // },
       alarmMsg: {
         default: this.options.settingAttrs.alarmMsg,
       },
@@ -116,17 +116,17 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       setRecipeRule: (attrs) => ({ chain }: { chain: any }) => {
          console.log("attrs", attrs) 
         // or조건과 and조건의 string -> array
-        function stringToArray(str, delimiter = '$') {
+        // function stringToArray(str, delimiter = '$') {
          
-          if (typeof str === 'string' && str.length > 0) {
-            // console.log("str : ", str)
-            return str.split(delimiter);
-          } else {
-            // console.log('Invalid string', str);
-            return [];
-          }
+        //   if (typeof str === 'string' && str.length > 0) {
+        //     // console.log("str : ", str)
+        //     return str.split(delimiter);
+        //   } else {
+        //     // console.log('Invalid string', str);
+        //     return [];
+        //   }
           
-        }
+        // }
         console.log("attrs.conditions", attrs.conditions) 
 
         // const conditions = attrs.conditions.map(item=>item.text);

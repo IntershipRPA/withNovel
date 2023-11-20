@@ -4,7 +4,8 @@ import Main from "./components/Main/index.vue";
 </script>
 
 <template>
-  <div class="mt-8 flex items-stretch">
+  <div class="flex w-full h-8 mb-1 bg-gradient-to-b from-slate-300 to-white"></div>
+  <div class="flex items-stretch">
     <LeftSide class='flex-grow-0' />
     <Main class="flex-grow" />    
   </div>

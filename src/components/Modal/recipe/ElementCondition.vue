@@ -6,17 +6,10 @@
         class="cursor-pointer h-full rounded border-0 bg-transparent py-0 pl-2 pr-7 text-gray-800 sm:text-sm"
         v-model="condition.andOr" @change="handleSelectedValueChange(condition)">
         <option selected disabled>조건선택</option>
-        <option>AND</option>
-        <option>OR</option>
         <option v-for="option in props.groups" :key="option">{{ option }}</option>
         <option>그룹 추가+</option>
       </select>
     </span>
-    <!-- <span :class="condition.isChecked ? 'bg-sky-550' : 'bg-gray-500'" -->
-    <!-- 체크 박스 -->
-    <!-- <span class='rounded-l-lg shadow-md -z-4 h-10 px-3 pr-7 my-2 -mr-4 flex items-center bg-gray-300'>
-      <input type="checkbox" class="cursor-pointer focus:outline-none w-6 h-6 rounded" v-model="condition.isChecked" />
-    </span> -->
     <!-- 조건 내용 -->
     <span class='flex items-center rounded shadow-md bg-zinc-100 z-10 py-1 px-8 mb-2 mt-2 '>
       {{ condition.text }}
@@ -27,9 +20,6 @@
 <script setup lang='ts'>
 import { onBeforeUpdate, onUpdated, ref } from 'vue';
 
-// onUpdated(() => {
-//   console.log("선택완료", props.num)
-// });
 
 const props = defineProps({
   condition: {
