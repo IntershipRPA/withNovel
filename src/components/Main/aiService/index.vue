@@ -24,8 +24,8 @@ const isJsonContentEmpty = Object.keys(recipeStore.jsonContent).length === 0 && 
 const defaultValue = computed(() => isJsonContentEmpty ? defaultEditorContent2 : recipeStore.jsonContent)
 
 // 오른쪽 사이드바 설정
-const AiDocumentStore = useAiDocumentStore(); // 스토어 인스턴스 생성
-const isAiDocumentOpen = computed(() => AiDocumentStore.isAiDocumentOpen);
+const aiDocumentStore = useAiDocumentStore(); // 스토어 인스턴스 생성
+const isAiDocumentOpen = computed(() => aiDocumentStore.isAiDocumentOpen);
 
 const emits = defineEmits();
 

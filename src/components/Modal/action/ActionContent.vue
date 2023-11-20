@@ -5,7 +5,7 @@
         <p class="text-sm text-gray-400 mb-1 ">
           선택한 설비
         </p>
-        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+        <p class='rounded shadow-sm border-2 ring-gray-300 px-4 py-1'>
           {{ facMsg }}
         </p>
       </div>
@@ -16,7 +16,7 @@
         <p class="text-sm text-gray-400 mb-1 ">
           선택한 태그
         </p>
-        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+        <p class='rounded shadow-sm border-2 ring-gray-300 px-4 py-1'>
           {{ tagMsg }}
         </p>
       </div>

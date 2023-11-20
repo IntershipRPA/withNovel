@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col mx-auto max-w-screen-lg p-12 px-18 min-w-[518px] sm:rounded-lg sm:border sm:px-12 sm:shadow-lg">
+  <div class="flex-col mx-auto max-w-screen-lg p-12 px-18 min-w-[518px] sm:rounded sm:border sm:px-12 sm:shadow-lg">
     <div class='text-xl mb-8'>
       AI 응답 요청 결과
     </div>
@@ -7,7 +7,7 @@
     <ConAct class='my-8'/>
     <ConAct class='my-8'/>
     <button type="button"
-      class='border-stone-200 bg-white p-4 px-8 sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:px-8 sm:shadow-lg text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
+      class='border-stone-200 bg-white p-4 px-8 sm:mb-[calc(20vh)] sm:rounded sm:border sm:px-8 sm:shadow-lg text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
       레시피 저장
     </button>
     <!-- <TestBard /> -->

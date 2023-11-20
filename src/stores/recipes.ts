@@ -6,6 +6,7 @@ export const useRecipeStore = defineStore('recipes', {
     reloadMainComponent: false,
     reloadLeftSideComponent: false,
     jsonContent: {},
+    currentRecipeID: 0,
   }),  
   actions: {
     forceReloadMainComponent() {

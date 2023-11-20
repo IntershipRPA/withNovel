@@ -1,10 +1,10 @@
 <template>
   <div v-if="items.length > 0" ref="commandListContainer"
-    class="z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border border-stone-200 bg-white px-1 py-2 shadow-md transition-all">
+    class="z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded border border-stone-200 bg-white px-1 py-2 shadow-md transition-all">
     <button v-for="(item, index) in items"
-      class="flex items-center w-full px-2 py-1 space-x-2 text-sm text-left rounded-md text-stone-900 hover:bg-stone-100"
+      class="flex items-center w-full px-2 py-1 space-x-2 text-sm text-left rounded text-stone-900 hover:bg-stone-100"
       :class="index === selectedIndex ? 'bg-stone-100 text-stone-900' : ''" :key="index" @click="selectItem(index)">
-      <div class="flex items-center justify-center w-10 h-10 bg-white border rounded-md border-stone-200">
+      <div class="flex items-center justify-center w-10 h-10 bg-white border rounded border-stone-200">
         <LoadingCircle v-if="item.title === 'Continue writing' && isLoading" />
         <!-- 아이콘 -->
         <!-- <component v-else :is="item.icon" size="18" /> -->

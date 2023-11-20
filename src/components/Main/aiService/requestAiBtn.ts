@@ -1,12 +1,40 @@
 import axios from 'axios';
 import { Recipe, Condition, Action } from '../../lib/recipeData'
 
-export const getContent = () => {
+export const readContent = () => {
   try {
-    // console.log("getContent() 호출")
     const json = JSON.parse(localStorage.getItem("aiService__content"));
     // console.log(json);
     const arr = json.content.map(item => (item.content || []).map(content => (content.text || [])).join(' '))
+
+    return arr;
+  } catch (error) {
+    console.log("readContent() 에러")
+  }
+}
+
+export const getTitle = () => {
+  // 컨텐츠의 첫번째 줄을 레시피 제목으로 설정
+  try {
+    const arr = readContent();
+    // console.log(arr);
+    let title = arr.find(item => item.trim() !== ''); // 빈 문자열이 아닌 첫 번째 요소 찾기
+
+    if (!title) {
+      // 모든 요소가 빈 문자열인 경우에 대한 예외 처리
+      title = "빈 제목"; // 기본값 할당
+    }
+    // console.log(combinedText);
+    return title;
+
+  } catch (error) {
+    console.log("getTitle() 에러")
+  }
+}
+
+export const getContent = () => {
+  try {
+    const arr = readContent();
     // console.log(arr);
     const combinedText = arr.join('\n');
     // console.log(combinedText);
@@ -85,7 +113,9 @@ export const requestAi = async () => {
 
         const jsonData = JSON.parse(jsonString);
 
-        // console.log("JSON파싱:", jsonData)
+        // 받아온 객체에 recipeName속성 추가
+        const recipeName = getTitle();
+        jsonData.recipeName = recipeName;
 
         return jsonData
 

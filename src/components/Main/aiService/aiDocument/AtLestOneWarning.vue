@@ -1,5 +1,5 @@
 <template>
-  <div class="text-red-600 text-center py-2 mb-2 border border-red-600 rounded-lg flex justify-center ">
+  <div class="text-red-600 text-center py-2 mb-2 border border-red-600 rounded flex justify-center ">
     <AlertTriangle class="mr-2 h-6 w-6 " />{{ props.message }}
   </div>
 </template>

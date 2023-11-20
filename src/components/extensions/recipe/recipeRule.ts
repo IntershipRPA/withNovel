@@ -11,12 +11,13 @@ export interface RecipeRuleOptions {
     // count: number;
     recipeName: string,
     action: string,
-    andCondition: string,
-    orCondition: string,
+    // andCondition: string,
+    // orCondition: string,
     alarmMsg: string,
     alarmMsgTo: string,
     auto: boolean,
     activated: boolean,
+    conditions: array,
   };
 }
 
@@ -71,12 +72,12 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       action: {
         default: this.options.settingAttrs.action,
       },
-      andCondition: {
-        default: this.options.settingAttrs.andCondition,
-      },
-      orCondition: {
-        default: this.options.settingAttrs.orCondition,
-      },
+      // andCondition: {
+      //   default: this.options.settingAttrs.andCondition,
+      // },
+      // orCondition: {
+      //   default: this.options.settingAttrs.orCondition,
+      // },
       alarmMsg: {
         default: this.options.settingAttrs.alarmMsg,
       },
@@ -89,7 +90,9 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
       activated: {
         default: this.options.settingAttrs.activated,
       },
-
+      conditions: {
+        default: this.options.settingAttrs.conditions,
+      },
     }
   },
 
@@ -111,68 +114,148 @@ export const RecipeRule = Node.create<RecipeRuleOptions>({
     return {
 
       setRecipeRule: (attrs) => ({ chain }: { chain: any }) => {
-        //  console.log("attrs", attrs) 
+         console.log("attrs", attrs) 
         // or조건과 and조건의 string -> array
-        function stringToArray(str, delimiter = '$') {
+        // function stringToArray(str, delimiter = '$') {
          
-          if (typeof str === 'string' && str.length > 0) {
-            // console.log("str : ", str)
-            return str.split(delimiter);
-          } else {
-            // console.log('Invalid string', str);
-            return [];
-          }
+        //   if (typeof str === 'string' && str.length > 0) {
+        //     // console.log("str : ", str)
+        //     return str.split(delimiter);
+        //   } else {
+        //     // console.log('Invalid string', str);
+        //     return [];
+        //   }
           
-        }
+        // }
+        console.log("attrs.conditions", attrs.conditions) 
 
-        const andConditions = stringToArray(attrs.andCondition);
-        const orConditions = stringToArray(attrs.orCondition);
-
-        // 추가할 배열
+        // const conditions = attrs.conditions.map(item=>item.text);
         const elementsToAdd = [];
 
-        // and조건 추가
-        if (andConditions.length > 0) {
-          const andArrs = [
-            { type: "hardBreak" },
-            {
-              type: 'text',
-              text: '필수 충족 조건'
-            },
-          ];
-          andArrs.push(...andConditions.flatMap((item) => [
-            { type: "hardBreak" },
-            {
-              type: 'text',
-              text: `▶ ${item}`
+        if(attrs.conditions.length > 0){
+
+          const groupedConditions = attrs.conditions.reduce((grouped, condition) => {
+            const { group } = condition;
+            
+            if (!grouped[group]) {
+              grouped[group] = []; // 새 그룹 생성
             }
-          ]));
-          elementsToAdd.push(...andArrs);
-        }
+          
+            grouped[group].push(condition); // 해당 그룹에 condition 추가
+            return grouped;
+          }, {});
 
-        // or조건 추가
-        if (orConditions.length > 0) {
-          const orArrs = [
-            // { type: "hardBreak" },
-            { type: "hardBreak" },
-            {
-              type: 'text',
-              text: '선택 조건'
-            },
-          ];
+          console.log(groupedConditions)
 
-          orArrs.push(...orConditions.flatMap((item: string) =>
-            [
+          for (const key in groupedConditions) {
+            console.log(key); // 각 그룹의 키 이름 출력
+            console.log(groupedConditions[key]); // 각 그룹의 배열 출력
+
+            elementsToAdd.push(
               { type: "hardBreak" },
               {
                 type: 'text',
-                text: `▷ ${item}`
+                text: `액션을 실행시키기 위한 조건 ${key}`
               },
-            ]
-          ))
-
-          elementsToAdd.push(...orArrs);
+            )
+            // elementsToAdd.push(groupedConditions[key].map(condition => [
+            //   { type: "hardBreak" },
+            //   {
+            //     type: 'text',
+            //     text: `▶ ${condition.text}`
+            //   }
+            // ]))
+            groupedConditions[key].forEach(condition => {
+              elementsToAdd.push(
+                { type: "hardBreak" },
+                {
+                  type: 'text',
+                  text: `▶ ${condition.text}`
+                }
+              );
+            });
+          }
         }
+
+        console.log(elementsToAdd)
+          // const group1 = [
+          //   { type: "hardBreak" },
+          //   {
+          //     type: 'text',
+          //     text: '액션을 실행시키기 위한 조건 그룹1'
+          //   },
+          // ];
+          // group1.push(...attrs.conditions.flatmap((element) => [
+          //   { type: "hardBreak" },
+          //   {
+          //     type: 'text',
+          //     text: `액션을 실행시키기 위한 조건 ${element.group}`
+          //   },
+          //   { type: "hardBreak" },
+          //   {
+          //     type: 'text',
+          //     text: `▶ ${element.text}`
+          //   }
+          // ]))
+
+          // andArrs.push(...andConditions.flatMap((item) => [
+          //   { type: "hardBreak" },
+          //   {
+          //     type: 'text',
+          //     text: `▶ ${item}`
+          //   }
+          // ]));
+          // elementsToAdd.push(...andArrs);
+
+
+        // const andConditions = stringToArray(attrs.andCondition);
+        // const orConditions = stringToArray(attrs.orCondition);
+
+        // // 추가할 배열
+        // const elementsToAdd = [];
+
+        // // and조건 추가
+        // if (andConditions.length > 0) {
+        //   const andArrs = [
+        //     { type: "hardBreak" },
+        //     {
+        //       type: 'text',
+        //       text: '필수 충족 조건'
+        //     },
+        //   ];
+        //   andArrs.push(...andConditions.flatMap((item) => [
+        //     { type: "hardBreak" },
+        //     {
+        //       type: 'text',
+        //       text: `▶ ${item}`
+        //     }
+        //   ]));
+        //   elementsToAdd.push(...andArrs);
+        // }
+
+        // // or조건 추가
+        // if (orConditions.length > 0) {
+        //   const orArrs = [
+        //     // { type: "hardBreak" },
+        //     { type: "hardBreak" },
+        //     {
+        //       type: 'text',
+        //       text: '선택 조건'
+        //     },
+        //   ];
+
+        //   orArrs.push(...orConditions.flatMap((item: string) =>
+        //     [
+        //       { type: "hardBreak" },
+        //       {
+        //         type: 'text',
+        //         text: `▷ ${item}`
+        //       },
+        //     ]
+        //   ))
+
+        //   elementsToAdd.push(...orArrs);
+        // }
 
         return (
           chain()

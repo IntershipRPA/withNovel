@@ -54,7 +54,7 @@ export const defaultExtensions = [
     code: {
       HTMLAttributes: {
         class:
-          "rounded-md bg-stone-200 px-1.5 py-1 font-mono font-medium text-stone-900",
+          "rounded bg-stone-200 px-1.5 py-1 font-mono font-medium text-stone-900",
         spellcheck: "false",
       },
     },

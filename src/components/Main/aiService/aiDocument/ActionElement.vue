@@ -1,6 +1,6 @@
 <template>
-  <div class="group mb-8 flex items-stretch my-2 border border-amber-200 rounded-lg">
-    <div class="p-2 px-3 mr-2 bg-amber-200 hover:bg-amber-300 group-hover:bg-amber-300 rounded-lg ">
+  <div class="group mb-8 flex items-stretch my-2 border border-amber-200 rounded">
+    <div class="p-2 px-3 mr-2 bg-amber-200 hover:bg-amber-300 group-hover:bg-amber-300 rounded ">
       액션
     </div>
     <div>
@@ -15,7 +15,7 @@
         </div>
         <!-- <div>
           <button type='button' @click='handleClickDelete'
-            class="text-red-700 px-4 rounded-lg hover:bg-red-500 hover:text-white">
+            class="text-red-700 px-4 rounded hover:bg-red-500 hover:text-white">
             <Trash2 :size="20" :stroke-width="1" />
           </button>
         </div> -->
@@ -123,13 +123,13 @@ const onMemoUpdated = (e) => {
 onMounted(() => {
   tippy('.copy-btn', {
     // content: "복사",
-    content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white bg-stone-800 text-white'>복사</span>",
+    content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white bg-stone-800 text-white'>복사</span>",
     allowHTML: true
   });
 
   tippy('.copy-btn', {
     // content: 'Global content',
-    content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white bg-stone-800 text-white'>복사 완료!</span>",
+    content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white bg-stone-800 text-white'>복사 완료!</span>",
     arrow: true,
     trigger: 'click',
     hideOnClick: false,
@@ -142,12 +142,12 @@ onMounted(() => {
   });
 
   tippy('.paste-btn', {
-    content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white bg-stone-800 text-white'>붙여넣기</span>",
+    content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white bg-stone-800 text-white'>붙여넣기</span>",
     allowHTML: true,
   });
 
   tippy('.paste-btn', {
-    content: "<span class='opacity-60 text-sm px-2 p-1 rounded-lg shadow-md border-stone-200 bg-white bg-stone-800 text-white'>붙여넣기 완료!</span>",
+    content: "<span class='opacity-60 text-sm px-2 p-1 rounded shadow-md border-stone-200 bg-white bg-stone-800 text-white'>붙여넣기 완료!</span>",
     allowHTML: true,
     arrow: true,
     trigger: 'click',

@@ -1,7 +1,7 @@
 <template>
   <div :key="componentKey" class="flex flex-col justify-items-center">
     <div ref="resizingElement" :style="{ width: dynamicWidth }"
-      class="p-1 px-12 bg-gray-400 min-w-[700px] w-full max-w-screen-lg border-stone-200 sm:rounded-lg flex justify-center">
+      class="p-1 px-12 bg-gray-400 min-w-[700px] w-full max-w-screen-lg border-stone-200 sm:rounded flex justify-center">
       <!-- <span class="mr-8">입력 모드를 선택하세요.</span> -->
       <ElementChecked :toggle='toggleValue' @update:modelValue="handleUpdateIsAi" />
     </div>
@@ -27,6 +27,7 @@ watch(
   () => {
     // 상태가 변경되었을 때 컴포넌트의 key 값을 변경하여 강제로 리로드
     componentKey.value += 1;
+    // console.log("Main페이지 리로딩")
   }
 );
 
