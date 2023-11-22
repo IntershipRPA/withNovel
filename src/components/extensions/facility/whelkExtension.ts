@@ -72,7 +72,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Receiver Tank",
-      searchTerms: ["리시버", "탱크", "압축공기"],
+      searchTerms: ["리시버", "탱크", "압축공기", "리시버 탱크"],
       description: "리시버 탱크",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -89,7 +89,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "After Cooler",
-      searchTerms: ["애프터","쿨러","냉각"],
+      searchTerms: ["애프터","쿨러","냉각","후방냉각기"],
       description: "후방냉각기",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -106,7 +106,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Air Compressor",
-      searchTerms: ["에어","콤프레샤","공기"],
+      searchTerms: ["에어","콤프레샤","공기", "에어컴프레서"],
       description: "에어컴프레서",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -123,7 +123,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Oil Separator",
-      searchTerms: ["오일","세퍼레이터", "기름"],
+      searchTerms: ["오일","세퍼레이터", "기름", "유수 분리기"],
       description: "유수 분리기",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -140,7 +140,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Rotor",
-      searchTerms: ["회전자"],
+      searchTerms: ["회전자", "로터"],
       description: "로터",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -157,7 +157,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Rotor Drive Motor",
-      searchTerms: ["모터", "드라이브"],
+      searchTerms: ["모터", "드라이브", "로터드라이브모터"],
       description: "로터드라이브모터",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -174,7 +174,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Air Motor",
-      searchTerms: ["압축"],
+      searchTerms: ["압축", "에어모터"],
       description: "에어모터",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -191,7 +191,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Electric Motor",
-      searchTerms: ["모터"],
+      searchTerms: ["모터", "전기모터"],
       description: "전기모터",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -208,7 +208,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Rotor Seal",
-      searchTerms: ["마개"],
+      searchTerms: ["마개", "로터씰"],
       description: "로터씰",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -225,7 +225,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Rotor Drive Unit",
-      searchTerms: ["운전"],
+      searchTerms: ["운전", "로터드라이브유닛"],
       description: "로터드라이브유닛",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -242,7 +242,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Boiler Load",
-      searchTerms: ["보일러"],
+      searchTerms: ["보일러", "보일러로드"],
       description: "보일러로드",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -259,7 +259,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Air Pre-heater",
-      searchTerms: ["공기"],
+      searchTerms: ["공기", "에어 프리히터"],
       description: "에어 프리히터",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -276,7 +276,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Conveying Pressure Transmitter",
-      searchTerms: [""],
+      searchTerms: ["압력 트랜스미터"],
       description: "압력 트랜스미터",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {

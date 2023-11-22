@@ -54,7 +54,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
   return [
     {
       title: "Winding Temp",
-      searchTerms: ["온도", "윈딩"],
+      searchTerms: ["온도", "윈딩", "권선온도계"],
       description: "권선온도계",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -71,7 +71,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Press",
-      searchTerms: ["가공", "압축", "프레스"],
+      searchTerms: ["가공", "압축", "프레스", "압력"],
       description: "압력",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -88,7 +88,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Status",
-      searchTerms: ["값"],
+      searchTerms: ["값", "상태"],
       description: "상태",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -105,7 +105,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Air",
-      searchTerms: ["에어"],
+      searchTerms: ["에어", "공기"],
       description: "공기",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -122,7 +122,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Current Check",
-      searchTerms: ["커런트"],
+      searchTerms: ["커런트", "현재상태"],
       description: "현재상태",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -139,7 +139,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },    
     {
       title: "Operate",
-      searchTerms: ["오퍼레이션"],
+      searchTerms: ["오퍼레이션", "운전"],
       description: "운전",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -156,7 +156,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Rotate",
-      searchTerms: ["로테이트"],
+      searchTerms: ["로테이트", "회전"],
       description: "회전",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -173,7 +173,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Binding",
-      searchTerms: ["조임"],
+      searchTerms: ["조임", "바인딩"],
       description: "바인딩",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -190,7 +190,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Control Valve",
-      searchTerms: ["벨브"],
+      searchTerms: ["벨브", "컨트롤벨브"],
       description: "컨트롤벨브",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -207,7 +207,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "PT-31",
-      searchTerms: [""],
+      searchTerms: ["PT-31"],
       description: "PT-31",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
