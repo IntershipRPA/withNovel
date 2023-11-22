@@ -5,7 +5,7 @@
     <div class="modal-content" @click.stop="stopPropagation">
       <!-- X 버튼 -->
       <button type="button" @click.stop="closeModal"
-        class="close-btn bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+        class="close-btn bg-white rounded p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
         <span class="sr-only">Close menu</span>
         <!-- Heroicon name: outline/x -->
         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"

@@ -72,7 +72,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Receiver Tank",
-      searchTerms: ["리시버", "탱크", "압축공기"],
+      searchTerms: ["리시버", "탱크", "압축공기", "리시버 탱크"],
       description: "리시버 탱크",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -89,7 +89,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "After Cooler",
-      searchTerms: ["애프터","쿨러","냉각"],
+      searchTerms: ["애프터","쿨러","냉각","후방냉각기"],
       description: "후방냉각기",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -106,7 +106,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Air Compressor",
-      searchTerms: ["에어","콤프레샤","공기"],
+      searchTerms: ["에어","콤프레샤","공기", "에어컴프레서"],
       description: "에어컴프레서",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -121,6 +121,177 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Oil Separator",
+      searchTerms: ["오일","세퍼레이터", "기름", "유수 분리기"],
+      description: "유수 분리기",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Oil Separator"})
+          .insertContent("Oil Separator")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Rotor",
+      searchTerms: ["회전자", "로터"],
+      description: "로터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Rotor"})
+          .insertContent("Rotor")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Rotor Drive Motor",
+      searchTerms: ["모터", "드라이브", "로터드라이브모터"],
+      description: "로터드라이브모터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Rotor Drive Motor"})
+          .insertContent("Rotor Drive Motor")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Air Motor",
+      searchTerms: ["압축", "에어모터"],
+      description: "에어모터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Air Motor"})
+          .insertContent("Air Motor")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Electric Motor",
+      searchTerms: ["모터", "전기모터"],
+      description: "전기모터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Electric Motor"})
+          .insertContent("Electric Motor")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Rotor Seal",
+      searchTerms: ["마개", "로터씰"],
+      description: "로터씰",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Rotor Seal"})
+          .insertContent("Rotor Seal")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Rotor Drive Unit",
+      searchTerms: ["운전", "로터드라이브유닛"],
+      description: "로터드라이브유닛",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Rotor Drive Unit"})
+          .insertContent("Rotor Drive Unit")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Boiler Load",
+      searchTerms: ["보일러", "보일러로드"],
+      description: "보일러로드",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Boiler Load"})
+          .insertContent("Boiler Load")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Air Pre-heater",
+      searchTerms: ["공기", "에어 프리히터"],
+      description: "에어 프리히터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Air Pre-heater"})
+          .insertContent("Air Pre-heater")
+          .unsetFacility()
+          .run();
+      },
+    },
+    {
+      title: "Conveying Pressure Transmitter",
+      searchTerms: ["압력 트랜스미터"],
+      description: "압력 트랜스미터",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setFacility({facility: "Conveying Pressure Transmitter"})
+          .insertContent("Conveying Pressure Transmitter")
+          .unsetFacility()
+          .run();
+      },
+    },
+
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();

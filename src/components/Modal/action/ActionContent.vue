@@ -5,7 +5,7 @@
         <p class="text-sm text-gray-400 mb-1 ">
           선택한 설비
         </p>
-        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+        <p class='rounded shadow-sm border-2 ring-gray-300 px-4 py-1'>
           {{ facMsg }}
         </p>
       </div>
@@ -16,7 +16,7 @@
         <p class="text-sm text-gray-400 mb-1 ">
           선택한 태그
         </p>
-        <p class='rounded-md shadow-sm border-2 ring-gray-300 px-4 py-1'>
+        <p class='rounded shadow-sm border-2 ring-gray-300 px-4 py-1'>
           {{ tagMsg }}
         </p>
       </div>
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { PropType, computed, onUpdated, ref } from "vue";
 import MiniEditor from '../minimalEditor/MiniEditor.vue';
-import ThirdModalChild from '../condition/ThirdModalChild.vue';
+import ThirdModalChild from '../ThirdModalChild.vue';
 import ConfirmBtn from '../ConfirmBtn.vue';
 import DeleteBtn from '../DeleteBtn.vue';
 import { Editor, Range } from '@tiptap/core';

@@ -21,6 +21,8 @@ import RecipeCommand from './recipe/recipeExtension';
 import { RecipeRule } from './recipe/recipeRule';
 import { FacilityMark } from './facility/facilityMark';
 import { TagMark } from './tag/tagMark';
+import { RangeMark } from './mark/rangeMark';
+import { UnitMark } from './mark/unitMark';
 import { MarkCondition } from './markCondition/markCondition';
 
 export const defaultExtensions = [
@@ -54,7 +56,7 @@ export const defaultExtensions = [
     code: {
       HTMLAttributes: {
         class:
-          "rounded-md bg-stone-200 px-1.5 py-1 font-mono font-medium text-stone-900",
+          "rounded bg-stone-200 px-1.5 py-1 font-mono font-medium text-stone-900",
         spellcheck: "false",
       },
     },
@@ -170,4 +172,6 @@ export const defaultExtensions = [
   MarkCondition,
   FacilityMark,
   TagMark,
+  RangeMark,
+  UnitMark,
 ];

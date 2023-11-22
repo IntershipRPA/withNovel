@@ -1,7 +1,7 @@
 <template>
   <NodeViewWrapper>
     <div class="block flex items-end">
-      <div class="relative rounded-lg shadow-md bg-green-100 hover:bg-green-200 z-20 px-8 mb-2 mt-2 py-5 items-center">
+      <div class="relative rounded shadow-md bg-green-100 hover:bg-green-200 z-20 px-8 mb-2 mt-2 py-5 items-center">
         <div class="sample-label right-10 bg-teal-700" contenteditable="false">
           <span class='pr-3' @click='handleClickBtnJSON'>
             JSON
@@ -32,19 +32,19 @@
     <div>
       <div class='block flex -mt-4 pl-6'>
         <button contenteditable="false"
-          class="recipe-btn-activated cursor-pointer rounded-lg shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white flex items-center min-w-max"
+          class="recipe-btn-activated cursor-pointer rounded shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white flex items-center min-w-max"
           :class="isActivated ? 'bg-green-400 hover:bg-green-500' : 'bg-gray-400 hover:bg-gray-500'">
           <ElementChecked v-model='isActivated' :checked-string='"레시피 활성ㅤ"' :un-checked-string='"레시피 비활성"'
             @update:modelValue="handleUpdateActivated" />
         </button>
         <button contenteditable="false"
-          class="recipe-btn-auto cursor-pointer rounded-lg shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max"
+          class="recipe-btn-auto cursor-pointer rounded shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max"
           :disabled='!isActivated ? true : false'
           :class="isAuto ? 'bg-green-400 hover:bg-green-500' : 'bg-gray-400 hover:bg-gray-500'">
           <ElementChecked v-model='isAuto' :checked-string='"ㅤ자동 ㅤ"' :un-checked-string='"자동 꺼짐"'
             @update:modelValue="handleUpdateAuto" />
         </button>
-        <button contenteditable="false" class="recipe-btn-run rounded-lg shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max
+        <button contenteditable="false" class="recipe-btn-run rounded shadow-md z-10 h-10 px-4 py-6 pt-8 text-sm text-white ml-4 flex items-center min-w-max
           bg-gray-300 disabled:cursor-not-allowed enabled:bg-red-400 enabled:hover:bg-red-500"
           :disabled='!isActivated || isAuto ? true : false' @click='handleClickBtnRun'>
           수동으로 실행하기
@@ -55,12 +55,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, onMounted } from 'vue';
+import { PropType, ref } from 'vue';
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3';
 import { Editor } from '@tiptap/core';
 import { useModalStore } from '../../../stores/modal';
 import ElementChecked from './ElementChecked.vue';
-import { Download, Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
+import { Settings, Settings2, Cog, PenLine, Menu } from 'lucide-vue-next';
 import { MapResult } from '@tiptap/pm/transform';
 
 const props = defineProps({
@@ -79,6 +79,10 @@ const props = defineProps({
 //   console.log("btn클릭")
 // }
 
+// 조건 일치시 실행할 액션
+const runAction = () => {
+  alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
+}
 
 // 모달 설정
 const modalStore = useModalStore(); // 스토어 인스턴스 생성
@@ -107,7 +111,7 @@ const getJSONFromRecipe = () => {
   // console.log(docs[locationNum])
 
   const result = JSON.stringify(docs[locationNum], null, 2);
-
+  
   return result;
 }
 
@@ -137,45 +141,6 @@ const getTextFromRecipe = () => {
 
   return result;
 }
-
-
-// 조건 일치시 실행할 액션
-const runAction = () => {
-  alert("레시피 조건 불일치로 담당자에게 알람을 발생시켰습니다.")
-}
-
-// 자동화를 위한 n초간격 함수를 저장하는 변수
-let intervalId;
-
-// 10초 간격으로 알람을 발생시키는 함수
-const startAlarm = () => {
-  if (!props.node.attrs.auto) {
-    // 바로 알람 발생
-    setTimeout(() => {
-      runAction(); // 1초 딜레이 후 알람 발생
-      setAlarmInterval(10000);
-    }, 1000); // 1초 딜레이 설정runAction();
-  }
-};
-
-// 알람을 중지하는 함수
-const stopAlarm = () => {
-  clearInterval(intervalId);
-};
-
-const setAlarmInterval = (sec: number) => {
-  clearInterval(intervalId); // 이전 타이머 중지
-  intervalId = setInterval(() => {
-    if (props.node.attrs.auto) {
-      runAction();
-    }
-  }, sec); // 10초 간격
-};
-
-// 컴포넌트가 처음 렌더링될 때 실행  
-onMounted(() => {
-  setAlarmInterval(10000);
-});
 
 
 // 세팅 버튼 클릭
@@ -209,12 +174,6 @@ const handleUpdateAuto = (value: boolean) => {
   props.updateAttributes({
     auto: value,
   });
-
-  if (value === true) {
-    startAlarm();
-  } else {
-    stopAlarm();
-  }
 }
 
 // 수동으로 실행 버튼 클릭

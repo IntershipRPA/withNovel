@@ -54,7 +54,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
   return [
     {
       title: "Winding Temp",
-      searchTerms: ["온도", "윈딩"],
+      searchTerms: ["온도", "윈딩", "권선온도계"],
       description: "권선온도계",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -71,7 +71,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Press",
-      searchTerms: ["가공", "압축", "프레스"],
+      searchTerms: ["가공", "압축", "프레스", "압력"],
       description: "압력",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -88,7 +88,7 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
     },
     {
       title: "Status",
-      searchTerms: ["값"],
+      searchTerms: ["값", "상태"],
       description: "상태",
       icon: Cog,
       command: ({ editor, range }: CommandProps) => {
@@ -103,6 +103,143 @@ const getSuggestionItems = async ({ query }: { query: string }) => {
           .run();
       },
     },
+    {
+      title: "Air",
+      searchTerms: ["에어", "공기"],
+      description: "공기",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Air`})
+          .insertContent(`Air`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "Current Check",
+      searchTerms: ["커런트", "현재상태"],
+      description: "현재상태",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Current Check`})
+          .insertContent(`Current Check`)
+          .unsetTag()
+          .run();
+      },
+    },    
+    {
+      title: "Operate",
+      searchTerms: ["오퍼레이션", "운전"],
+      description: "운전",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Operate`})
+          .insertContent(`Operate`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "Rotate",
+      searchTerms: ["로테이트", "회전"],
+      description: "회전",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Rotate`})
+          .insertContent(`Rotate`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "Binding",
+      searchTerms: ["조임", "바인딩"],
+      description: "바인딩",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Binding`})
+          .insertContent(`Binding`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "Control Valve",
+      searchTerms: ["벨브", "컨트롤벨브"],
+      description: "컨트롤벨브",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `Control Valve`})
+          .insertContent(`Control Valve`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "PT-31",
+      searchTerms: ["PT-31"],
+      description: "PT-31",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `PT-31`})
+          .insertContent(`PT-31`)
+          .unsetTag()
+          .run();
+      },
+    },
+    {
+      title: "MCCB",
+      searchTerms: ["MCCB"],
+      description: "MCCB",
+      icon: Cog,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .toggleNode("paragraph", "paragraph")
+          .setTag({tag: `MCCB`})
+          .insertContent(`MCCB`)
+          .unsetTag()
+          .run();
+      },
+    },
+
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();
